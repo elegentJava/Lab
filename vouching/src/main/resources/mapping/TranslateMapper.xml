@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bupt.vouching.mapper.TranslateMapper" >
+
+	<!-- 随机查询指定数目和难度的句子翻译题 -->
+	<select id="findTranslateIdByRandom" parameterType="java.util.Map" resultType="int">
+		select translateid
+		from translate
+		where level = #{level}
+		order by rand() limit #{random}
+	</select>
+	
+	<!-- 根据ID集合查询指定语句翻译题 -->
+	<select id="findTranslatesByIds" resultType="Translate">
+		select
+		translateid,question,answer
+		from translate
+		where translateid in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	
+	<!-- 通过章节和等级查询语句翻译题目 -->
+	<select id="findTranslatesByChapterAndLevel" parameterType="java.util.Map" resultType="Translate">
+		select
+		translateid,question
+		from translate
+		where chapterid = #{chapterId} and level = #{level}
+	</select>
+	
+	<!-- 随机查询指定数目和难度以及章节的语句翻译题 -->
+	<select id="findTranslatesByRandom" parameterType="java.util.Map" resultType="Translate">
+		select
+		translateid,question,answer
+		from translate
+		where level = #{level} and chapterid = #{chapterId}
+		order by rand() limit #{random}
+	</select>
+		
+</mapper>

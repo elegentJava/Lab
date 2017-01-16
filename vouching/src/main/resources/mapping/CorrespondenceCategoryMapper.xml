@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bupt.vouching.mapper.CorrespondenceCategoryMapper" >
+
+	<!-- 查找所有函电类型 -->
+	<select id="findAllCategories" resultType="CorrespondenceCategory">
+		select 
+		ccid,fatherid,name,flag
+		from correcategory
+	</select>
+	
+</mapper>

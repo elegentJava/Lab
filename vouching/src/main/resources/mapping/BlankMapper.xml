@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bupt.vouching.mapper.BlankMapper" >
+
+	<!-- 随机查询指定数目和难度的填空题 -->
+	<select id="findBlankIdByRandom" parameterType="java.util.Map" resultType="int">
+		select clozeId
+		from cloze
+		where level = #{level}
+		order by rand() limit #{random}
+	</select>
+		
+	<!-- 通过ID集合查询指定填空题 -->
+	<select id="findBlanksByIds" resultType="Blank">
+		select
+		blankid,question,answer
+		from blank
+		where blankId in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>	
+	
+	<!-- 通过章节和等级查询指定填空题 -->
+	<select id="findBlanksByChapterAndLevel" parameterType="java.util.Map" resultType="Blank">
+		select
+		blankid,question
+		from blank
+		where chapterid = #{chapterId} and level = #{level}
+	</select>
+	
+	<!-- 随机查询指定数目和难度以及章节的填空题 -->
+	<select id="findBlanksByRandom" parameterType="java.util.Map" resultType="Blank">
+		select
+		blankid,question,answer
+		from blank
+		where level = #{level} and chapterid = #{chapterId}
+		order by rand() limit #{random}
+	</select>
+	
+</mapper>

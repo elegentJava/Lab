@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bupt.vouching.mapper.UserMapper" >
+
+	<resultMap type="User" id="findUserAndClass">
+		<id column="userid" property="userId"/>
+		<result column="name" property="name"/>
+		<result column="account" property="account"/>
+		<result column="sex" property="sex"/>
+		<result column="isonline" property="isOnline"/>
+		<result column="email" property="email"/>
+		<result column="lastlogindate" property="lastLoginDate"/>
+		<result column="role" property="role"/>
+		<association property="clas" javaType="Class" column="classid">
+			<id column="classid" property="classId"/>
+			<result column="classname" property="className"/>
+		</association>
+	</resultMap>
+
+	<!-- 通过账号密码获取用户信息 -->
+	<select id="findUserByAP" parameterType="string" resultType="User">
+		select
+		userid,account,password,name,sex,isonline,role,email,lastlogindate,classId 
+		from user
+		where account = #{0} and password = #{1}
+	</select>
+	
+	<!-- 修改用户的在线状态 -->
+	<update id="updateUserOnlineStatus" parameterType="int">
+		update user
+		set isonline = #{1}
+		where userId = #{0}
+	</update>
+	
+	<!-- 修改用户的在线状态和登录时间 -->
+	<update id="updateUserStatusAndLastLoginDate" parameterType="User">
+		update user
+		set lastlogindate = #{lastLoginDate},isonline = #{isOnline} 
+		where userid = #{userId}
+	</update>
+	
+	<!-- 通过id和密码查找指定用户信息 -->
+	<select id="findUserByIdAndPassword" parameterType="java.util.Map" resultType="User">
+		select userId
+		from user
+		where userid = #{userId} and password = #{password}
+	</select>
+	
+	<!-- 修改用户密码 -->
+	<update id="updateUserPassword" parameterType="java.util.Map">
+		update user
+		set password = #{password}
+		where userid = #{userId}
+	</update>
+	
+	<!-- 根据积分查询用户信息 -->
+	<select id="findUserByCredit" parameterType="int" resultType="User">
+		select
+		userid,name,isonline,credit
+		from user
+		where role = 1
+		order by credit desc limit 0,#{0}
+	</select>
+	
+	<!-- 查询用户和班级信息 -->
+	<select id="findUserAndClassByRole" resultMap="findUserAndClass">
+		select 
+		u.userid,u.account,u.name,u.sex,u.role,u.isonline,u.email,u.lastlogindate,u.classid,c.classname
+		from user u,class c
+		where u.role = #{0} and u.classid = c.classid
+	</select>
+	
+	<!-- 只查询用户信息 -->
+	<select id="findSingleUsersByRole" resultType="User">
+		select
+		userid,account,name,sex,role,isonline,email,lastlogindate,classid
+		from user
+		where role = #{0}
+	</select>
+	
+	<!-- 修改密码 -->
+	<update id="updatePassword" parameterType="java.util.Map">
+		update user
+		set password = #{password}
+		where userId = #{userId} 
+	</update>
+	
+	<!-- 根据id删除单个用户 -->
+	<delete id="deleteSingleUserById" parameterType="int">
+		delete from user where userid = #{0}
+	</delete>
+	
+	<!-- 保存用户 -->
+	<insert id="saveUser" parameterType="User">
+		insert into 
+		user(userid,account,password,name,sex,
+			 isonline,role,classid,email) 
+		values(#{userId},#{account},#{password},#{name},#{sex},
+			   #{isOnline},#{role},#{classId},#{email})
+	</insert>
+	
+	<select id="findUsersByClassId" parameterType="int" resultType="User">
+		select userid,name
+		from user
+		where classid = #{0}
+	</select>
+	
+	<!-- 通过id查找用户 -->
+	<select id="findUserById" parameterType="int" resultType="User">
+		select *
+		from user
+		where userid = #{0}
+	</select>
+	
+	<!-- 通过账号查找用户信息 -->
+	<select id="findUserByAccount" parameterType="string" resultType="User">
+		select userid
+		from user
+		where account = #{0}
+	</select>
+	
+	<!-- 批量增加用户数据 -->
+	<insert id="batchInsert">
+		 insert into user (account,password,sex,isonline,name,email,classid)  
+    	 values 
+	    <foreach collection="list" item="item" index="index" separator="," > 
+	        (#{item.account},#{item.password},#{item.sex},#{item.isOnline},#{item.name},#{item.email},#{item.classId}) 
+	    </foreach>
+	</insert>
+	
+	<!-- 批量删除用户信息 -->
+	<delete id="batchDelete">
+		delete from user
+		where userid in
+		<foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	
+</mapper>

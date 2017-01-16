@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bupt.vouching.mapper.TeachResourceMapper" >
+
+	<resultMap type="TeachResource" id="TeachResourceAndUser">
+		<id column="trid" property="trid"/>
+		<result column="type" property="type"/>
+		<result column="flag" property="flag"/>
+		<result column="date" property="date"/>
+		<association property="user" javaType="User" column="userid">
+			<id column="userid" property="userId"/>
+			<result column="name" property="name"/>
+		</association>
+	</resultMap>
+
+	<!-- 保存一个上传文件 -->
+	<insert id="saveTeachResource" parameterType="TeachResource">
+		insert into 
+		teachresource(trid,path,userid,type,flag,date)
+		values(#{trid},#{path},#{userId},#{type},#{flag},#{date})
+	</insert>
+	
+	<!-- 根据文件路径删除文件 -->		
+	<delete id="deleteResourceByPath" parameterType="string">
+		delete from teachresource
+		where path = #{0}
+	</delete>	
+	
+	<!-- 通过ID查询资源信息 -->
+	<select id="findResourceById" parameterType="int" resultType="TeachResource">
+		select
+		trid,path,type,flag,date,userid
+		from teachresource
+		where trid = #{0}
+	</select>
+	
+	<!-- 修改资源的状态 -->
+	<update id="updateStatus" parameterType="java.util.Map">
+		update teachresource
+		set flag = #{flag}
+		where trid = #{trid}
+	</update>
+	
+	<!-- 通过类型查询资源信息 -->
+	<select id="findResourcesByType" parameterType="int" resultMap="TeachResourceAndUser">
+		select 
+		t.trid,t.userid,t.type,t.flag,t.date,u.name
+		from teachresource t , user u
+		where type = #{type} and t.userid = u.userid
+		order by flag
+	</select>
+			
+</mapper>

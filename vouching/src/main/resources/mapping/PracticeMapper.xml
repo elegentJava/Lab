@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bupt.vouching.mapper.PracticeMapper" >
+
+	<resultMap type="Practice" id="findPracticesByUserId">
+		<id column="practiceid" property="practiceId"/>
+		<result column="score" property="score"/>
+		<result column="date" property="date" javaType="java.util.Date"/>
+		<result column="userid" property="userId"/>
+		<association property="chapter" column="chapterid" javaType="Chapter">
+			<id column="chapterid" property="chapterId"/>
+			<result column="name" property="name"/>
+		</association>
+	</resultMap>
+	
+	<!-- 通过用户查询练习记录 -->
+	<select id="findPracticesByUserId" parameterType="int" resultMap="findPracticesByUserId">
+		select 
+		p.practiceid,p.score,p.date,p.userid,p.chapterid,c.name
+		from practice p,chapter c
+		where p.chapterid = c.chapterid and p.userid = #{0}
+	</select>
+	
+	<!-- 添加一条练习记录 -->
+	<insert id="addPractice" parameterType="Practice">
+		insert into
+		practice(practiceid,score,date,userid,chapterid)
+		values(#{practiceId},#{score},#{date},#{userId},#{chapterId});
+	</insert>
+
+</mapper>

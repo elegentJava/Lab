@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bupt.vouching.mapper.RadioMapper" >
+
+	<!-- 随机查询指定数目和难度的单选题 -->
+	<select id="findRadioIdByRandom" parameterType="java.util.Map" resultType="int">
+		select radioId
+		from radio
+		where level = #{level}
+		order by rand() limit #{random}
+	</select>
+	
+	<!-- 通过ID集合查询指定单选题 -->
+	<select id="findRadiosByIds" resultType="Radio">
+		select
+		radioid,question,radio.option,answer
+		from radio
+		where radioid in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	
+	<!-- 通过章节和等级查询单选题目 -->
+	<select id="findRadiosByChapterAndLevel" parameterType="java.util.Map" resultType="Radio">
+		select
+		radioid,question
+		from radio
+		where chapterid = #{chapterId} and level = #{level}
+	</select>
+	
+	<!-- 随机查询指定数目和难度以及章节的单选题 -->
+	<select id="findRadiosByRandom" parameterType="java.util.Map" resultType="Radio">
+		select
+		radioid,question,radio.option,answer
+		from radio
+		where level = #{level} and chapterid = #{chapterId}
+		order by rand() limit #{random}
+	</select>
+		
+</mapper>

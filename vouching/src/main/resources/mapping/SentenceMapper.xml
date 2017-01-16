@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bupt.vouching.mapper.SentenceMapper" >
+
+	<!-- 通过类别、类型、级别查询语句 -->
+	<select id="findSentencesByCTL" resultType="Sentence">
+		select 
+		sentenceid,chinese,english,categoryid,level,type
+		from sentence
+		where categoryid = #{categoryId} and level = #{level} and type = #{type}
+	</select>
+	
+</mapper>

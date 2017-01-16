@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bupt.vouching.mapper.ChapterMapper" >
+
+	<!-- 修改章节的状态 -->
+	<update id="updateActiveStatus" parameterType="java.util.Map">
+		update chapter
+		set isactive = #{status}
+		where chapterid = #{chapterId}
+	</update>
+	
+	<!-- 通过章节状态查询章节信息 -->
+	<select id="findAllChaptersByActiveStatus" parameterType="int" resultType="Chapter">
+		select
+		chapterid,name,isactive
+		from chapter
+		where isactive = #{0}
+	</select>
+	
+	<!-- 批量插入 -->
+	<insert id="batchInsert">
+		insert into chapter (name,isactive)  
+    	 values 
+	    <foreach collection="list" item="item" index="index" separator="," > 
+	        (#{item.name},#{item.isActive}) 
+	    </foreach>
+	</insert>
+	
+</mapper>

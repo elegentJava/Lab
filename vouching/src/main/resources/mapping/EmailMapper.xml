@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bupt.vouching.mapper.EmailMapper" >
+	
+	<!-- 查询所有未删除的收件信 -->
+	<select id="findReceiveEmails" parameterType="int" resultType="Email">
+		select
+		emailid,sendid,sendemail,sendname,receiveid,receiveemail,receivename,subject,content,date,isread,senddel,receivedel
+		from email
+		where receiveid = #{0} and receivedel = 0
+	</select>
+	
+	<!-- 查询所有未删除的发件信 -->
+	<select id="findSendEmails" parameterType="int" resultType="Email">
+		select
+		emailid,sendid,sendemail,sendname,receiveid,receiveemail,receivename,subject,content,date,isread,senddel,receivedel
+		from email
+		where sendid = #{0} and senddel = 0
+	</select>
+	
+	<!-- 保存邮件信息 -->
+	<insert id="saveEmail" parameterType="Email">
+		insert into email
+		(emailid,sendid,sendemail,sendname,receiveid,receiveemail,
+		 receivename,subject,content,date,isread,senddel,receivedel)
+		values 
+		(#{emailId},#{sendId},#{sendEmail},#{sendName},#{receiveId},#{receiveEmail},
+	     #{receiveName},#{subject},#{content},#{date},#{isRead},#{sendDel},#{receiveDel})
+	</insert>
+	
+</mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bupt.vouching.mapper.UserPaperMapper" >
+
+	<resultMap type="UserPaper" id="findExamsByUserId">
+		<id column="userpaperid" property="userPaperId"/>
+		<result column="answerdate" property="answerDate"/>
+		<result column="score" property="score"/>
+		<association property="exam" column="examid" javaType="Exam">
+			<id column="examid" property="examId"/>
+			<result column="name" property="name"/>
+		</association>
+	</resultMap>
+		
+	<!-- 通过用户ID查询试卷ID -->
+	<select id="findExamIdByUserId" parameterType="int" resultType="int">
+		select examid
+		from userpaper
+		where userid = #{0}
+	</select>	
+	
+	<!-- 保存用户试卷 -->
+	<insert id="saveUserPaper" parameterType="UserPaper"> 
+		insert into 
+		userpaper(answerdate,radios,blanks,phrases,translates,clozes,examid,score,userid)
+		values(#{answerDate},#{radios},#{blanks},#{phrases},#{translates},
+				#{clozes},#{examId},#{score},#{userId})
+	</insert>
+	
+	<!-- 通过用户ID查询试卷 -->
+	<select id="findExamsByUserId" parameterType="int" resultMap="findExamsByUserId">
+		select
+		p.examid,p.answerdate,p.score,e.name
+		from userpaper p,exam e
+		where p.userid = #{0} and p.examid = e.examid
+	</select>
+	
+</mapper>

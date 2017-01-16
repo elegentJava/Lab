@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bupt.vouching.mapper.ExamMapper" >
+
+	<!-- 根据激活状态查询试卷详情信息的返回结果Map -->
+	<resultMap id="findExamDetailByStatusAndTeacher" type="Exam">
+		<id property="examId" column="examid"/>
+		<result property="name" column="name"/>
+		<result property="createDate" column="createdate"/>
+		<result property="isActive" column="isactive"/>
+		<result property="bak" column="bak"/>
+		<association property="clas" column="classid" javaType="Class">
+			<id property="classId" column="classid"/>
+			<result property="className" column="classname"/>
+		</association>
+	</resultMap>
+
+	<!-- 保存试卷信息 -->
+	<insert id="saveExam" parameterType="Exam">
+		insert into
+		exam(name,createdate,bak,teacherid,isactive,classid,
+			 radioid,blankid,phraseid,translateid,clozeid)
+		values(#{name},#{createDate},#{bak},#{teacherId},#{isActive},#{classId},
+			 #{radioId},#{blankId},#{phraseId},#{translateId},#{clozeId})
+	</insert>
+	
+	<!-- 根据激活状态查询试卷详情信息 -->
+	<select id="findExamDetailByStatusAndTeacher" parameterType="int" resultMap="findExamDetailByStatusAndTeacher">
+		select 
+		e.examid,e.name,e.createdate,e.bak,c.classid,c.classname
+		from exam e,class c
+		where e.classid = c.classid and e.isactive = #{isActive} and e.teacherid = #{teacherId}
+	</select>
+	
+	<!-- 根据试卷ID修改试卷状态 -->
+	<update id="updateExamStatusById" parameterType="java.util.Map">
+		update exam
+		set isactive = #{isActive}
+		where examId = #{examId}
+	</update>
+	
+	<!-- 根据ID删除试卷 -->
+	<delete id="deleteExamById" parameterType="int">
+		delete
+		from exam
+		where examId = #{0}
+	</delete>
+	
+	<!-- 通过ID查询指定试卷 -->
+	<select id="findExamById" parameterType="int" resultType="Exam">
+		select
+		examId,name,bak,radioid,blankid,phraseid,translateid,clozeid
+		from exam
+		where examId = #{0}
+	</select>
+	
+	<!-- 修改试卷的题目ID集合字符串 -->
+	<update id="updateQuestionId" parameterType="Exam">
+		update exam
+		set radioid = #{radioId},blankid = #{blankId},phraseid = #{phraseId},clozeid = #{clozeId},translateid = #{translateId}
+		where examid = #{examId}
+	</update>
+	
+	<!-- 查询用户已经参加过的考试 -->
+	<select id="findJoinedExam" parameterType="java.util.Map" resultType="Exam">
+		select
+		examId,name,createdate,bak
+		from exam
+		where isactive = #{isActive} and examid in 
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	
+	<!-- 查询用户未参加过的考试 -->
+	<select id="findUnjoinedExam" parameterType="java.util.Map" resultType="Exam">
+		select
+		examId,name,createdate,bak
+		from exam
+		where isactive = #{isActive} and examid not in 
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	
+	<!-- 根据试卷状态查询试卷信息 -->
+	<select id="findExamsBySatus" parameterType="int" resultType="Exam">
+		select
+		examId,name,createdate,bak
+		from exam
+		where isactive = #{0} 
+	</select>
+		
+</mapper>

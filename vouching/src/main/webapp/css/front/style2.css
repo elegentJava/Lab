@@ -1,0 +1,302 @@
+body {
+	font-size: 12px;
+	margin: 0;
+}
+
+td {
+	border: 1px soild #256e00;
+}
+
+.frame {
+	margin: 0;
+}
+
+.top a:link {
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.top a:visited {
+	text-decoration: none;
+	color: #ffffff;
+}
+
+.top a:hover {
+	text-decoration: none;
+	color: #116dff;
+	background-color: transparent;
+}
+
+.top a:active {
+	text-decoration: none;
+	color: #444444;
+}
+
+.tabl {
+	border:
+}
+
+.style1 {
+	font-size: 11px;
+	color: #222222;
+}
+
+.style2 {
+	font-size: 11px;
+	color: #ffffff;
+}
+
+.textbox {
+	background: #9cc3ca;
+	font-family: "Verdana", "Arial", "Helvetica";
+	font-size: 11px;
+	text-align: left;
+	font-color: #ffffff;
+}
+
+.textbox1 {
+	background: #cee2e6;
+	border-top: 0px solid;
+	border-left: 0px solid;
+	border-right: 0px solid;
+	border-bottom: 0px solid;
+	font-family: "Verdana", "Arial", "Helvetica";
+	font-size: 11px;
+	text-align: left;
+}
+
+.textbox2 {
+	background: #ffffff;
+	font-family: "Verdana", "Arial", "Helvetica";
+	font-size: 11px;
+	text-align: left;
+	font-color: #ffffff;
+}
+
+.textbox3 {
+	background: transparent;
+	border-top: 1px #dddddd solid;
+	border-left: 1px #dddddd solid;
+	border-right: 1px #dddddd solid;
+	border-bottom: 1px #dddddd solid;
+	font-family: "Verdana", "Arial", "Helvetica";
+	font-size: 11px;
+	text-align: left;
+}
+
+.style1 {
+	font-size: 12px;
+	color: #FFFFFF;
+}
+
+.style2 {
+	font-size: 12px;
+	color: #000000;
+}
+
+a:link {
+	color: #000000;
+	text-decoration: none;
+}
+
+a:visited {
+	color: #000000;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #256e00 !important;
+	text-decoration: none;
+}
+
+a:active {
+	color: #99FF00;
+	text-decoration: none;
+}
+
+.dtree {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #666;
+	white-space: nowrap;
+}
+
+.dtree img {
+	border: 0px;
+	vertical-align: middle;
+}
+
+.dtree a {
+	color: #333;
+	text-decoration: none;
+}
+
+.dtree a.node,.dtree a.nodeSel {
+	white-space: nowrap;
+	padding: 1px 2px 1px 2px;
+}
+
+.dtree a.node:hover,.dtree a.nodeSel:hover {
+	color: #333;
+	text-decoration: underline;
+}
+
+.bold {
+	font-size: 9pt;
+	font-weight: bold;
+	color: #000099;
+}
+
+.dtree a.nodeSel {
+	background-color: #c0d2ec;
+}
+
+.dtree .clip {
+	overflow: hidden;
+}
+
+hr {
+	height: 1px;
+	color: #CCCCCC;
+}
+
+.myinput {
+	width: 95%;
+	border: 1px solid #999999;
+}
+
+.tablebox {
+	border: 1pt solid #CCCCCC;
+}
+
+.myinput50 {
+	width: 50%;
+	border: 1px solid #999999;
+}
+
+.underline {
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: none;
+	border-right-style: none;
+	border-bottom-style: solid;
+	border-left-style: none;
+	border-top-color: #CCCCCC;
+	border-right-color: #CCCCCC;
+	border-bottom-color: #CCCCCC;
+	border-left-color: #CCCCCC;
+}
+
+input {
+	font-size: 9pt;
+}
+
+.ckxk {
+	font-family: "����", "Arial";
+	font-size: 9pt;
+	height: 20px;
+	padding-left: 8px;
+}
+
+.teatb {
+	background-color: #256e00;
+	color: #000000;
+	font-size: 12px
+}
+
+.teatbbai {
+	background-color: #f0f6db;
+	color: #000;
+	font-size: 12px;
+	height: 25px;
+	align: right
+}
+
+.topbai {
+	color: #000;
+	font-size: 12px;
+}
+
+.topbai a {
+	color: #000;
+	font-size: 12px;
+}
+
+.topbai a:hover {
+	color: #d0e5b7;
+	font-size: 12px;
+}
+
+.tbtopbai {
+	font-size: 12px;
+	text-align: center;
+	color: #fff;
+	font-weight: bold;
+	height: 25px
+}
+
+DIV.neat-dialog-cont {
+	Z-INDEX: 98;
+	BACKGROUND: none transparent scroll repeat 0% 0%;
+	LEFT: 0px;
+	WIDTH: 100%;
+	POSITION: absolute;
+	TOP: 0px;
+	HEIGHT: 100%
+}
+
+DIV.neat-dialog-bg {
+	Z-INDEX: -1;
+	FILTER: alpha(opacity = 70);
+	LEFT: 0px;
+	WIDTH: 100%;
+	POSITION: absolute;
+	TOP: 0px;
+	HEIGHT: 100%;
+	BACKGROUND-COLOR: #eee;
+	opacity: 0.7;
+}
+
+DIV.neat-dialog {
+	BORDER-RIGHT: #555 1px solid;
+	BORDER-TOP: #555 1px solid;
+	Z-INDEX: 99;
+	MARGIN-LEFT: 35%;
+	BORDER-LEFT: #555 1px solid;
+	WIDTH: 300px;
+	MARGIN-RIGHT: auto;
+	BORDER-BOTTOM: #555 1px solid;
+	POSITION: relative;
+	TOP: 25%;
+	BACKGROUND-COLOR: #fff
+}
+
+DIV.neat-dialog-title {
+	PADDING-RIGHT: 0.3em;
+	PADDING-LEFT: 0.3em;
+	FONT-SIZE: 1em;
+	PADDING-BOTTOM: 0.1em;
+	MARGIN: 0px;
+	LINE-HEIGHT: 1.2em;
+	PADDING-TOP: 0.1em;
+	BORDER-BOTTOM: #444 1px solid;
+	POSITION: relative;
+	background: #36C;
+	color: White;
+}
+
+DIV.neat-dialog P {
+	PADDING-RIGHT: 0.2em;
+	PADDING-LEFT: 0.2em;
+	PADDING-BOTTOM: 0.2em;
+	PADDING-TOP: 0.2em;
+	TEXT-ALIGN: center
+}
+
+.fyys {
+	padding: 3px 8px;
+	font-weight: 700;
+	color: #2e6ab1;
+}
