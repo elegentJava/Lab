@@ -22,7 +22,7 @@ import com.bupt.vouching.service.EmailService;
  * 
  */
 @Controller
-@RequestMapping("/email/")
+@RequestMapping("/email")
 public class EmailController extends BaseController {
 	
 	private Logger log = Logger.getLogger(getClass());

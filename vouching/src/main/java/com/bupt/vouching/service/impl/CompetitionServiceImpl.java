@@ -12,7 +12,9 @@ import com.bupt.vouching.frame.GlobalContext;
 import com.bupt.vouching.frame.MJSONObject;
 import com.bupt.vouching.mapper.UserMapper;
 import com.bupt.vouching.service.CompetitionService;
+import com.bupt.vouching.service.bean.Competition;
 import com.bupt.vouching.type.PageSize;
+import com.bupt.vouching.type.error.CompetitionError;
 import com.bupt.vouching.type.error.ErrorCode;
 
 /**
@@ -44,6 +46,30 @@ public class CompetitionServiceImpl implements CompetitionService {
 	@Override
 	public MJSONObject matching(JSONObject jParams) {
 		MJSONObject result = new MJSONObject();
+		JSONObject detail = new JSONObject();
+		String token = jParams.getString("token");
+		List<Competition> competitionQueue = globalContext.getCompetitionQueue();
+		if(competitionQueue != null){
+			for(Competition competition : competitionQueue){
+				for (User e : competition.getUsers()) {
+					if (e.getUserId().equals(globalContext.getUserToken().get(token).getUserId())) {
+						detail.put("users", competition.getUsers());
+						result.setDetail(detail);
+						result.setErrorCode(ErrorCode.SUCCESS);
+						return result;
+					}
+				}
+			}
+		}
+		result.setErrorCode(CompetitionError.MATCH_NOT_COMPLETE);
+		return result;
+	}
+
+	@Override
+	public MJSONObject joinCompetition(JSONObject jParams) {
+		MJSONObject result = new MJSONObject();
+		String token = jParams.getString("token");
+		globalContext.getWatchingQueue().add(token);
 		result.setErrorCode(ErrorCode.SUCCESS);
 		return result;
 	}

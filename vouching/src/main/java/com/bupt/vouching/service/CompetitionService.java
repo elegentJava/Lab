@@ -27,4 +27,12 @@ public interface CompetitionService {
 	 */
 	public MJSONObject matching(JSONObject jParams);
 
+	/**
+	 * 加入匹配队列
+	 * 
+	 * @param jParams
+	 * @return
+	 */
+	public MJSONObject joinCompetition(JSONObject jParams);
+
 }

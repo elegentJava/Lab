@@ -22,7 +22,7 @@ import com.bupt.vouching.service.UserService;
  * 
  */
 @Controller("userController")
-@RequestMapping("/user/")
+@RequestMapping("/user")
 public class UserController extends BaseController{
 
 	private Logger log = Logger.getLogger(getClass());

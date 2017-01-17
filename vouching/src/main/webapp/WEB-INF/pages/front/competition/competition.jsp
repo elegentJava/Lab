@@ -41,7 +41,6 @@
 					<tr>
 						<td height="120" align="center" valign="middle">
 							<button id="match">开始匹配</button>
-							<button id="test">开始匹配</button>
 						</td>
 					</tr>
 				</table>

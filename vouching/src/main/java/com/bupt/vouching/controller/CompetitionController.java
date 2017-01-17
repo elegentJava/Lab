@@ -50,6 +50,25 @@ public class CompetitionController extends BaseController {
 	}
 	
 	/**
+	 * 加入匹配队列
+	 * 
+	 * @param jo
+	 * @return
+	 */
+	@RequestMapping("joinCompetition")
+	public @ResponseBody JSONObject joinCompetition(@RequestBody JSONObject jo) {
+		MJSONObject detail = null;
+		try {
+			RequestTemplate rt = new RequestTemplate(jo);
+			detail = competitionService.joinCompetition(rt.getJParams());
+		} catch (Exception e) {
+			log.error("加入匹配队列失败!",e);
+			return new ResponseTemplate().getReturn();
+		}
+		return new ResponseTemplate(detail).getReturn();
+	}
+	
+	/**
 	 * 竞技匹配
 	 * 
 	 * @param jo

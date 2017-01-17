@@ -1,6 +1,8 @@
 package com.bupt.vouching.frame;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -13,6 +15,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.bupt.vouching.bean.Exam;
 import com.bupt.vouching.bean.Question;
 import com.bupt.vouching.bean.User;
+import com.bupt.vouching.service.bean.Competition;
+import com.bupt.vouching.service.impl.TimeServiceImpl;
 
 /**
  * 初始化操作
@@ -35,6 +39,11 @@ public class InitServlet extends HttpServlet {
 		globalContext.setCurrentExam(new HashMap<String, Exam>());
 		globalContext.setCurrentPractice(new HashMap<String, List<? extends Question>>());
 		globalContext.setEmailDetail(new HashMap<String, Integer[]>());
+		globalContext.setWatchingQueue(new LinkedList<String>());
+		globalContext.setCompetitionQueue(new ArrayList<Competition>());
+		
+		//启动检测竞技队列
+		app.getBean(TimeServiceImpl.class).competitionQueueListener();
 	}
 
 }

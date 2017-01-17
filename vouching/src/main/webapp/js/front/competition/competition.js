@@ -1,27 +1,50 @@
 $(function() {
 	
 	$("#match").bind("click",function(){
-		layer.open({
-			  type: 1 //Page层类型
-			  ,area: ['430px', '300px']
-			  ,shade: 0.6 //遮罩透明度
-			  ,anim: 3 //0-6的动画形式，-1不开启
-			  ,title : '匹配中,请等待...'
-			  ,content: '<div style="padding:10px;"><div style="padding:10px;"><table><tbody><tr><td><img src="/vouching/images/pic_user1.jpg" alt="" width="70px" height="60px"/><h3 style="text-align: center;">User1</h3></td><td><img src="/vouching/images/pic_user1.jpg" alt="" width="70px" height="60px"/><h3 style="text-align: center;">User1</h3></td><td><img src="/vouching/images/pic_user1.jpg" alt="" width="70px" height="60px"/><h3 style="text-align: center;">User1</h3></td><td><img src="/vouching/images/pic_user1.jpg" alt="" width="70px" height="60px"/><h3 style="text-align: center;">User1</h3></td><td><img src="/vouching/images/pic_user1.jpg" alt="" width="70px" height="60px"/><h3 style="text-align: center;">User1</h3></td></tr></tbody></table></div><div style="text-align: center;"><h3>匹配中....</h3></div></div>'
-			  ,success : function(){
-				  $(this).everyTime('1s','validateMatchQuery',function(){
-					  var url = "/vouching/competition/matching";
-					  var data = {
-						  token : $("#token").val()
-					  };
-					  var successCallback = function(data){
-						  var users = data.queue;
-						  
-					  };
-					  VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null);
-					},0,true);
-			  }
-			});
+		
+		//加入匹配队列
+		var url = "/vouching/competition/joinCompetition";
+		var data = {
+			token : $("#token").val()
+		};
+		var successCallback = function(data){
+			layer.open({
+				  type: 1 ,
+				  area: ['430px', '250px'] ,
+				  shade: 0.6 ,
+				  anim: 3 ,
+				  title : '匹配中,请等待...' ,
+				  content: '<div style="padding:10px;"><div style="padding:10px;"><table><tbody><tr id="competitionQueue"></tr></tbody></table></div><div style="text-align: center;"><h5>匹配中....</h5></div></div>',
+				  success : function(){
+					  $(this).everyTime('1s','validateMatchQuery',function(){
+						  var url = "/vouching/competition/matching";
+						  var data = {
+							  token : $("#token").val()
+						  };
+						  var successCallback = function(data){
+							  var users = data.detail.users;
+							  for (var i = 0 ; i < users.length ; i++) {
+								  if ($("#"+users[i].userId).attr("id") == undefined) {
+									  $("#competitionQueue").append("<td id='" +users[i].userId+ "'></td>");
+									  var td = $("#competitionQueue>td").eq(i);
+									  td.append("<img src='/vouching/images/pic_user1.jpg' width='70px' height='60px'/>");
+									  td.append("<h3 style='text-align: center;'>" +users[i].name+ "</h3>");
+								  } 
+							  }
+							  if (users.length == 5) {
+								  window.parent.menu.location.href = "/vouching/forward/forwardCompetitionExam?token="+$("#token").val();
+							  }
+						  };
+						  var faildCallback = function(data){
+							  //nope
+						  }
+						  VCUtils.common.ajax.commonAjax(url, false, data, successCallback, faildCallback, null);
+						},0,true);
+				  }
+				});
+		};
+		VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, null);
+		
 	});
 
 	// 装载竞技排行榜
@@ -39,9 +62,6 @@ $(function() {
 			tr.append("<td class='bgbai'>"+ranks[i].isOnlineName+"</td>");
 		}
 	};
-	var faildCallback = function(data){
-		divAlert(data.errorCode);
-	};
-	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, faildCallback);
+	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, null);
 
 });

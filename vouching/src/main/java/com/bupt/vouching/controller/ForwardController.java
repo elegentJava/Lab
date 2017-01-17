@@ -17,7 +17,7 @@ import com.bupt.vouching.frame.GlobalContext;
  * 
  */
 @Controller("forwardControler")
-@RequestMapping("/forward/")
+@RequestMapping("/forward")
 public class ForwardController extends BaseController {
 
 	@Resource
@@ -326,9 +326,9 @@ public class ForwardController extends BaseController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("forwardCompetitionStation")
-	public String forwardCompetitionStation(String token, HttpServletRequest request){
-		return formFrontResult(token, request, competition, station);
+	@RequestMapping("forwardCompetition")
+	public String forwardCompetition(String token, HttpServletRequest request){
+		return formFrontResult(token, request, competition, competition);
 	}
 	
 	/**
@@ -338,9 +338,9 @@ public class ForwardController extends BaseController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("forwardEnterCompetition")
-	public String forwardEnterCompetition(String token, HttpServletRequest request){
-		return formFrontResult(token, request, competition, exam);
+	@RequestMapping("forwardCompetitionExam")
+	public String forwardCompetitionExam(String token, HttpServletRequest request){
+		return formFrontResult(token, request, competition, competitionExam);
 	}
 	
 	//////////////////////////////练习平台模块相关//////////////////////////////

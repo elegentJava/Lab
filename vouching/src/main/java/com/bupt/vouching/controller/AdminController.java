@@ -18,7 +18,7 @@ import com.bupt.vouching.frame.ResponseTemplate;
 import com.bupt.vouching.service.AdminService;
 
 @Controller
-@RequestMapping("/admin/")
+@RequestMapping("/admin")
 public class AdminController extends BaseController {
 
 	private Logger log = Logger.getLogger(getClass());

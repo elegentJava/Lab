@@ -1,5 +1,6 @@
 package com.bupt.vouching.frame;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
 import com.bupt.vouching.bean.Exam;
 import com.bupt.vouching.bean.Question;
 import com.bupt.vouching.bean.User;
+import com.bupt.vouching.service.bean.Competition;
 
 /**
  * 全局上下文
@@ -19,7 +21,7 @@ import com.bupt.vouching.bean.User;
 @Component("globalContext")
 @Scope("singleton")
 public class GlobalContext {
-	
+
 	/**
 	 * 用户Token
 	 */
@@ -40,6 +42,16 @@ public class GlobalContext {
 	 */
 	private Map<String, Exam> currentExam;
 
+	/**
+	 * 等待队列
+	 */
+	private LinkedList<String> watchingQueue;
+
+	/**
+	 * 匹配队列
+	 */
+	private List<Competition> competitionQueue;
+
 	public Map<String, User> getUserToken() {
 		return userToken;
 	}
@@ -52,8 +64,7 @@ public class GlobalContext {
 		return currentPractice;
 	}
 
-	public void setCurrentPractice(
-			Map<String, List<? extends Question>> currentPractice) {
+	public void setCurrentPractice(Map<String, List<? extends Question>> currentPractice) {
 		this.currentPractice = currentPractice;
 	}
 
@@ -71,6 +82,22 @@ public class GlobalContext {
 
 	public void setEmailDetail(Map<String, Integer[]> emailDetail) {
 		this.emailDetail = emailDetail;
+	}
+
+	public LinkedList<String> getWatchingQueue() {
+		return watchingQueue;
+	}
+
+	public void setWatchingQueue(LinkedList<String> watchingQueue) {
+		this.watchingQueue = watchingQueue;
+	}
+
+	public List<Competition> getCompetitionQueue() {
+		return competitionQueue;
+	}
+
+	public void setCompetitionQueue(List<Competition> competitionQueue) {
+		this.competitionQueue = competitionQueue;
 	}
 
 }

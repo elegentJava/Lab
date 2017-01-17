@@ -25,7 +25,7 @@ import com.bupt.vouching.service.ResourceService;
  * 
  */
 @Controller
-@RequestMapping("/resource/")
+@RequestMapping("/resource")
 public class ResourceController extends BaseController {
 	
 	private Logger log = Logger.getLogger(getClass());

@@ -22,7 +22,7 @@ import com.bupt.vouching.service.ExamService;
  * 
  */
 @Controller
-@RequestMapping("/exam/")
+@RequestMapping("/exam")
 public class ExamController extends BaseController {
 
 	private Logger log = Logger.getLogger(getClass());
