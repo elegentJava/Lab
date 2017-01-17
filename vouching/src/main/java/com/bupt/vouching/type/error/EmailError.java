@@ -36,7 +36,19 @@ public enum EmailError implements ErrorType{
 	/**
 	 * 您正在考试中,不能使用该功能
 	 */
-	USER_IN_EXAM(0x006,"USERINTEXAM"),
+	USER_IN_EXAM(0x006,"USERINTEXAM"), 
+	/**
+	 * 查看详情失败
+	 */
+	SHOW_DETAIL_FAILD(0x007,"查看详情失败!"), 
+	/**
+	 * 邮件删除失败
+	 */
+	DEL_EMAIL_FAILD(0x008,"邮件删除失败!"), 
+	/**
+	 * 选择一个再删除
+	 */
+	SELECTED_ZERO(0x009,"请选择一个再删除!"),
 	;
 	
 	private int id;

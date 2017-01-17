@@ -5,9 +5,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <%@include file="../common/common.jsp"%>
 <title>收件箱</title>
-<script type="text/javascript" src="<%=bp%>/js/dtree.js"></script>
+<link rel="stylesheet" href="<%=bp%>/css/front/style2.css" type="text/css"></link>
 <script type="text/javascript" src="<%=bp%>/js/front/email/sendemail.js"></script>
-<link rel="stylesheet" href="<%=bp%>/css/styles2.css" type="text/css"></link>
 </head>
 
 <body topmargin="0" leftmargin="0">
@@ -34,7 +33,7 @@
 						<tr>
 							<td width="10%" align="right"><span style="font-size: 9pt">短信收件人</span></td>
 							<td width="80%">
-								<input type="text" id="receiver" value="" size="80" /> 
+								<input type="text" id="receivers" value="" size="80" /> 
 								<select id="classList" style="width: 120px"></select>
 							</td>
 						</tr>
@@ -69,7 +68,6 @@
 				</td>
 		</table>
 	</form>
-	<input type="hidden" id="receivers" value=""/>
 	<input type="hidden" id="token" value="${token}"/>
 </body>
 </html>

@@ -50,6 +50,25 @@ public class EmailController extends BaseController {
 	}
 	
 	/**
+	 * 装载班级列表
+	 * 
+	 * @param jo
+	 * @return
+	 */
+	@RequestMapping("loadClassList")
+	public @ResponseBody JSONObject loadClassList(@RequestBody JSONObject jo) {
+		MJSONObject detail = null;
+		try {
+			RequestTemplate rt = new RequestTemplate(jo);
+			detail = emailService.loadClassList(rt.getJParams());
+		} catch (Exception e) {
+			log.error("装载班级列表失败!",e);
+			return new ResponseTemplate().getReturn();
+		}
+		return new ResponseTemplate(detail).getReturn();
+	}
+	
+	/**
 	 * 装载联系人列表
 	 * 
 	 * @param jo
@@ -86,4 +105,62 @@ public class EmailController extends BaseController {
 		}
 		return new ResponseTemplate(detail).getReturn();
 	}
+	
+	/**
+	 * 装载邮件详情信息
+	 * 
+	 * @param jo
+	 * @return
+	 */
+	@RequestMapping("loadEmailDetail")
+	public @ResponseBody JSONObject loadEmailDetail(@RequestBody JSONObject jo) {
+		MJSONObject detail = null;
+		try {
+			RequestTemplate rt = new RequestTemplate(jo);
+			detail = emailService.loadEmailDetail(rt.getJParams());
+		} catch (Exception e) {
+			log.error("装载邮件详情信息失败!",e);
+			return new ResponseTemplate().getReturn();
+		}
+		return new ResponseTemplate(detail).getReturn();
+	}
+	
+	/**
+	 * 批量删除邮件
+	 * 
+	 * @param jo
+	 * @return
+	 */
+	@RequestMapping("batchDeleteEmail")
+	public @ResponseBody JSONObject batchDeleteEmail(@RequestBody JSONObject jo) {
+		MJSONObject detail = null;
+		try {
+			RequestTemplate rt = new RequestTemplate(jo);
+			detail = emailService.batchDeleteEmail(rt.getJParams());
+		} catch (Exception e) {
+			log.error("批量删除邮件失败!",e);
+			return new ResponseTemplate().getReturn();
+		}
+		return new ResponseTemplate(detail).getReturn();
+	}
+	
+	/**
+	 * 首页装载未读站内信
+	 * 
+	 * @param jo
+	 * @return
+	 */
+	@RequestMapping("loadUnreadEmailsForMain")
+	public @ResponseBody JSONObject loadUnreadEmailsForMain(@RequestBody JSONObject jo) {
+		MJSONObject detail = null;
+		try {
+			RequestTemplate rt = new RequestTemplate(jo);
+			detail = emailService.loadUnreadEmailsForMain(rt.getJParams());
+		} catch (Exception e) {
+			log.error("首页装载未读站内信失败!",e);
+			return new ResponseTemplate().getReturn();
+		}
+		return new ResponseTemplate(detail).getReturn();
+	}
+	
 }

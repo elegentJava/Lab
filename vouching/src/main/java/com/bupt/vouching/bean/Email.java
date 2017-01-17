@@ -17,7 +17,7 @@ public class Email implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private String emailId;
+	private Integer emailId;
 	private String subject;
 	private String content;
 	private Date date;
@@ -26,20 +26,18 @@ public class Email implements Serializable {
 	private Integer receiveDel;
 	private Integer sendId;
 	private String sendName;
-	private String sendEmail;
 	private Integer receiveId;
 	private String receiveName;
-	private String receiveEmail;
 
 	// 页面中使用
 	private String formatDate;
 	private String isReadName;
 
-	public String getEmailId() {
+	public Integer getEmailId() {
 		return emailId;
 	}
 
-	public void setEmailId(String emailId) {
+	public void setEmailId(Integer emailId) {
 		this.emailId = emailId;
 	}
 
@@ -107,14 +105,6 @@ public class Email implements Serializable {
 		this.sendName = sendName;
 	}
 
-	public String getSendEmail() {
-		return sendEmail;
-	}
-
-	public void setSendEmail(String sendEmail) {
-		this.sendEmail = sendEmail;
-	}
-
 	public Integer getReceiveId() {
 		return receiveId;
 	}
@@ -129,14 +119,6 @@ public class Email implements Serializable {
 
 	public void setReceiveName(String receiveName) {
 		this.receiveName = receiveName;
-	}
-
-	public String getReceiveEmail() {
-		return receiveEmail;
-	}
-
-	public void setReceiveEmail(String receiveEmail) {
-		this.receiveEmail = receiveEmail;
 	}
 
 	public String getFormatDate() {

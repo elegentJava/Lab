@@ -1,6 +1,5 @@
 package com.bupt.vouching.service.impl;
 
-import java.util.Deque;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -45,10 +44,6 @@ public class CompetitionServiceImpl implements CompetitionService {
 	@Override
 	public MJSONObject matching(JSONObject jParams) {
 		MJSONObject result = new MJSONObject();
-		String token = jParams.getString("token");
-		User user = globalContext.getUserToken().get(token);
-		Deque<User> competitonTempQueue = globalContext.getCompetitonTempQueue();
-		competitonTempQueue.add(user);
 		result.setErrorCode(ErrorCode.SUCCESS);
 		return result;
 	}

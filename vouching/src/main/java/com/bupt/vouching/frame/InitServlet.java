@@ -34,8 +34,7 @@ public class InitServlet extends HttpServlet {
 		globalContext.setUserToken(new HashMap<String, User>());
 		globalContext.setCurrentExam(new HashMap<String, Exam>());
 		globalContext.setCurrentPractice(new HashMap<String, List<? extends Question>>());
-		globalContext.setUserInExamMap(new HashMap<String,Boolean>());
-
+		globalContext.setEmailDetail(new HashMap<String, Integer[]>());
 	}
 
 }

@@ -216,12 +216,9 @@ var VCUtils = {
 			selectAll : function(name){
 				//全选事件
 				$("#checkall").click(function() {
+					var flag = this.checked;
 					$("input[name='"+name+"']").each(function() {
-						if (this.checked) {
-							this.checked = false;
-						} else {
-							this.checked = true;
-						}
+						this.checked = flag;
 					});
 				});
 			}

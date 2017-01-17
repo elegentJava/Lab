@@ -30,10 +30,7 @@ $(function(){
 			}
 		}
 	};
-	var faildCallback = function(data){
-		divAlert(data.errorCode);
-	};
-	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, faildCallback);
+	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, null);
 	
 	//查看答案并计分
 	$("#showAnswer").bind("click",function(){
@@ -64,10 +61,7 @@ $(function(){
 			$("#showAnswer").attr("value","最后得分为："+score+"分");
 			$("#showAnswer").attr("disabled",true);
 		};
-		var faildCallback = function(data){
-			divAlert(data.errorCode);
-		};
-		VCUtils.common.ajax.commonAjax(url, false, data, successCallback, faildCallback);
+		VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, null);
 	});
 	
 });

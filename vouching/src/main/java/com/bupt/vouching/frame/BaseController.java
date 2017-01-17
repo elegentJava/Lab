@@ -59,9 +59,6 @@ public abstract class BaseController {
 	/*
 	 * common目录下
 	 */
-	public static final String PATH_NAVIGATE = "/navigate";
-	public String navigate = PATH_NAVIGATE;
-	
 	public static final String PATH_MAIN = "/main";
 	public String main = PATH_MAIN;
 	
@@ -74,14 +71,17 @@ public abstract class BaseController {
 	public static final String PATH_STATION = "/station";
 	public String station = PATH_STATION;
 	
-	public static final String PATH_RECEIVE_BOX= "/receiveBox";
+	public static final String PATH_RECEIVE_BOX= "/receivebox";
 	public String receiveBox = PATH_RECEIVE_BOX;
 	
-	public static final String PATH_SEND_BOX= "/sendBox";
+	public static final String PATH_SEND_BOX= "/sendbox";
 	public String sendBox = PATH_SEND_BOX;
 	
-	public static final String PATH_SEND_EMAIL= "/sendEmail";
+	public static final String PATH_SEND_EMAIL= "/sendemail";
 	public String sendEmail = PATH_SEND_EMAIL;
+	
+	public static final String PATH_EMAIL_DETAIL= "/emaildetail";
+	public String emailDetail = PATH_EMAIL_DETAIL;
 	
 	/*
 	 * Exam目录下
@@ -107,15 +107,15 @@ public abstract class BaseController {
 	public static final String PATH_EXAM_RECORD = "/examrecord";
 	public String examRecord = PATH_EXAM_RECORD;
 	/*
-	 * practise目录下
+	 * practice目录下
 	 */
-	public static final String PATH_TEST_SELECT = "/testSelect";
+	public static final String PATH_TEST_SELECT = "/testselect";
 	public String testSelect = PATH_TEST_SELECT;
 	
-	public static final String PATH_START_TEST = "/startTest";
+	public static final String PATH_START_TEST = "/starttest";
 	public String startTest = PATH_START_TEST;
 	
-	public static final String PATH_RECORD = "/testRecord";
+	public static final String PATH_RECORD = "/testrecord";
 	public String record = PATH_RECORD;
 	
 	/*

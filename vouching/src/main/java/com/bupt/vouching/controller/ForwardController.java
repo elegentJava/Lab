@@ -76,26 +76,14 @@ public class ForwardController extends BaseController {
 	}
 
 	/**
-	 * 跳转到导航栏，并装载用户数据
+	 * 跳转前台首页
 	 * 
 	 * @param token
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("forwardNavigate")
-	public String forwardNavigate(String token, HttpServletRequest request) {
-		return formFrontResult(token, request, common, navigate);
-	}
-	
-	/**
-	 * 跳转首页
-	 * 
-	 * @param token
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping("forwardMain")
-	public String forwardMain(String token, HttpServletRequest request) {
+	@RequestMapping("forwardFrontMain")
+	public String forwardFrontMain(String token, HttpServletRequest request) {
 		return formFrontResult(token, request, main);
 	}
 	
@@ -147,6 +135,20 @@ public class ForwardController extends BaseController {
 	@RequestMapping("forwardSendBox")
 	public String forwardSendBox(String token, HttpServletRequest request){
 		return formFrontResult(token, request, email, sendBox);
+	}
+	
+	/**
+	 * 跳转到详情页面
+	 * @param token
+	 * @param type
+	 * @param emailId
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("forwardEmailDetail")
+	public String forwardEmailDetail(String token, Integer type, Integer emailId, HttpServletRequest request){
+		globalContext.getEmailDetail().put(token, new Integer[] { emailId, type });
+		return formFrontResult(token, request, email, emailDetail);
 	}
 	
 	//////////////////////////////资源平台模块相关//////////////////////////////

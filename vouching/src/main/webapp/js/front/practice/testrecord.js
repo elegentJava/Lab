@@ -11,6 +11,7 @@ $(function(){
  * @param pageNum
  */
 function loadQueryResult(pageNum){
+	var loading = layer.load();
 	var url = "/vouching/practice/loadTestRecord";
 	var data = {
 		pageNum : pageNum,
@@ -32,6 +33,7 @@ function loadQueryResult(pageNum){
 			$("#pager").show();
 		} 
 		VCUtils.common.pager.front.registerEvent(loadQueryResult);
+		layer.close(loading);
 	};
-	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null);
+	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, loading);
 }

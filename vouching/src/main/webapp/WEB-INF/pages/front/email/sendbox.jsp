@@ -21,10 +21,10 @@ td {
     	<table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" height="400">
 			<tr>	
 				<td width="50%" bgcolor="#1D6300" height="30">
-			    	<p style="margin-left: 20"><font color="#FFFFFF"><span style="font-size: 9pt; font-weight: 700">&nbsp;&nbsp;收件箱</span></font></p>
+			    	<p style="margin-left: 20"><font color="#FFFFFF"><span style="font-size: 9pt; font-weight: 700">&nbsp;&nbsp;发件箱</span></font></p>
 		     	</td>
 				 <td width="50%" height="30" align="right" bgcolor="#1D6300">
-				     <img src="<%=bp %>/images/mes_btn1.jpg" alt="" width="166" height="35" border="0" usemap="#Map2"/>
+				     <img src="<%=bp %>/images/mes_btn1.jpg" alt="" width="166" height="35" border="0" usemap="#Map1"/>
 				 </td>
 		  	</tr>
   			<tr>
@@ -32,14 +32,9 @@ td {
 		        	<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;font-size:12px;table-layout:fixed;" bordercolor="#1D6300" width="100%">
 		            	<tr>
 			            	<td width="4%" height="24" bgcolor="#77B654" align="center">
-			            		<input type="checkbox"/>
+			            		<input id="checkall" type="checkbox"/>
 			            	</td>
-			            	<td width="6%" height="24" bgcolor="#77B654" align="center">
-			            		<p style="margin-left: 5; margin-right: 2; margin-top: 2; margin-bottom: 2">
-		                    		<font color="#FFFFFF"><span style="font-size: 9pt">状态</span></font>
-		                    	</p>
-		               		</td>
-			                <td width="25%" height="24" bgcolor="#77B654" align="center">
+			                <td width="31%" height="24" bgcolor="#77B654" align="center">
 			                	<p style="margin-left: 5; margin-right: 2; margin-top: 2; margin-bottom: 2">
 			                    	<font color="#FFFFFF"><span style="font-size: 9pt">函电主题</span></font>
 			                	</p>
@@ -51,11 +46,11 @@ td {
 			                </td>
 			                <td width="20%"  height="24" bgcolor="#77B654" align="center" width="20%">
 			                	<p style="margin-left: 5; margin-right: 2; margin-top: 2; margin-bottom: 2">
-			                    	<font color="#FFFFFF"><span style="font-size: 9pt">接收时间</span></font>
+			                    	<font color="#FFFFFF"><span style="font-size: 9pt">发送时间</span></font>
 			                    </p>
 			                </td>
 		             	</tr>
-		             	<tbody id="receiveList"></tbody>
+		             	<tbody id="sendList"></tbody>
 		             	<tfoot id="pager">
 		             		<%@include file="../common/pager.jsp" %>
 		             	</tfoot>
@@ -64,9 +59,9 @@ td {
 			</tr>
 		</table>
 		<!-- 热点击 -->
-		<map name="Map2" id="Map2">
-			<area shape="rect" coords="3,5,82,30" href="#" alt="" id="del"/>
-			<area shape="rect" coords="86,4,159,31" href="#" alt="" />
+		<map name="Map1" id="Map1">
+			<area shape="rect" coords="3,5,82,30" href="javascript:;" alt="" id="del"/>
+			<area shape="rect" coords="86,4,159,31" href="javascript:;" alt="fresh" />
 		</map>
 	</form>
 	<input type="hidden" id="token" value="${token}"/>

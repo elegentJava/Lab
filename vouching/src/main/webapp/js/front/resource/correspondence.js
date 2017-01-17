@@ -2,6 +2,7 @@ var tree = new dTree("tree");
 
 $(function(){
 	
+	//加载类型树
 	var url = "/vouching/resource/loadCategoryTree";
 	var data = {
 		token : $("#token").val()

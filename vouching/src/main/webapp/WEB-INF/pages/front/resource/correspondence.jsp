@@ -11,7 +11,7 @@
 </head>
 <body>
 <div style="width: 100%; height: auto">
-		<div style="width: 20%; height: auto; float: left;">
+		<div style="width: 16%; height: auto; float: left; margin-left: 20px; margin-top: 30px">
 			<div id="dtree" class="dtree"></div>
 		</div>
 		<div style="width: 80%; height: auto; float: left;">
@@ -28,7 +28,7 @@
 						<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin: 10px auto;table-layout: fixed;">
 							<tr height="30">
 								<td align="left" valign="top" class="t2" width="15%"><strong>
-										<a href="#" onclick="showDia({	title : '发送函电',href : 'mail/showMailBox.do?value=1'})">发送函电</a>
+										<a href="javascript:;" id="sendHD">发送函电</a>
 								</strong></td>
 								<td width="84%"></td>
 							</tr>

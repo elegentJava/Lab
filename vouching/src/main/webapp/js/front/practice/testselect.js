@@ -19,10 +19,7 @@ $(function(){
 			$("#levels").append("<option value='" +levels[i].id+ "'>" +levels[i].name+ "</option>");
 		}
 	};
-	var faildCallback = function(data){
-		divAlert(data.errorCode);
-	};
-	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, faildCallback);
+	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, null);
 	
 	//生成试卷
 	$("#startTest").bind("click",function(){
@@ -43,10 +40,7 @@ $(function(){
 			var url = "/vouching/forward/forwardStartTest?token="+token;
 			VCUtils.common.util.simpleHref(url);
 		}
-		var faildCallback = function(data){
-			divAlert(data.errorCode);
-		}
-		VCUtils.common.ajax.commonAjax(url, false, data, successCallback, faildCallback);
+		VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, null);
 	});
 	
 });

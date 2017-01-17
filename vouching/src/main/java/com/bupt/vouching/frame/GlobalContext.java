@@ -1,6 +1,5 @@
 package com.bupt.vouching.frame;
 
-import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 
@@ -20,16 +19,16 @@ import com.bupt.vouching.bean.User;
 @Component("globalContext")
 @Scope("singleton")
 public class GlobalContext {
-
+	
 	/**
 	 * 用户Token
 	 */
 	private Map<String, User> userToken;
 
 	/**
-	 * 用户当前登录的IP地址
+	 * 邮件类型
 	 */
-	private Map<String, String> userIP;
+	private Map<String, Integer[]> emailDetail;
 
 	/**
 	 * 当前用户的练习试题
@@ -40,16 +39,6 @@ public class GlobalContext {
 	 * 用户正在参加的考试
 	 */
 	private Map<String, Exam> currentExam;
-
-	/**
-	 * 用户是否在考试标签
-	 */
-	private Map<String, Boolean> userInExamMap;
-
-	/**
-	 * 用户加入的临时竞技队列
-	 */
-	private Deque<User> competitonTempQueue;
 
 	public Map<String, User> getUserToken() {
 		return userToken;
@@ -76,28 +65,12 @@ public class GlobalContext {
 		this.currentExam = currentExam;
 	}
 
-	public Map<String, Boolean> getUserInExamMap() {
-		return userInExamMap;
+	public Map<String, Integer[]> getEmailDetail() {
+		return emailDetail;
 	}
 
-	public void setUserInExamMap(Map<String, Boolean> userInExamMap) {
-		this.userInExamMap = userInExamMap;
-	}
-
-	public Map<String, String> getUserIP() {
-		return userIP;
-	}
-
-	public void setUserIP(Map<String, String> userIP) {
-		this.userIP = userIP;
-	}
-
-	public Deque<User> getCompetitonTempQueue() {
-		return competitonTempQueue;
-	}
-
-	public void setCompetitonTempQueue(Deque<User> competitonTempQueue) {
-		this.competitonTempQueue = competitonTempQueue;
+	public void setEmailDetail(Map<String, Integer[]> emailDetail) {
+		this.emailDetail = emailDetail;
 	}
 
 }

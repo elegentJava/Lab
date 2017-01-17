@@ -5,27 +5,74 @@
 	<!-- 查询所有未删除的收件信 -->
 	<select id="findReceiveEmails" parameterType="int" resultType="Email">
 		select
-		emailid,sendid,sendemail,sendname,receiveid,receiveemail,receivename,subject,content,date,isread,senddel,receivedel
+		emailid,sendid,sendname,receiveid,receivename,subject,content,date,isread,senddel,receivedel
 		from email
 		where receiveid = #{0} and receivedel = 0
+		order by date DESC
 	</select>
 	
 	<!-- 查询所有未删除的发件信 -->
 	<select id="findSendEmails" parameterType="int" resultType="Email">
 		select
-		emailid,sendid,sendemail,sendname,receiveid,receiveemail,receivename,subject,content,date,isread,senddel,receivedel
+		emailid,sendid,sendname,receiveid,receivename,subject,content,date,isread,senddel,receivedel
 		from email
 		where sendid = #{0} and senddel = 0
+		order by date DESC
 	</select>
 	
 	<!-- 保存邮件信息 -->
 	<insert id="saveEmail" parameterType="Email">
 		insert into email
-		(emailid,sendid,sendemail,sendname,receiveid,receiveemail,
+		(emailid,sendid,sendname,receiveid,
 		 receivename,subject,content,date,isread,senddel,receivedel)
 		values 
-		(#{emailId},#{sendId},#{sendEmail},#{sendName},#{receiveId},#{receiveEmail},
+		(#{emailId},#{sendId},#{sendName},#{receiveId},
 	     #{receiveName},#{subject},#{content},#{date},#{isRead},#{sendDel},#{receiveDel})
 	</insert>
+	
+	<!-- 修改邮件状态 -->
+	<update id="updateEmailStatus" parameterType="Email">
+		update email
+		set isread = #{isRead}
+		where emailid = #{emailId}
+	</update>
+	
+	<!-- 通过ID查询邮件 -->
+	<select id="findEmailById" parameterType="int" resultType="Email">
+		select 
+		emailid,sendid,sendname,receiveid, receivename,subject,content,date,isread,senddel,receivedel
+		from email
+		where emailid = #{0}
+	</select>
+	
+	<!-- 批量修改收到邮件的删除状态-->
+	<update id="batchUpdateReceiveEmailDelStatus" parameterType="java.util.Map">
+		update email
+		set receivedel = #{receiveDel}
+		where emailid in
+		<foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+	
+	<!-- 批量修改发送邮件的删除状态 -->
+	<update id="batchUpdateSendEmailDelStatus" parameterType="java.util.Map">
+		update email
+		set senddel = #{sendDel}
+		where emailid in
+		<foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+	
+	<!-- 查询前五条未读的收件信 -->
+	<select id="findReceiveUnreadEmails" parameterType="int" resultType="Email">
+		select
+		emailid,sendid,sendname,receiveid,receivename,subject,content,date,isread,senddel,receivedel
+		from email
+		where receiveid = #{0} and receivedel = 0 and isread = 0
+		order by date DESC
+		limit 0, 5
+	</select>
 	
 </mapper>

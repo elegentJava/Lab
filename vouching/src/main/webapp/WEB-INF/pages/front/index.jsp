@@ -22,9 +22,12 @@
 			<tr>
 				<td height="29" align="right" class="bai12">${user.name}，你好！&nbsp;角色：${user.roleName}&nbsp;&nbsp;
 					<a id="logout" href="javascript:;" target="_parent">注销</a>&nbsp;| 
-					<a href="/vouching/forward/forwardModifyPW?token=${requestScope.token}" target="menu">个人密码修改</a>&nbsp;|
-					<a href="javascript:;">互动平台积分：0</a> 
-					<a href="javascript:;">未读站内信：0</a>
+					<a href="/vouching/forward/forwardModifyPW?token=${requestScope.token}" target="menu">个人密码修改</a>&nbsp;
+					<c:if test="${user.role == 1}">
+						|
+						<a href="javascript:;">互动平台积分：0</a> 
+						<a href="javascript:;">未读站内信：0</a>
+					</c:if>
 				</td>
 			</tr>
 		</table>
@@ -95,7 +98,7 @@
 		<input type="hidden" id="token" value="${token}"/>
 	</div>
 	<div>
-		<iframe scrolling="auto" rameborder="0" name="menu" width="100%" height="100%"></iframe>
+		<iframe scrolling="auto" rameborder="0" name="menu" width="100%" height="100%" src="/vouching/forward/forwardFrontMain?token=${token}"></iframe>
 	</div>
 </body>
 </html>

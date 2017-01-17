@@ -465,9 +465,7 @@ public class ExamServiceImpl implements ExamService {
 			Exam exam = examMapper.findExamById(examId);
 			if (exam != null) {
 				Map<String, Exam> currentExam = globalContext.getCurrentExam();
-				Map<String, Boolean> userInExamMap = globalContext.getUserInExamMap();
 				currentExam.put(token, exam);
-				userInExamMap.put(token, true);
 				result.setErrorCode(ErrorCode.SUCCESS);
 			} else {
 				result.setErrorCode(ErrorCode.PARAM_ABNORMAL);

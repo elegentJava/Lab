@@ -4,8 +4,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <%@include file="../common/common.jsp" %>
-<script type="text/javascript" src="<%=bp%>/js/dtreebase.js"></script>
-<link rel="stylesheet" href="<%=bp%>/css/treestyles.css" type="text/css"></link>
+<script type="text/javascript" src="<%=bp%>/js/lib/tree/dtreebase.js"></script>
+<link rel="stylesheet" href="<%=bp%>/js/lib/tree/treestyles.css" type="text/css"></link>
 <title>信息管理中心 </title>
 </head>
 

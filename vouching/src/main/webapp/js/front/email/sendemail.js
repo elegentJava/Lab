@@ -1,7 +1,7 @@
 $(function(){
 	
 	//装载班级信息
-	var url = "/vouching/admin/loadClasses";
+	var url = "/vouching/email/loadClassList";
 	var data = {
 		token : $("#token").val()
 	};
@@ -14,10 +14,7 @@ $(function(){
 			loadReceiver(classes[0].classId);
 		}
 	};
-	var faildCallback = function(data){
-		
-	};
-	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, faildCallback);
+	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, null);
 	
 	//班级选项改变事件
 	$("#classList").bind("change",function(){
@@ -31,20 +28,29 @@ $(function(){
 		var subject = $("#subject").val();
 		var content = $("#content").val();
 		var receivers = $("#receivers").val();
-		var url = "/vouching/email/sendEmail";
-		var data = {
-			token : $("#token").val(),
-			subject : subject,
-			content : content,
-			receivers : receivers
-		};
-		var successCallback = function(data){
-			
-		};
-		var faildCallback = function(data){
-			
-		};
-		VCUtils.common.ajax.commonAjax(url, false, data, successCallback, faildCallback);
+		if (VCUtils.common.util.isNotNullOrBlank(subject)) {
+			if (VCUtils.common.util.isNotNullOrBlank(content)) {
+				if (VCUtils.common.util.isNotNullOrBlank(receivers)) {
+					var url = "/vouching/email/sendEmail";
+					var data = {
+						token : $("#token").val(),
+						subject : subject,
+						content : content,
+						receivers : receivers
+					};
+					var successCallback = function(data){
+						layer.msg("发送成功!");
+					};
+					VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, null);
+				} else {
+					VCUtils.common.tip.errorAlert("收件人不能为空!");
+				}
+			} else {
+				VCUtils.common.tip.errorAlert("内容不能为空!");
+			}
+		} else {
+			VCUtils.common.tip.errorAlert("主题不能为空!");
+		}
 	});
 	
 	
@@ -71,10 +77,7 @@ function loadReceiver(classId){
 		}
 		addReceiver();
 	};
-	var faildCallback = function(data){
-		
-	};
-	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, faildCallback);
+	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, null);
 }
 
 /**
@@ -83,18 +86,14 @@ function loadReceiver(classId){
 function addReceiver(){
 	$("option[name='receiver']").bind("click",function(){
 		var selectedObj = $("option[name='receiver']:selected");
-		var temp = "";
 		var receivers = "";
 		for (var i = 0; i < selectedObj.length; i++) {
 			if (i != selectedObj.length - 1) {
-				temp += $(selectedObj[i]).text() + ";";
 				receivers += $(selectedObj[i]).attr("value") + ";";
 			} else {
-				temp += $(selectedObj[i]).text();
 				receivers += $(selectedObj[i]).attr("value");
 			}
 		}
-		$("#receiver").attr("value",temp);
 		$("#receivers").attr("value",receivers);
 	});
 }

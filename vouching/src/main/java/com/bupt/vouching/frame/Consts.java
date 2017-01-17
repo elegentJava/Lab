@@ -122,11 +122,11 @@ public class Consts {
 	/**
 	 * 邮件已读
 	 */
-	public static final Integer EMAIL_READ = 0;
+	public static final Integer EMAIL_READ = 1;
 	/**
 	 * 邮件没有删除
 	 */
-	public static final Integer EMAIL_IS_NOT_DELETE = 0;
+	public static final Integer EMAIL_NOT_DELETE = 0;
 	/**
 	 * 邮件已经删除
 	 */

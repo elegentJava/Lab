@@ -1,3 +1,3 @@
 eclipse.preferences.version=1
-validator.Checked=/,src/main/webapp/js/lib/jquery.js
-validator.Unchecked=src
+validator.Checked=/
+validator.Unchecked=

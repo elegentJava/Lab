@@ -32,7 +32,7 @@ td {
 		        	<table border="1" cellpadding="0" cellspacing="0" style="border-collapse: collapse;font-size:12px;table-layout:fixed;" bordercolor="#1D6300" width="100%">
 		            	<tr>
 			            	<td width="4%" height="24" bgcolor="#77B654" align="center">
-			            		<input type="checkbox"/>
+			            		<input id="checkall" type="checkbox"/>
 			            	</td>
 			            	<td width="6%" height="24" bgcolor="#77B654" align="center">
 			            		<p style="margin-left: 5; margin-right: 2; margin-top: 2; margin-bottom: 2">
@@ -65,8 +65,8 @@ td {
 		</table>
 		<!-- 热点击 -->
 		<map name="Map2" id="Map2">
-			<area shape="rect" coords="3,5,82,30" href="#" alt="" id="del"/>
-			<area shape="rect" coords="86,4,159,31" href="#" alt="" />
+			<area shape="rect" coords="3,5,82,30" href="javascript:;" alt="" id="del"/>
+			<area shape="rect" coords="86,4,159,31" href="javascript:;" alt="" id="fresh" />
 		</map>
 	</form>
 	<input type="hidden" id="token" value="${token}"/>
