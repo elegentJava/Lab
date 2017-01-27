@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import com.bupt.vouching.bean.Exam;
 import com.bupt.vouching.bean.Question;
 import com.bupt.vouching.bean.User;
-import com.bupt.vouching.service.bean.Competition;
+import com.bupt.vouching.service.bean.CompetitionSer;
 
 /**
  * 全局上下文
@@ -48,9 +48,14 @@ public class GlobalContext {
 	private LinkedList<String> watchingQueue;
 
 	/**
-	 * 匹配队列
+	 * 匹配队Map
 	 */
-	private List<Competition> competitionQueue;
+	private Map<String, CompetitionSer> competitionMap;
+
+	/**
+	 * 匹配成功后用户检索Map
+	 */
+	private Map<String, String> matchingMap;
 
 	public Map<String, User> getUserToken() {
 		return userToken;
@@ -92,12 +97,20 @@ public class GlobalContext {
 		this.watchingQueue = watchingQueue;
 	}
 
-	public List<Competition> getCompetitionQueue() {
-		return competitionQueue;
+	public Map<String, CompetitionSer> getCompetitionMap() {
+		return competitionMap;
 	}
 
-	public void setCompetitionQueue(List<Competition> competitionQueue) {
-		this.competitionQueue = competitionQueue;
+	public void setCompetitionMap(Map<String, CompetitionSer> competitionMap) {
+		this.competitionMap = competitionMap;
+	}
+
+	public Map<String, String> getMatchingMap() {
+		return matchingMap;
+	}
+
+	public void setMatchingMap(Map<String, String> matchingMap) {
+		this.matchingMap = matchingMap;
 	}
 
 }

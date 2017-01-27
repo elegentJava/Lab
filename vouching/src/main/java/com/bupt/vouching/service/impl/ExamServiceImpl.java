@@ -32,6 +32,8 @@ import com.bupt.vouching.mapper.RadioMapper;
 import com.bupt.vouching.mapper.TranslateMapper;
 import com.bupt.vouching.mapper.UserPaperMapper;
 import com.bupt.vouching.service.ExamService;
+import com.bupt.vouching.service.bean.QuestionLevel;
+import com.bupt.vouching.service.bean.QuestionType;
 import com.bupt.vouching.type.LevelType;
 import com.bupt.vouching.type.PageSize;
 import com.bupt.vouching.type.QuestionCategory;
@@ -218,7 +220,7 @@ public class ExamServiceImpl implements ExamService {
 		Integer phraseCount = jParams.getInteger("phraseCount");
 		Integer translateCount = jParams.getInteger("translateCount");
 		Integer level = jParams.getInteger("level");
-		if (!Utils.isNullOrBlank(name, bak) && radioCount != null
+		if (!Utils.isNullOrBlank(name) && radioCount != null
 				&& blankCount != null && clozeCount != null
 				&& phraseCount != null && translateCount != null
 				&& level != null) {
@@ -434,7 +436,7 @@ public class ExamServiceImpl implements ExamService {
 			List<Exam> unjoinedExam = null;
 			if (examIds != null && examIds.size() > 0) {
 				if (joinStatus == Consts.EXAM_JOINED) {
-					joinedExam = examMapper.findJoinedExam(map);
+					//joinedExam = examMapper.findJoinedExam(map);
 					pageInfo = new PageInfo<Exam>(joinedExam);
 					detail.put("joinedExams", joinedExam);
 				} else {
@@ -442,7 +444,7 @@ public class ExamServiceImpl implements ExamService {
 					pageInfo = new PageInfo<Exam>(unjoinedExam);
 					detail.put("unjoinedExams", unjoinedExam);
 				}
-			} else {
+			} else {//用户未参加任何考试
 				unjoinedExam = examMapper.findExamsBySatus(Consts.ACTIVE);
 				pageInfo = new PageInfo<Exam>(unjoinedExam);
 				detail.put("unjoinedExams", unjoinedExam);
@@ -464,8 +466,7 @@ public class ExamServiceImpl implements ExamService {
 		if (examId != null) {
 			Exam exam = examMapper.findExamById(examId);
 			if (exam != null) {
-				Map<String, Exam> currentExam = globalContext.getCurrentExam();
-				currentExam.put(token, exam);
+				globalContext.getCurrentExam().put(token, exam);
 				result.setErrorCode(ErrorCode.SUCCESS);
 			} else {
 				result.setErrorCode(ErrorCode.PARAM_ABNORMAL);
@@ -545,6 +546,7 @@ public class ExamServiceImpl implements ExamService {
 			userPaper.setPhrases(generateIds(phraseAnswers));
 			userPaper.setTranslates(generateIds(translateAnswers));
 			userPaper.setRadios(generateIds(radioAnswers));
+			userPaper.setStatus(Consts.USER_PAPER_UNDO);
 			userPaper.setUserId(globalContext.getUserToken().get(token).getUserId());
 			if (userPaperMapper.saveUserPaper(userPaper) == Consts.DATA_SINGLE_SUCCESS) {
 				result.setErrorCode(ErrorCode.SUCCESS);
@@ -650,82 +652,20 @@ public class ExamServiceImpl implements ExamService {
 		return null;
 	}
 
-	/**
-	 * 问题类型实体
-	 * 
-	 * @author Hogan
-	 * 
-	 */
-	public static class QuestionType {
-
-		private Integer id;
-		private String tag;
-		private String name;
-
-		public QuestionType(Integer id, String tag, String name) {
-			this.id = id;
-			this.tag = tag;
-			this.name = name;
+	@Override
+	public MJSONObject autoValidateName(JSONObject jParams) {
+		MJSONObject result = new MJSONObject();
+		String name = jParams.getString("name");
+		if (!Utils.isNullOrBlank(name)) {
+			if (examMapper.findExamByName(name) == null) {
+				result.setErrorCode(ErrorCode.SUCCESS);
+			} else {
+				result.setErrorCode(ExamError.AUTO_EXAM_NAME_EXISTED);
+			}
+		} else {
+			result.setErrorCode(ExamError.AUTO_EXAM_NAME_IS_NULL);
 		}
-
-		public Integer getId() {
-			return id;
-		}
-
-		public void setId(Integer id) {
-			this.id = id;
-		}
-		
-		public String getTag() {
-			return tag;
-		}
-
-		public void setTag(String tag) {
-			this.tag = tag;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-	}
-	
-	/**
-	 * 问题难易程度实体
-	 * 
-	 * @author Hogan
-	 * 
-	 */
-	public static class QuestionLevel {
-
-		private Integer id;
-		private String name;
-
-		public QuestionLevel(Integer id, String name) {
-			this.id = id;
-			this.name = name;
-		}
-
-		public Integer getId() {
-			return id;
-		}
-
-		public void setId(Integer id) {
-			this.id = id;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
+		return result;
 	}
 
 }

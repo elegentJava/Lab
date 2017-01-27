@@ -42,6 +42,7 @@ public class User implements Serializable {
 	//逻辑上使用
 	private Date logicTime;
 	private Boolean isWaiting;
+	private Integer competitionScore;
 
 	public Integer getUserId() {
 		return userId;
@@ -222,4 +223,13 @@ public class User implements Serializable {
 	public void setIsWaiting(Boolean isWaiting) {
 		this.isWaiting = isWaiting;
 	}
+
+	public Integer getCompetitionScore() {
+		return competitionScore;
+	}
+
+	public void setCompetitionScore(Integer competitionScore) {
+		this.competitionScore = competitionScore;
+	}
+	
 }

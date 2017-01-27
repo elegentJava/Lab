@@ -40,7 +40,15 @@ public enum ExamError implements ErrorType{
 	/**
 	 * 保存用户试卷失败
 	 */
-	SAVE_USER_EXAM_FAILD(0x007,"保存用户试卷失败!"),
+	SAVE_USER_EXAM_FAILD(0x007,"保存用户试卷失败!"), 
+	/**
+	 * 考试名称已经存在
+	 */
+	AUTO_EXAM_NAME_EXISTED(0x008,"考试名称已经存在!"), 
+	/**
+	 * 考试名称不能为空
+	 */
+	AUTO_EXAM_NAME_IS_NULL(0x009,"考试名称不能为空!"),
 	;
 	
 	private int id;

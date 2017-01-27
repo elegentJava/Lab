@@ -32,8 +32,11 @@ $(function() {
 								  } 
 							  }
 							  if (users.length == 5) {
-								  window.parent.menu.location.href = "/vouching/forward/forwardCompetitionExam?token="+$("#token").val();
-							  }
+								  $(this).stopTime("validateMatchQuery");
+								  $(this).oneTime('1s',function(){//匹配成功后，1s后跳转
+									  window.parent.menu.location.href = "/vouching/forward/forwardCompetitionExam?token="+$("#token").val();
+									});
+								  }
 						  };
 						  var faildCallback = function(data){
 							  //nope
@@ -54,8 +57,8 @@ $(function() {
 	};
 	var successCallback = function(data){
 		var ranks = data.detail.ranks;
-		$("#rankList").append("<tr></tr>");
 		for (var i = 0; i < ranks.length; i++) {
+			$("#rankList").append("<tr></tr>");
 			var tr = $("#rankList").children().eq(i);
 			tr.append("<td class='bgbai'>"+ranks[i].name+"</td>");
 			tr.append("<td class='bgbai'>"+ranks[i].credit+"</td>");

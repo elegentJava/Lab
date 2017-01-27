@@ -62,14 +62,6 @@ public interface ExamMapper {
 	public Integer updateQuestionId(Exam exam);
 
 	/**
-	 * 查询用户已经参加过的考试
-	 * 
-	 * @param map
-	 * @return
-	 */
-	public List<Exam> findJoinedExam(Map<String, Object> map);
-
-	/**
 	 * 查询用户未参加过的考试
 	 * 
 	 * @param map
@@ -84,5 +76,13 @@ public interface ExamMapper {
 	 * @return
 	 */
 	public List<Exam> findExamsBySatus(Integer active);
+
+	/**
+	 * 通过考试名称查询考试信息
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public Exam findExamByName(String name);
 
 }

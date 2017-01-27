@@ -101,7 +101,7 @@ public abstract class BaseController {
 	public static final String PATH_PREVIEW = "/preview";
 	public String preview = PATH_PREVIEW;
 	
-	public static final String PATH_JOIN_EXAM = "/joinExam";
+	public static final String PATH_JOIN_EXAM = "/joinexam";
 	public String joinExam = PATH_JOIN_EXAM;
 	
 	public static final String PATH_START_EXAM = "/startExam";
@@ -138,7 +138,7 @@ public abstract class BaseController {
 	
 	////////////////////////////第四级目录////////////////////////////
 	
-	public static final String PATH_EXAM_SETTING = "/examSetting";
+	public static final String PATH_EXAM_SETTING = "/examsetting";
 	public String examSetting = PATH_EXAM_SETTING;
 	
 	public static final String PATH_UPLOAD= "/upload";

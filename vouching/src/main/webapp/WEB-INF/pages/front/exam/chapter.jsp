@@ -6,7 +6,7 @@
 <%@include file="../common/common.jsp"%>
 <title>章节设置</title>
 
-<link href="<%=bp%>/css/style2.css" rel="stylesheet" type="text/css" />
+<link href="<%=bp%>/css/front/style2.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="<%=bp%>/js/front/exam/chapter.js"></script>
 </head>
 

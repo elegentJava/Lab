@@ -26,6 +26,7 @@ $(function(){
  * @param isActive
  */
 function initLoadData(tbodyId,isActive){
+	var loading = layer.load();
 	var url = "/vouching/exam/loadExamSetting";
 	var data = {
 		token : $("#token").val(),
@@ -79,11 +80,9 @@ function initLoadData(tbodyId,isActive){
 				$("#inactiveList").append("<tr><td colspan='7' class='teatbbai' align='left' style='font-family: 黑体;'>暂无待激活的试卷信息！</td></tr>");
 			}
 		}
+		layer.close(loading);
 	};
-	var failedCallback = function(data){
-		divAlert(data.errorCode);
-	};
-	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, failedCallback);
+	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, loading);
 }
 
 /**
@@ -92,6 +91,7 @@ function initLoadData(tbodyId,isActive){
  * @param pageNum
  */
 function loadActiveForPage(pageNum){
+	var loading = layer.load();
 	var url = "/vouching/exam/loadExamSetting";
 	var data = {
 		token : $("#token").val(),
@@ -121,11 +121,9 @@ function loadActiveForPage(pageNum){
 			$("#activeList").append("<tr><td colspan='7' class='teatbbai' align='left' style='font-family: 黑体;color:read;'>暂无激活的试卷信息！</td></tr>");
 		}
 		refreshForPage();
+		layer.close(loading);
 	};
-	var failedCallback = function(data){
-		divAlert(data.errorCode);
-	};
-	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, failedCallback);
+	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, loading);
 }
 
 /**
@@ -134,6 +132,7 @@ function loadActiveForPage(pageNum){
  * @param pageNum
  */
 function loadInactiveForPage(pageNum){
+	var loading = layer.close();
 	var url = "/vouching/exam/loadExamSetting";
 	var data = {
 		token : $("#token").val(),
@@ -164,11 +163,9 @@ function loadInactiveForPage(pageNum){
 			$("#inactiveList").append("<tr><td colspan='7' class='teatbbai' align='left' style='font-family: 黑体;'>暂无待激活的试卷信息！</td></tr>");
 		}
 		refreshForPage();
+		layer.close(loading);
 	};
-	var failedCallback = function(data){
-		divAlert(data.errorCode);
-	};
-	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, failedCallback);
+	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, loading);
 }
 
 /**
@@ -190,10 +187,7 @@ function updateExamStatus(id,status){
 			var successCallback = function(data){
 				refresh();
 			};
-			var failedCallback = function(data){
-				divAlert(data.errorCode);
-			};
-			VCUtils.common.ajax.commonAjax(url, false, data, successCallback, failedCallback);
+			VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, null);
 		});
 	});
 }
@@ -211,13 +205,10 @@ function deleteExam(){
 				examId : $(this).attr("value")
 			};
 			var successCallback = function(data){
-				divAlert("删除成功!");
+				layer.msg("删除成功!");
 				refresh();
 			};
-			var faildCallback = function(data){
-				divAlert(data.errorCode);
-			};
-			VCUtils.common.ajax.commonAjax(url, false, data, successCallback, faildCallback);
+			VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, null);
 		});
 	});
 }

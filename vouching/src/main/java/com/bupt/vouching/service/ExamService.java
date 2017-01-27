@@ -138,4 +138,12 @@ public interface ExamService {
 	 * @return
 	 */
 	public MJSONObject loadExamRecord(JSONObject jParams);
+
+	/**
+	 * 自动组卷页面校验考试名称
+	 * 
+	 * @param jParams
+	 * @return
+	 */
+	public MJSONObject autoValidateName(JSONObject jParams);
 }

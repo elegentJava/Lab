@@ -22,9 +22,9 @@
 	<!-- 保存用户试卷 -->
 	<insert id="saveUserPaper" parameterType="UserPaper"> 
 		insert into 
-		userpaper(answerdate,radios,blanks,phrases,translates,clozes,examid,score,userid)
+		userpaper(answerdate,radios,blanks,phrases,translates,clozes,examid,score,userid,status)
 		values(#{answerDate},#{radios},#{blanks},#{phrases},#{translates},
-				#{clozes},#{examId},#{score},#{userId})
+				#{clozes},#{examId},#{score},#{userId},#{status})
 	</insert>
 	
 	<!-- 通过用户ID查询试卷 -->

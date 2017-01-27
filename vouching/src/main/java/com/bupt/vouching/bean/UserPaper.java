@@ -26,6 +26,7 @@ public class UserPaper {
 	private Integer examId;
 	private Integer score;
 	private Integer userId;
+	private Integer status;
 
 	private List<Integer> radioIds;
 	private List<Integer> blankIds;
@@ -35,6 +36,7 @@ public class UserPaper {
 	private Exam exam;
 	private User user;
 
+	private String statusName;
 	private String formatAnswerDate;
 
 	public Integer getUserPaperId() {
@@ -189,7 +191,7 @@ public class UserPaper {
 	}
 
 	public String getFormatAnswerDate() {
-		if(this.answerDate != null){
+		if (this.answerDate != null) {
 			formatAnswerDate = DateFormatUtils.format(this.answerDate, Consts.DATE_SIMPLE_PATTERN);
 		}
 		return formatAnswerDate;
@@ -197,6 +199,25 @@ public class UserPaper {
 
 	public void setFormatAnswerDate(String formatAnswerDate) {
 		this.formatAnswerDate = formatAnswerDate;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	public String getStatusName() {
+		if(this.status != null){
+			statusName = this.status == 0 ? "还未批阅":"已经批阅";
+		}
+		return statusName;
+	}
+
+	public void setStatusName(String statusName) {
+		this.statusName = statusName;
 	}
 
 	private List<Integer> generateIds(String id) {

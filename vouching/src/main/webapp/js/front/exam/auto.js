@@ -17,7 +17,7 @@ $(function(){
 			$("#levels").append("<option value='"+levels[i].id+"'>"+levels[i].name+"</option>");
 		}
 	};
-	VCUtils.common.ajax.commonAjax(url, true, data, successCallback, null);
+	VCUtils.common.ajax.commonAjax(url, true, data, successCallback, null, null);
 	
 	//考试名称校验
 	$("#name").bind("focusout",function(){
@@ -43,12 +43,9 @@ $(function(){
 				level : $("#levels").val()
 			};
 			var successCallback = function(data){
-				divAlert("试卷生成成功!");
+				layer.msg("试卷生成成功!");
 			};
-			var faildCallback = function(data){
-				divAlert(data.errorCode);
-			};
-			VCUtils.common.ajax.commonAjax(url, false, data, successCallback, faildCallback);
+			VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, null);
 		}
 	});
 	
@@ -62,9 +59,23 @@ $(function(){
 function examNameValidate(){
 	var name = $("#name").val();
 	if (VCUtils.common.util.isNotNullOrBlank(name)) {
-		$("#errorMsg").text("");
-		return true;
+		var flag = true;
+		var url = "/vouching/exam/autoValidateName";
+		var data = {
+			token : $("#token").val(),
+			name : name
+		};
+		var successCallback = function(data){
+			$("#errorMsg").text("");
+		};
+		var faildCallback = function(data){
+			$("#errorMsg").text(data.errorCode);
+			flag = false;
+		};
+		VCUtils.common.ajax.commonAjax(url, false, data, successCallback, faildCallback, null);
+		return flag;
+	} else {
+		$("#errorMsg").text("请输入考试名称!");
+		return false;
 	}
-	$("#errorMsg").text("请输入考试名称!");
-	return false;
 }

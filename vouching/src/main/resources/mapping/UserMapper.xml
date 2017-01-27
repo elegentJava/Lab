@@ -137,4 +137,11 @@
 		</foreach>
 	</delete>
 	
+	<!-- 修改用户的积分 -->
+	<update id="updateCredit" parameterType="User">
+		update user
+		set credit = #{credit}
+		where userid = #{userId}
+	</update>
+	
 </mapper>

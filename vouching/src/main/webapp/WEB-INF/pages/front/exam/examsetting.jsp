@@ -4,7 +4,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <%@include file="../common/common.jsp"%>
-<link href="<%=bp%>/css/style2.css" rel="stylesheet" type="text/css" />
+<link href="<%=bp%>/css/front/style2.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="<%=bp%>/js/front/exam/examsetting.js"></script>
 <title>考试设置</title>
 </head>

@@ -20,9 +20,11 @@ public class Utils {
 	 * @return
 	 */
 	public static boolean isNullOrBlank(String... str) {
-		for (String e : str) {
-			if (e == null || "".equals(e)) {
-				return true;
+		if(str != null){
+			for (String e : str) {
+				if (e == null || "".equals(e)) {
+					return true;
+				}
 			}
 		}
 		return false;

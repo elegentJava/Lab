@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <%@include file="../common/common.jsp"%>
-<link href="<%=bp%>/css/style2.css" rel="stylesheet" type="text/css" />
+<link href="<%=bp%>/css/front/style2.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="<%=bp%>/js/front/exam/joinexam.js" ></script>
 <title>参加考试</title> 
 </head>
@@ -24,9 +24,10 @@
 				<table width="80%" border="0" cellspacing="1" cellpadding="0" class="content_table1">
 					<tr><td colspan="3" class="teatbbai" align="left">你已经参加过的考试列表</td></tr>
 					<tr class="teatb" style="color: #fff;" align="center">
-						<td width="40%" align="center">考试名称</td>
-						<td width="25%" align="center">备注</td>
-						<td width="15%" align="center">提交时间</td>
+						<td width="30%" align="center">考试名称</td>
+						<td width="30%" align="center">备注</td>
+						<td width="15%" align="center">状态</td>
+						<td width="25%" align="center">提交时间</td>
 					</tr>
 					<tbody id="joinedList"></tbody>
 					<tfoot id="joinedPager">

@@ -61,7 +61,7 @@
 								</tr>
 								<tbody id="questionList"></tbody>
 								<tr><td colspan="2" id="answerText" style="color: red"></td></tr>
-								<tfoot><tr><td colspan='2' align="center" class="t2"><strong><input id="showAnswer" type="button" value="查看答案并计分"/>&nbsp;&nbsp;</strong></td></tr></tfoot>	
+								<tfoot><tr><td colspan='2' align="center" class="t2"><strong><input id="showAnswer" type="button" value="查看答案并提交"/>&nbsp;&nbsp;</strong></td></tr></tfoot>	
 							</table>
 						</td>
 					</tr>
@@ -69,7 +69,6 @@
 			</td>
 		</tr>
 	</table>
-	<input type="hidden" id="chapterIdHidden" value="1"/>
 	<input type="hidden" id="token" value="${token}"/>
 	<jsp:include page="../common/foot.jsp" />
 </body>

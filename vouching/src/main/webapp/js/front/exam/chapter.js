@@ -1,32 +1,7 @@
 $(function(){
 	
 	//装载章节信息
-	var url = "/vouching/exam/loadChapters";
-	var data = {
-		token : $("#token").val()
-	};
-	var successCallback = function(data){
-		var activeChapter = data.detail.activeChapters;
-		var inactiveChapter = data.detail.inactiveChapters;
-		if (activeChapter != null && activeChapter.length >= 1) {
-			for (var i = 0; i < activeChapter.length; i++) {
-				$("#activeList").append("<tr id='"+activeChapter[i].chapterId+"' class='teatbbai' align='center'><td><a chapterName='"+activeChapter[i].name+"' value='"+activeChapter[i].chapterId+"' name='inactive' href='javascript:;'>取消激活</a></td><td>"+activeChapter[i].name+"</td></tr>");
-			}
-		} else {
-			$("#activeList").append("<tr><td>暂无已经激活的章节信息!</td></tr>");
-		}
-		if (inactiveChapter != null && inactiveChapter.length >= 1) {
-			for (var i = 0; i < inactiveChapter.length; i++) {
-				$("#inactiveList").append("<tr id='"+inactiveChapter[i].chapterId+"' class='teatbbai' align='center'><td><a chapterName='"+inactiveChapter[i].name+"' value='"+inactiveChapter[i].chapterId+"' name='active' href='javascript:;'>激活</a></td><td>"+inactiveChapter[i].name+"</td></tr>");
-			}
-		} else {
-			$("#inactiveList").append("<tr><td>暂无未激活的章节信息!</td></tr>");
-		}
-	};
-	var failedCallback = function(data){
-		divAlert(data.errorCode);
-	};
-	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, failedCallback);
+	loadChapter();
 	
 	//取消激活
 	inactiveChapter();
@@ -35,6 +10,37 @@ $(function(){
 	activeChapter();
 	
 });
+
+/**
+ * 装载章节信息
+ */
+function loadChapter(){
+	var url = "/vouching/exam/loadChapters";
+	var data = {
+		token : $("#token").val()
+	};
+	var successCallback = function(data){
+		$("#activeList").children().remove();
+		$("#inactiveList").children().remove();
+		var activeChapter = data.detail.activeChapters;
+		var inactiveChapter = data.detail.inactiveChapters;
+		if (activeChapter != null && activeChapter.length >= 1) {
+			for (var i = 0; i < activeChapter.length; i++) {
+				$("#activeList").append("<tr id='"+activeChapter[i].chapterId+"' class='teatbbai' align='center'><td><a chapterName='"+activeChapter[i].name+"' value='"+activeChapter[i].chapterId+"' name='inactive' href='javascript:;'>取消激活</a></td><td>"+activeChapter[i].name+"</td></tr>");
+			}
+		} else {
+			$("#activeList").append("<tr class='teatbbai'><td colspan='2'>暂无已经激活的章节信息!</td></tr>");
+		}
+		if (inactiveChapter != null && inactiveChapter.length >= 1) {
+			for (var i = 0; i < inactiveChapter.length; i++) {
+				$("#inactiveList").append("<tr id='"+inactiveChapter[i].chapterId+"' class='teatbbai' align='center'><td><a chapterName='"+inactiveChapter[i].name+"' value='"+inactiveChapter[i].chapterId+"' name='active' href='javascript:;'>激活</a></td><td>"+inactiveChapter[i].name+"</td></tr>");
+			}
+		} else {
+			$("#inactiveList").append("<tr class='teatbbai'><td colspan='2'>暂无未激活的章节信息!</td></tr>");
+		}
+	};
+	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, null);
+}
 
 /**
  * 激活章节
@@ -51,14 +57,9 @@ function activeChapter(){
 				status : 1
 			};
 			var successCallback = function(data){
-				$("#"+id).remove();
-				$("#activeList").append("<tr id='"+id+"' class='teatbbai' align='center'><td><a chapterName='"+chapterName+"' value='"+id+"' name='inactive' href='javascript:;'>取消激活</a></td><td>"+chapterName+"</td></tr>");
-				inactiveChapter();
+				refresh();
 			};
-			var faildCallback = function(data){
-				divAlert(data.errorCode);
-			};
-			VCUtils.common.ajax.commonAjax(url, false, data, successCallback, faildCallback);
+			VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, null);
 		});
 	});
 }
@@ -78,14 +79,18 @@ function inactiveChapter(){
 				status : 0
 			};
 			var successCallback = function(data){
-				$("#"+id).remove();
-				$("#inactiveList").append("<tr id='"+id+"' class='teatbbai' align='center'><td><a chapterName='"+chapterName+"' value='"+id+"' name='active' href='javascript:;'>激活</a></td><td>"+chapterName+"</td></tr>");
-				activeChapter();
+				refresh();
 			};
-			var faildCallback = function(data){
-				divAlert(data.errorCode);
-			};
-			VCUtils.common.ajax.commonAjax(url, false, data, successCallback, faildCallback);
+			VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, null);
 		});
 	});
+}
+
+/**
+ * 刷新
+ */
+function refresh(){
+	loadChapter();
+	activeChapter();
+	inactiveChapter();
 }

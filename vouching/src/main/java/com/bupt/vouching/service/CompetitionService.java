@@ -35,4 +35,20 @@ public interface CompetitionService {
 	 */
 	public MJSONObject joinCompetition(JSONObject jParams);
 
+	/**
+	 * 装载竞技试题
+	 * 
+	 * @param jParams
+	 * @return
+	 */
+	public MJSONObject loadCompetitionExam(JSONObject jParams);
+
+	/**
+	 * 查看答案并记录
+	 * 
+	 * @param jParams
+	 * @return
+	 */
+	public MJSONObject showAnswer(JSONObject jParams);
+
 }

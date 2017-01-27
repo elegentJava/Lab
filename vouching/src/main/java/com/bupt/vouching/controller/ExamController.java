@@ -334,4 +334,23 @@ public class ExamController extends BaseController {
 		return new ResponseTemplate(detail).getReturn();
 	}
 	
+	/**
+	 * 自动组卷页面校验考试名称
+	 * 
+	 * @param jo
+	 * @return
+	 */
+	@RequestMapping("autoValidateName")
+	public @ResponseBody JSONObject autoValidateName(@RequestBody JSONObject jo) {
+		MJSONObject detail = null;
+		try {
+			RequestTemplate rt = new RequestTemplate(jo);
+			detail = examService.autoValidateName(rt.getJParams());
+		} catch (Exception e) {
+			log.error("自动组卷页面校验考试名称失败!",e);
+			return new ResponseTemplate().getReturn();
+		}
+		return new ResponseTemplate(detail).getReturn();
+	}
+	
 }

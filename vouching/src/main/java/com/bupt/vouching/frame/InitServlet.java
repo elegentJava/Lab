@@ -1,6 +1,5 @@
 package com.bupt.vouching.frame;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,8 +14,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.bupt.vouching.bean.Exam;
 import com.bupt.vouching.bean.Question;
 import com.bupt.vouching.bean.User;
-import com.bupt.vouching.service.bean.Competition;
-import com.bupt.vouching.service.impl.TimeServiceImpl;
+import com.bupt.vouching.service.TimeService;
+import com.bupt.vouching.service.bean.CompetitionSer;
 
 /**
  * 初始化操作
@@ -40,10 +39,11 @@ public class InitServlet extends HttpServlet {
 		globalContext.setCurrentPractice(new HashMap<String, List<? extends Question>>());
 		globalContext.setEmailDetail(new HashMap<String, Integer[]>());
 		globalContext.setWatchingQueue(new LinkedList<String>());
-		globalContext.setCompetitionQueue(new ArrayList<Competition>());
+		globalContext.setCompetitionMap(new HashMap<String,CompetitionSer>());
+		globalContext.setMatchingMap(new HashMap<String,String>());
 		
 		//启动检测竞技队列
-		app.getBean(TimeServiceImpl.class).competitionQueueListener();
+		app.getBean(TimeService.class).competitionQueueListener();
 	}
 
 }

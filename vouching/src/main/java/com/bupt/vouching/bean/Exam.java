@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import com.bupt.vouching.frame.Consts;
+import com.bupt.vouching.util.Utils;
 
 /**
  * 试卷实体
@@ -64,6 +65,9 @@ public class Exam {
 	}
 
 	public String getBak() {
+		if(Utils.isNullOrBlank(this.bak)){
+			this.bak = "无备注信息";
+		}
 		return bak;
 	}
 

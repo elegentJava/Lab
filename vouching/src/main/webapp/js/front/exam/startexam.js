@@ -1,6 +1,18 @@
 $(function(){
 	
 	//装载试卷信息
+	loadStartExam();
+	
+	//提交试卷
+	submitExam();
+	
+});
+
+/**
+ * 装载考试页面
+ */
+function loadStartExam() {
+	var loading = layer.load();
 	var url = "/vouching/exam/loadStartExam";
 	var data = {
 		token : $("#token").val()
@@ -94,13 +106,16 @@ $(function(){
 		
 		//备份ExamId
 		$("#examId").attr("value",data.detail.examId);
+		
+		layer.close(loading);
 	};
-	var faildCallback = function(data){
-		divAlert(data.errorCode);
-	};
-	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, faildCallback);
-	
-	//提交试卷
+	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, loading);
+}
+
+/**
+ * 提交试卷
+ */
+function submitExam() {
 	$("#submitExam").bind("click",function(){
 		var radiosObj = $("#radiosList").find("input:checked");
 		var phrasesObj = $("#phrasesList").find("input");
@@ -138,12 +153,8 @@ $(function(){
 		    translateAnswers : translateAnswers
 		};
 		var successCallback = function(data){
-			divAlert("试卷保存成功!");
+			layer.msg("试卷保存成功!");
 		};
-		var faildCallback = function(data){
-		    divAlert(data.errorCode);
-		};
-		VCUtils.common.ajax.commonAjax(url, false, data, successCallback, faildCallback);
+		VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null ,null);
 	});
-	
-});
+}

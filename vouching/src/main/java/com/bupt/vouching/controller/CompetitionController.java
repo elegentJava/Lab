@@ -87,4 +87,42 @@ public class CompetitionController extends BaseController {
 		return new ResponseTemplate(detail).getReturn();
 	}
 	
+	/**
+	 * 装载竞技试题
+	 * 
+	 * @param jo
+	 * @return
+	 */
+	@RequestMapping("loadCompetitionExam")
+	public @ResponseBody JSONObject loadCompetitionExam(@RequestBody JSONObject jo) {
+		MJSONObject detail = null;
+		try {
+			RequestTemplate rt = new RequestTemplate(jo);
+			detail = competitionService.loadCompetitionExam(rt.getJParams());
+		} catch (Exception e) {
+			log.error("装载竞技试题失败!",e);
+			return new ResponseTemplate().getReturn();
+		}
+		return new ResponseTemplate(detail).getReturn();
+	}
+	
+	/**
+	 * 查看答案并记录
+	 * 
+	 * @param jo
+	 * @return
+	 */
+	@RequestMapping("showAnswer")
+	public @ResponseBody JSONObject showAnswer(@RequestBody JSONObject jo) {
+		MJSONObject detail = null;
+		try {
+			RequestTemplate rt = new RequestTemplate(jo);
+			detail = competitionService.showAnswer(rt.getJParams());
+		} catch (Exception e) {
+			log.error("查看答案并记录失败!",e);
+			return new ResponseTemplate().getReturn();
+		}
+		return new ResponseTemplate(detail).getReturn();
+	}
+	
 }

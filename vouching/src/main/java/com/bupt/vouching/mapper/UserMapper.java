@@ -127,7 +127,7 @@ public interface UserMapper {
 	 * @return
 	 */
 	public User findUserByAccount(String account);
-	
+
 	/**
 	 * 批量增加用户数据
 	 * 
@@ -142,4 +142,11 @@ public interface UserMapper {
 	 * @return
 	 */
 	public Integer batchDelete(Integer[] userIds);
+
+	/**
+	 * 修改用户的积分
+	 * 
+	 * @param map
+	 */
+	public Integer updateCredit(Map<String, Object> map);
 }

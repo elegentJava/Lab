@@ -35,7 +35,7 @@ public enum PageSize {
 	/**
 	 * 参加考试的记录数
 	 */
-	JOIN_EXAM_RECORD(5),
+	JOIN_EXAM_RECORD(3),
 	/**
 	 * 用户列表纪录数
 	 */

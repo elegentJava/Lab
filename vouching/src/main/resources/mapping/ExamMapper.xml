@@ -61,17 +61,6 @@
 		where examid = #{examId}
 	</update>
 	
-	<!-- 查询用户已经参加过的考试 -->
-	<select id="findJoinedExam" parameterType="java.util.Map" resultType="Exam">
-		select
-		examId,name,createdate,bak
-		from exam
-		where isactive = #{isActive} and examid in 
-		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
-			#{item}
-		</foreach>
-	</select>
-	
 	<!-- 查询用户未参加过的考试 -->
 	<select id="findUnjoinedExam" parameterType="java.util.Map" resultType="Exam">
 		select
@@ -89,6 +78,14 @@
 		examId,name,createdate,bak
 		from exam
 		where isactive = #{0} 
+	</select>
+
+	<!-- 通过考试名称查询考试信息 -->
+	<select id="findExamByName" parameterType="string" resultType="Exam">
+		select
+		examid,name,createdate,bak
+		from exam
+		where name = #{0} 
 	</select>
 		
 </mapper>

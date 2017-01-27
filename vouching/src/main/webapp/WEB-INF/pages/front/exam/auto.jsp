@@ -4,7 +4,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <%@include file="../common/common.jsp"%>
-<script type="text/javascript" src="<%=bp%>/js/front/exam/auto.js" defer="defer"></script>
+<script type="text/javascript" src="<%=bp%>/js/front/exam/auto.js" ></script>
 <title>无标题文档</title>
 </head>
 

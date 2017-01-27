@@ -19,6 +19,7 @@ $(function(){
  * @param joinStatus
  */
 function initLoadData(tbodyId,joinStatus){
+	var loading = layer.load();
 	var url = "/vouching/exam/loadJoinExam";
 	var data = {
 		token : $("#token").val(),
@@ -36,6 +37,7 @@ function initLoadData(tbodyId,joinStatus){
 					var tr = $("#" + tbodyId).children().eq(i);
 					tr.append("<td class='teatbbai' align='center'>" + datas[i].name + "</td>");
 					tr.append("<td class='teatbbai' align='center'>" + datas[i].bak + "</td>");
+					tr.append("<td class='teatbbai' align='center'>" + datas[i].statusName + "</td>");
 					tr.append("<td class='teatbbai' align='center'>" + datas[i].formatCreateDate + "</td>");
 				}
 				VCUtils.common.pager.front.loadPage(data);
@@ -64,11 +66,9 @@ function initLoadData(tbodyId,joinStatus){
 				$("#" + tbodyId).append("<tr><td colspan='4' class='teatbbai' align='left' style='font-family: 黑体;'>暂无尚未参加的试卷信息！</td></tr>");
 			}
 		}
+		layer.close(loading);
 	};
-	var failedCallback = function(data){
-		divAlert(data.errorCode);
-	};
-	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, failedCallback);
+	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, loading);
 }
 
 /**
@@ -77,6 +77,7 @@ function initLoadData(tbodyId,joinStatus){
  * @param pageNum
  */
 function loadJoinedForPage(pageNum){
+	var loading = layer.load();
 	var url = "/vouching/exam/loadJoinExam";
 	var data = {
 		token : $("#token").val(),
@@ -101,11 +102,9 @@ function loadJoinedForPage(pageNum){
 			$("#joinedPager").hide();
 			$("#joinedList").append("<tr><td colspan='3' class='teatbbai' align='left' style='font-family: 黑体;color:read;'>暂无激活的试卷信息！</td></tr>");
 		}
+		layer.close(loading);
 	};
-	var failedCallback = function(data){
-		divAlert(data.errorCode);
-	};
-	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, failedCallback);
+	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, loading);
 }
 
 /**
@@ -114,6 +113,7 @@ function loadJoinedForPage(pageNum){
  * @param pageNum
  */
 function loadUnjoinedForPage(pageNum){
+	var loading = layer.load();
 	var url = "/vouching/exam/loadJoinExam";
 	var data = {
 		token : $("#token").val(),
@@ -140,11 +140,9 @@ function loadUnjoinedForPage(pageNum){
 			$("#unjoinedList").append("<tr><td colspan='4' class='teatbbai' align='left' style='font-family: 黑体;color:read;'>暂无激活的试卷信息！</td></tr>");
 		}
 		joinExam();
+		layer.close(loading);
 	};
-	var failedCallback = function(data){
-		divAlert(data.errorCode);
-	};
-	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, failedCallback);
+	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, loading);
 }
 
 /**
@@ -166,11 +164,7 @@ function joinExam(){
 				var url = "/vouching/forward/forwardStartExam?token="+token;
 				VCUtils.common.util.simpleHref(url);
 			};
-			var failedCallback = function(data){
-				divAlert(data.errorCode);
-			};
-			VCUtils.common.ajax.commonAjax(url, false, data, successCallback, failedCallback);
+			VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, null);
 		});
 	});
 }
-

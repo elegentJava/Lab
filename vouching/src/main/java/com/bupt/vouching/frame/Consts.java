@@ -134,25 +134,33 @@ public class Consts {
 	/**
 	 * 竞技队列匹配上限
 	 */
-	public static final int MATECHED_COUNT = 5;
+	public static final Integer MATECHED_COUNT = 5;
 	
 	/**
 	 * 默认的班级ID(创建用户没有选择班级)
 	 */
-	public static final int DEFAULT_CLASS_ID = 3;
+	public static final Integer DEFAULT_CLASS_ID = 3;
 	
 	/**
 	 * 资源还没有处理
 	 */
-	public static final int RESOURCE_UN_DEAL = 0;
+	public static final Integer RESOURCE_UN_DEAL = 0;
 	
 	/**
 	 * 资源已经处理
 	 */
-	public static final int RESOURCE_DEAL = 1;
-	
+	public static final Integer RESOURCE_DEAL = 1;
 	/**
-	 * 默认为前台登录
+	 * 试题数量
 	 */
-	public static final String DEFAULT_LOGIN_URL = "frontLogin";
+	public static final Integer QUESTION_COUNT = 10;
+	/**
+	 * 试卷处理状态--未处理
+	 */
+	public static final Integer USER_PAPER_UNDO = 0;
+	/**
+	 * 试卷处理状态--已处理
+	 */
+	public static final Integer USER_PAPER_DONE = 1;
+	
 }
