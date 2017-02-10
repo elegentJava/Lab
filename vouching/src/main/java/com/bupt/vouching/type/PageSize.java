@@ -55,7 +55,12 @@ public enum PageSize {
 	/**
 	 * 资源列表记录数
 	 */
-	RESOURCE_LIST_RECORD(10), ;
+	RESOURCE_LIST_RECORD(10), 
+	/**
+	 * 竞技记录数
+	 */
+	COMPETITION_RECORD(5), 
+	;
 
 	private int pageSize;
 

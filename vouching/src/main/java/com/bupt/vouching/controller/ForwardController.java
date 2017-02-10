@@ -332,7 +332,7 @@ public class ForwardController extends BaseController {
 	}
 	
 	/**
-	 * 跳转到竞技试卷页面
+	 * 跳转到竞技记录页面
 	 * 
 	 * @param token
 	 * @param request
@@ -341,6 +341,18 @@ public class ForwardController extends BaseController {
 	@RequestMapping("forwardCompetitionExam")
 	public String forwardCompetitionExam(String token, HttpServletRequest request){
 		return formFrontResult(token, request, competition, competitionExam);
+	}
+	
+	/**
+	 * 跳转到竞技试卷页面
+	 * 
+	 * @param token
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("forwardCompetitionRecord")
+	public String forwardCompetitionRecord(String token, HttpServletRequest request){
+		return formFrontResult(token, request, competition, competitionRecord);
 	}
 	
 	//////////////////////////////练习平台模块相关//////////////////////////////

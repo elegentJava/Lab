@@ -5,6 +5,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <%@include file="../common/common.jsp"%>
+<link rel="stylesheet" href="<%=bp%>/js/lib/tree/treestyles.css" type="text/css"></link>
+<script type="text/javascript" src="<%=bp%>/js/lib/tree/dtreebase.js"></script>
 <script type="text/javascript" src="<%=bp%>/js/front/exam/manual.js"></script>
 <title>手工组卷</title>
 <style>

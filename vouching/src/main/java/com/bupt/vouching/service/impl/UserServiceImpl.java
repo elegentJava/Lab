@@ -15,6 +15,7 @@ import com.bupt.vouching.frame.GlobalContext;
 import com.bupt.vouching.frame.MJSONObject;
 import com.bupt.vouching.mapper.UserMapper;
 import com.bupt.vouching.service.UserService;
+import com.bupt.vouching.service.bean.CompetitionSer;
 import com.bupt.vouching.type.error.ErrorCode;
 import com.bupt.vouching.type.error.UserError;
 import com.bupt.vouching.util.Utils;
@@ -82,6 +83,7 @@ public class UserServiceImpl implements UserService {
 		User user = globalContext.getUserToken().get(token);
 		user.setIsOnline(Consts.USER_NOT_ONLINE);
 		user.setLastLoginDate(user.getLoginDate());
+		removeCompetitionMap(token);
 		globalContext.getUserToken().remove(token);
 		if (userMapper.updateUserStatusAndLastLoginDate(user) == Consts.DATA_SINGLE_SUCCESS) {
 			result.setErrorCode(ErrorCode.SUCCESS);
@@ -120,6 +122,22 @@ public class UserServiceImpl implements UserService {
 			result.setErrorCode(UserError.PASSWORD_NULL);
 		}
 		return result;
+	}
+	
+	/**
+	 * 用户注销后，从匹配队列中删除
+	 * 
+	 * @param token
+	 */
+	private void removeCompetitionMap(String token) {
+		String competitionId = globalContext.getMatchingMap().get(token);
+		globalContext.getMatchingMap().remove(token);
+		if (competitionId != null) {
+			CompetitionSer competitionSer = globalContext.getCompetitionMap().get(competitionId);
+			if (competitionSer != null) {
+				competitionSer.getUsers().remove(token);
+			}
+		}
 	}
 
 }

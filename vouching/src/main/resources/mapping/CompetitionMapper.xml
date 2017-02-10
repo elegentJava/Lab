@@ -8,5 +8,13 @@
 		competition(score,userid,date) 
 		values (#{score},#{userId},#{date})
 	</insert>
+	
+	<!-- 通过用户ID查询竞技记录 -->
+	<select id="findCompetitionsByUserId" parameterType="int" resultType="Competition">
+		select 
+		competitionid,score,date
+		from competition
+		where userid = #{0}
+	</select>
 
 </mapper>

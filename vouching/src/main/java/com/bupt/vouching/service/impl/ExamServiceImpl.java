@@ -426,26 +426,19 @@ public class ExamServiceImpl implements ExamService {
 		String token = jParams.getString("token");
 		if (pageNum != null && joinStatus != null) {
 			User user = globalContext.getUserToken().get(token);
-			List<Integer> examIds = userPaperMapper.findExamIdByUserId(user.getUserId());
 			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("list", examIds);
-			map.put("isActive", Consts.ACTIVE);
+			map.put("userId", user.getUserId());
+			map.put("classId", user.getClassId());
 			PageHelper.startPage(pageNum, PageSize.JOIN_EXAM_RECORD);
-			PageInfo<Exam> pageInfo = null;
-			List<Exam> joinedExam = null;
+			PageInfo<?> pageInfo = null;
+			List<UserPaper> joinedExam = null;
 			List<Exam> unjoinedExam = null;
-			if (examIds != null && examIds.size() > 0) {
-				if (joinStatus == Consts.EXAM_JOINED) {
-					//joinedExam = examMapper.findJoinedExam(map);
-					pageInfo = new PageInfo<Exam>(joinedExam);
-					detail.put("joinedExams", joinedExam);
-				} else {
-					unjoinedExam = examMapper.findUnjoinedExam(map);
-					pageInfo = new PageInfo<Exam>(unjoinedExam);
-					detail.put("unjoinedExams", unjoinedExam);
-				}
-			} else {//用户未参加任何考试
-				unjoinedExam = examMapper.findExamsBySatus(Consts.ACTIVE);
+			if (joinStatus == Consts.EXAM_JOINED) {//已经参加过的考试信息
+				joinedExam = userPaperMapper.findJoinedExam(map);
+				pageInfo = new PageInfo<UserPaper>(joinedExam);
+				detail.put("joinedExams", joinedExam);
+			} else {//尚未参加的考试信息
+				unjoinedExam = examMapper.findUnjoinedExam(map);
 				pageInfo = new PageInfo<Exam>(unjoinedExam);
 				detail.put("unjoinedExams", unjoinedExam);
 			}
@@ -529,32 +522,37 @@ public class ExamServiceImpl implements ExamService {
 	public MJSONObject saveUserExam(JSONObject jParams) {
 		MJSONObject result = new MJSONObject();
 		String token = jParams.getString("token");
-		Integer examId = jParams.getInteger("examId");
-		String[] radioAnswers = jParams.getObject("radioAnswers", String[].class);
-		String[] phraseAnswers = jParams.getObject("phraseAnswers", String[].class);
-		String[] clozeAnswers = jParams.getObject("clozeAnswers", String[].class);
-		String[] blankAnswers = jParams.getObject("blankAnswers", String[].class);
-		String[] translateAnswers = jParams.getObject("translateAnswers", String[].class);
-		if (examId != null && radioAnswers != null && phraseAnswers != null
-				&& clozeAnswers != null && blankAnswers != null
-				&& translateAnswers != null) {
-			UserPaper userPaper = new UserPaper();
-			userPaper.setAnswerDate(new Date());
-			userPaper.setExamId(examId);
-			userPaper.setBlanks(generateIds(blankAnswers));
-			userPaper.setClozes(generateIds(clozeAnswers));
-			userPaper.setPhrases(generateIds(phraseAnswers));
-			userPaper.setTranslates(generateIds(translateAnswers));
-			userPaper.setRadios(generateIds(radioAnswers));
-			userPaper.setStatus(Consts.USER_PAPER_UNDO);
-			userPaper.setUserId(globalContext.getUserToken().get(token).getUserId());
-			if (userPaperMapper.saveUserPaper(userPaper) == Consts.DATA_SINGLE_SUCCESS) {
-				result.setErrorCode(ErrorCode.SUCCESS);
+		if (globalContext.getCurrentExam().get(token) != null) {// 还没提交过
+			Integer examId = jParams.getInteger("examId");
+			String[] radioAnswers = jParams.getObject("radioAnswers", String[].class);
+			String[] phraseAnswers = jParams.getObject("phraseAnswers", String[].class);
+			String[] clozeAnswers = jParams.getObject("clozeAnswers", String[].class);
+			String[] blankAnswers = jParams.getObject("blankAnswers", String[].class);
+			String[] translateAnswers = jParams.getObject("translateAnswers", String[].class);
+			if (examId != null && radioAnswers != null && phraseAnswers != null
+					&& clozeAnswers != null && blankAnswers != null
+					&& translateAnswers != null) {
+				UserPaper userPaper = new UserPaper();
+				userPaper.setAnswerDate(new Date());
+				userPaper.setExamId(examId);
+				userPaper.setBlanks(generateIds(blankAnswers));
+				userPaper.setClozes(generateIds(clozeAnswers));
+				userPaper.setPhrases(generateIds(phraseAnswers));
+				userPaper.setTranslates(generateIds(translateAnswers));
+				userPaper.setRadios(generateIds(radioAnswers));
+				userPaper.setStatus(Consts.USER_PAPER_UNDO);
+				userPaper.setUserId(globalContext.getUserToken().get(token).getUserId());
+				if (userPaperMapper.saveUserPaper(userPaper) == Consts.DATA_SINGLE_SUCCESS) {
+					globalContext.getCurrentExam().remove(token);
+					result.setErrorCode(ErrorCode.SUCCESS);
+				} else {
+					result.setErrorCode(ExamError.SAVE_USER_EXAM_FAILD);
+				}
 			} else {
-				result.setErrorCode(ExamError.SAVE_USER_EXAM_FAILD);
+				result.setErrorCode(ErrorCode.PARAM_ABNORMAL);
 			}
 		} else {
-			result.setErrorCode(ErrorCode.PARAM_ABNORMAL);
+			result.setErrorCode(ExamError.ALREADY_SUBMIT_EXAM);
 		}
 		return result;
 	}
@@ -568,8 +566,11 @@ public class ExamServiceImpl implements ExamService {
 		if (pageNum != null) {
 			User user = globalContext.getUserToken().get(token);
 			PageHelper.startPage(pageNum, PageSize.EXAM_RECORD_COUNT);
-			List<UserPaper> userPapers = userPaperMapper.findExamsByUserId(user.getUserId());
-			PageInfo<UserPaper> pageInfo = new PageInfo<>(userPapers);
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("userId", user.getUserId());
+			map.put("status", Consts.USER_PAPER_DONE);
+			List<UserPaper> userPapers = userPaperMapper.findUserpaperByUserIdAndStatus(map);
+			PageInfo<UserPaper> pageInfo = new PageInfo<UserPaper>(userPapers);
 			detail.put("examRecords", pageInfo.getList());
 			result.setDetail(detail);
 			result.setPageInfo(pageInfo);

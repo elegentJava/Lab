@@ -37,15 +37,39 @@ $(function(){
 			answers : answers,
 		};
 		var successCallback = function(data){
+			layer.open({
+				  type: 1 ,
+				  area: ['430px', '250px'] ,
+				  shade: 0.6 ,
+				  anim: 3 ,
+				  closeBtn: 0,
+				  title : '结算中,请等待...' ,
+				  content: '<div style="padding:10px;"><div style="text-align: center;"><h3>结算中....</h3><h3>答对<span style="color:red" id="score"></span>道题</h3></div><div style="text-align: center;"><h3>题目答案为:<span id="answers"></span></h3></div><div style="text-align: center;"><h3>最后获得积分为:<span style="color:red" id="credit"></span></h3></div><div style="text-align: center;"></div></div>',
+				  success : function(){
+					  $(this).everyTime('1s','validateSettlement',function(){
+						  var url = "/vouching/competition/creditHandle";
+						  var data = {
+							  token : $("#token").val()
+						  };
+						  var successCallback = function(data){
+							  $(this).stopTime("validateSettlement");
+							  $("#credit").text(data.detail.credit);
+							  $(this).oneTime('2s',function(){//结算成功后，2s后跳转
+								  var url = "/vouching/forward/forwardCompetition?token=" + $("#token").val();
+								  VCUtils.common.util.simpleHref(url);
+							  });
+						  };
+						  var faildCallback = function(data){
+							  //nope
+						  }
+						  VCUtils.common.ajax.commonAjax(url, false, data, successCallback, faildCallback, null);
+						},0,true);
+				  }
+				});
 			var answers = data.detail.answers;
 			var score = data.detail.score;
-			var text = "";
-			for (var i = 0; i < answers.length; i++) {
-				text += (i+1)+"、"+answers[i]+"      ";
-			}
-			$("#answerText").text(text);
-			$("#showAnswer").attr("value","最后得分为："+score+"分");
-			$("#showAnswer").attr("disabled",true);
+			$("#score").text(score);
+			$("#answers").text(answers);
 		};
 		VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, null);
 	});

@@ -125,4 +125,42 @@ public class CompetitionController extends BaseController {
 		return new ResponseTemplate(detail).getReturn();
 	}
 	
+	/**
+	 * 积分处理
+	 * 
+	 * @param jo
+	 * @return
+	 */
+	@RequestMapping("creditHandle")
+	public @ResponseBody JSONObject creditHandle(@RequestBody JSONObject jo) {
+		MJSONObject detail = null;
+		try {
+			RequestTemplate rt = new RequestTemplate(jo);
+			detail = competitionService.creditHandle(rt.getJParams());
+		} catch (Exception e) {
+			log.error("积分处理失败!",e);
+			return new ResponseTemplate().getReturn();
+		}
+		return new ResponseTemplate(detail).getReturn();
+	}
+	
+	/**
+	 * 装载竞技记录信息
+	 * 
+	 * @param jo
+	 * @return
+	 */
+	@RequestMapping("loadCompetitionRecord")
+	public @ResponseBody JSONObject loadCompetitionRecord(@RequestBody JSONObject jo) {
+		MJSONObject detail = null;
+		try {
+			RequestTemplate rt = new RequestTemplate(jo);
+			detail = competitionService.loadCompetitionRecord(rt.getJParams());
+		} catch (Exception e) {
+			log.error("装载竞技记录信息失败!",e);
+			return new ResponseTemplate().getReturn();
+		}
+		return new ResponseTemplate(detail).getReturn();
+	}
+	
 }

@@ -43,7 +43,8 @@ public class User implements Serializable {
 	private Date logicTime;
 	private Boolean isWaiting;
 	private Integer competitionScore;
-
+	private Integer tempCredit;
+	
 	public Integer getUserId() {
 		return userId;
 	}
@@ -230,6 +231,14 @@ public class User implements Serializable {
 
 	public void setCompetitionScore(Integer competitionScore) {
 		this.competitionScore = competitionScore;
+	}
+
+	public Integer getTempCredit() {
+		return tempCredit;
+	}
+
+	public void setTempCredit(Integer tempCredit) {
+		this.tempCredit = tempCredit;
 	}
 	
 }

@@ -25,6 +25,8 @@ import com.bupt.vouching.type.PageSize;
 import com.bupt.vouching.type.error.CompetitionError;
 import com.bupt.vouching.type.error.ErrorCode;
 import com.bupt.vouching.type.error.PracticeError;
+import com.bupt.vouching.util.page.PageHelper;
+import com.bupt.vouching.util.page.PageInfo;
 
 /**
  * 竞技业务实现类
@@ -63,14 +65,10 @@ public class CompetitionServiceImpl implements CompetitionService {
 		Map<String, String> matchingMap = globalContext.getMatchingMap();
 		if (matchingMap.containsKey(token)) {
 			CompetitionSer competition = globalContext.getCompetitionMap().get(matchingMap.get(token));
-			for (User e : competition.getUsers()) {
-				if (e.getUserId().equals(globalContext.getUserToken().get(token).getUserId())) {
-					detail.put("users", competition.getUsers());
-					result.setDetail(detail);
-					result.setErrorCode(ErrorCode.SUCCESS);
-					return result;
-				}
-			}
+			detail.put("users", competition.getUsers());
+			result.setDetail(detail);
+			result.setErrorCode(ErrorCode.SUCCESS);
+			return result;
 		} else {
 			result.setErrorCode(CompetitionError.MATCH_NOT_COMPLETE);
 		}
@@ -108,37 +106,101 @@ public class CompetitionServiceImpl implements CompetitionService {
 		String[] answers = jParams.getObject("answers", String[].class);
 		Integer score = 0;
 		Integer count = 0;
-		String[] answer = new String[5];
 		if (answers != null) {
-			List<? extends Question> questions = globalContext
-					.getCompetitionMap()
-					.get(globalContext.getMatchingMap().get(token))
-					.getQuestions();
-			for (Question question : questions) {
-				if (answers[count] != null) {
-					if (question instanceof Radio) {
-						if (OptionType.byId(Integer.parseInt(answers[count])).getDescription().equals(question.getAnswer())) {
-							score++;
+			String competitionId = globalContext.getMatchingMap().get(token);
+			if (competitionId != null) {
+				CompetitionSer competitionSer = globalContext.getCompetitionMap().get(competitionId);
+				if (competitionSer != null) {
+					List<? extends Question> questions = competitionSer.getQuestions();
+					for (Question question : questions) {
+						if (answers[count] != null) {
+							if (question instanceof Radio) {//暂时只有选择题
+								if (OptionType.byId(Integer.parseInt(answers[count])).getDescription().equals(question.getAnswer())) {
+									score++;
+								}
+							}
+							count++;
 						}
+					}
+					//暂存用户的竞技得分，通过独立线程进行处理
+					List<User> users = competitionSer.getUsers();
+					for (User e : users) {
+						if (e.getUserId() == user.getUserId()) {
+							e.setCompetitionScore(score);
+							break;
+						}
+					}
+					Competition newCompetition = new Competition();
+					newCompetition.setDate(new Date());
+					newCompetition.setScore(score);
+					newCompetition.setUserId(user.getUserId());
+					if (competitionMapper.addCompetition(newCompetition) == Consts.DATA_SINGLE_SUCCESS) {
+						user.setCompetitionScore(score);
+						detail.put("answers", competitionSer.getAnswers());
+						detail.put("score", score);
+						result.setDetail(detail);
+						result.setErrorCode(ErrorCode.SUCCESS);
+					} else {
+						result.setErrorCode(PracticeError.SHOW_ANSWER_FAILD);
+					}
 				}
-				answer[count] = question.getAnswer();
-				count++;
 			}
-			Competition newCompetition = new Competition();
-			newCompetition.setDate(new Date());
-			newCompetition.setScore(score);
-			newCompetition.setUserId(user.getUserId());
-			if (competitionMapper.addCompetition(newCompetition) == Consts.DATA_SINGLE_SUCCESS) {
-				user.setCompetitionScore(score);
-				detail.put("answers", answer);
-				detail.put("score", score);
-				result.setDetail(detail);
-				result.setErrorCode(ErrorCode.SUCCESS);
-			} else {
-				result.setErrorCode(PracticeError.SHOW_ANSWER_FAILD);
-			}
-		} }else {
+		} else {
 			result.setErrorCode(ErrorCode.PARAM_ABNORMAL);
+		}
+		return result;
+	}
+	
+	@Override
+	public MJSONObject loadCompetitionRecord(JSONObject jParams) {
+		MJSONObject result = new MJSONObject();
+		JSONObject detail = new JSONObject();
+		String token = jParams.getString("token");
+		Integer pageNum = jParams.getInteger("pageNum");
+		User user = globalContext.getUserToken().get(token);
+		PageHelper.startPage(pageNum, PageSize.COMPETITION_RECORD);
+		List<Competition> competitions = competitionMapper.findCompetitionsByUserId(user.getUserId());
+		PageInfo<Competition> pageInfo = new PageInfo<Competition>(competitions);
+		detail.put("records", pageInfo.getList());
+		result.setDetail(detail);
+		result.setPageInfo(pageInfo);
+		result.setErrorCode(ErrorCode.SUCCESS);
+		return result;
+	}
+
+	@Override
+	public MJSONObject creditHandle(JSONObject jParams) {
+		MJSONObject result = new MJSONObject();
+		JSONObject detail = new JSONObject();
+		String token = jParams.getString("token");
+		User user = globalContext.getUserToken().get(token);
+		String competitionId = globalContext.getMatchingMap().get(token);
+		if (competitionId != null) {
+			CompetitionSer competitionSer = globalContext.getCompetitionMap().get(competitionId);
+			if (competitionSer != null) {
+				if (competitionSer.getScoreHandle()) {
+					for (User e : competitionSer.getUsers()) {
+						if (user.getUserId() == e.getUserId()) {
+							detail.put("credit", e.getTempCredit());
+							result.setDetail(detail);
+							result.setErrorCode(ErrorCode.SUCCESS);
+							return result;
+						}
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public MJSONObject removeCompetitionInfo(JSONObject jParams) {
+		MJSONObject result = new MJSONObject();
+		String token = jParams.getString("token");
+		String competitionId = globalContext.getMatchingMap().get(token);
+		if (competitionId != null) {
+			globalContext.getMatchingMap().remove(token);
+			result.setErrorCode(ErrorCode.SUCCESS);
 		}
 		return result;
 	}

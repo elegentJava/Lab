@@ -14,7 +14,7 @@
 			<result property="className" column="classname"/>
 		</association>
 	</resultMap>
-
+	
 	<!-- 保存试卷信息 -->
 	<insert id="saveExam" parameterType="Exam">
 		insert into
@@ -66,10 +66,8 @@
 		select
 		examId,name,createdate,bak
 		from exam
-		where isactive = #{isActive} and examid not in 
-		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
-			#{item}
-		</foreach>
+		where classid = #{classId} and isactive = 1 and examid not in 
+		(select examid from userpaper where userid = #{userId})
 	</select>
 	
 	<!-- 根据试卷状态查询试卷信息 -->
@@ -87,5 +85,5 @@
 		from exam
 		where name = #{0} 
 	</select>
-		
+	
 </mapper>

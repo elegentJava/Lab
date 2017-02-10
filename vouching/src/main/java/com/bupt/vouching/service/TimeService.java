@@ -22,4 +22,9 @@ public interface TimeService {
 	 * 竞技积分监听器
 	 */
 	public void competitionCreditListener();
+	
+	/**
+	 * 清除竞技信息监听器
+	 */
+	public void removeCompetitionInfoListener();
 }

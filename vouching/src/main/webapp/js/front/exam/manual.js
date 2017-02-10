@@ -19,6 +19,14 @@ $(function(){
 		for (var i = 0; i < chapters.length; i++) {
 			tree.add(chapters[i].chapterId, 0, chapters[i].name, "1", chapters[i].name, "main");
 		} 
+		$("a[href='1']").each(function(){
+			$(this).unbind("click");
+			$(this).bind("click",function(){
+				var chapterId = $(this).attr("id").slice($(this).attr("id").length - 1);
+				$("#chapterIdHidden").val(chapterId);
+				queryQuestionsForCommon(chapterId, null, null);
+			});
+		});
 		document.getElementById("dtree").innerHTML=tree;
 		//装载题目类型
 		for (var i = 0; i < questionTypes.length; i++) {
@@ -155,10 +163,7 @@ function queryQuestionsForCommon(chapterId,source,level){
 		VCUtils.common.pager.front.registerEvent(queryQuestionsForPage);
 		bindClickForAddQuestion();
 	};
-	var faildCallback = function(data){
-		divAlert("题目查询失败!");
-	};
-	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, faildCallback);
+	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, null);
 }
 
 /**

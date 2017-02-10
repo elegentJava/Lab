@@ -22,7 +22,7 @@
 					<tr><td colspan="2" class="weizhi">&nbsp;<strong>首页 ->考试平台 ->查看试卷信息</strong></td></tr>
 				</table>
 				<table width="80%" border="0" cellspacing="1" cellpadding="0" class="content_table1">
-					<tr><td colspan="3" class="teatbbai" align="left">你已经参加过的考试列表</td></tr>
+					<tr><td colspan="4" class="teatbbai" align="left">你已经参加过的考试列表</td></tr>
 					<tr class="teatb" style="color: #fff;" align="center">
 						<td width="30%" align="center">考试名称</td>
 						<td width="30%" align="center">备注</td>

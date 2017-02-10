@@ -3,6 +3,7 @@ package com.bupt.vouching.frame;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -33,17 +34,19 @@ public class InitServlet extends HttpServlet {
 		super.init();
 		final ApplicationContext app = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
 		final GlobalContext globalContext = app.getBean(GlobalContext.class);
+		
 		//初始化全局变量
 		globalContext.setUserToken(new HashMap<String, User>());
 		globalContext.setCurrentExam(new HashMap<String, Exam>());
 		globalContext.setCurrentPractice(new HashMap<String, List<? extends Question>>());
 		globalContext.setEmailDetail(new HashMap<String, Integer[]>());
 		globalContext.setWatchingQueue(new LinkedList<String>());
-		globalContext.setCompetitionMap(new HashMap<String,CompetitionSer>());
-		globalContext.setMatchingMap(new HashMap<String,String>());
+		globalContext.setCompetitionMap(new ConcurrentHashMap<String,CompetitionSer>());
+		globalContext.setMatchingMap(new ConcurrentHashMap<String,String>());
 		
 		//启动检测竞技队列
 		app.getBean(TimeService.class).competitionQueueListener();
+		app.getBean(TimeService.class).competitionCreditListener();
 	}
 
 }

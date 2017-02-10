@@ -20,7 +20,7 @@
 	<!-- 通过账号密码获取用户信息 -->
 	<select id="findUserByAP" parameterType="string" resultType="User">
 		select
-		userid,account,password,name,sex,isonline,role,email,lastlogindate,classId 
+		userid,account,password,name,sex,isonline,role,email,lastlogindate,classId,credit 
 		from user
 		where account = #{0} and password = #{1}
 	</select>

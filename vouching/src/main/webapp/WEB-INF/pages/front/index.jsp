@@ -84,7 +84,7 @@
 								</c:if>
 								<li style="padding-left: 285px;" name="jjpt" class='s_li'>
 									<a href="/vouching/forward/forwardCompetition?token=${token}" target="menu">知识点竞技</a> | 
-									<a href="#" target="menu">查看成绩</a>
+									<a href="/vouching/forward/forwardCompetitionRecord?token=${token}" target="menu">查看成绩</a>
 								</li>
 								<li style="padding-left: 420px;" name="znx" class='s_li'>
 									<a href="/vouching/forward/forwardEmailStation?token=${token}" target="menu">站内信</a>

@@ -48,7 +48,11 @@ public enum ExamError implements ErrorType{
 	/**
 	 * 考试名称不能为空
 	 */
-	AUTO_EXAM_NAME_IS_NULL(0x009,"考试名称不能为空!"),
+	AUTO_EXAM_NAME_IS_NULL(0x009,"考试名称不能为空!"), 
+	/**
+	 * 试卷已经提交过了
+	 */
+	ALREADY_SUBMIT_EXAM(0x010,"试卷已经提交过了!"),
 	;
 	
 	private int id;

@@ -1,11 +1,14 @@
 package com.bupt.vouching.service.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -21,6 +24,7 @@ import com.bupt.vouching.mapper.RadioMapper;
 import com.bupt.vouching.mapper.UserMapper;
 import com.bupt.vouching.service.TimeService;
 import com.bupt.vouching.service.bean.CompetitionSer;
+import com.bupt.vouching.type.Credit;
 
 /**
  * 定时任务
@@ -79,7 +83,7 @@ public class TimeServiceImpl implements TimeService {
 				for (;;) {
 					Map<String, CompetitionSer> competitionMap = globalContext.getCompetitionMap();
 					LinkedList<String> watchingQueue = globalContext.getWatchingQueue();
-					if (!competitionMap.isEmpty()) {
+					if (!competitionMap.isEmpty()) {//非初始化操作
 						CompetitionSer competition = null;
 						for (Entry<String, CompetitionSer> e : competitionMap.entrySet()) {
 							if (e.getValue().getUsers().size() < Consts.MATECHED_COUNT) {
@@ -127,6 +131,67 @@ public class TimeServiceImpl implements TimeService {
 					}
 				}
 			}
+		},"competitionQueueListener").start();
+	}
+	
+	@Override
+	public void competitionCreditListener() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				for(;;){
+					Map<String, CompetitionSer> competitionMap = globalContext.getCompetitionMap();
+					if (!competitionMap.isEmpty()) {
+						for (Entry<String, CompetitionSer> e : competitionMap.entrySet()) {
+							CompetitionSer competitionSer = e.getValue();
+							if (!competitionSer.getScoreHandle()) {
+								boolean flag = true;
+								synchronized (this) {
+									List<User> users = competitionSer.getUsers();
+									if (users.size() > 0) {
+										for (User user : users) {
+											if (user.getCompetitionScore() == null) {
+												flag = false;
+												break;
+											}
+										}
+									} else {
+										flag = false;
+									}
+									if (flag) {//所有用户都已经录入分数
+										sortForCredit(users);
+										for (User user : users) {
+											Map<String, Object> map = new HashMap<String, Object>();
+											map.put("userId", user.getUserId());
+											map.put("credit", user.getCredit());
+											userMapper.updateCredit(map);
+										}
+										competitionSer.setScoreHandle(true);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},"competitionCreditListener").start();
+	}
+	
+	@Override
+	public void removeCompetitionInfoListener() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				for(;;){
+					Map<String, CompetitionSer> competitionMap = globalContext.getCompetitionMap();
+					Set<String> competitionIds = competitionMap.keySet();
+					for(String e : competitionIds){
+						if (!globalContext.getMatchingMap().containsValue(e)) {
+							competitionMap.remove(e);
+						}
+					}
+				}
+			}
 		}).start();
 	}
 	
@@ -144,48 +209,41 @@ public class TimeServiceImpl implements TimeService {
 		List<? extends Question> questions = radioMapper.findRadiosByRandom(map);	
 		competition.setQuestions(questions);
 	}
-
-	@Override
-	public void competitionCreditListener() {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				Map<String, CompetitionSer> competitionMap = globalContext.getCompetitionMap();
-				for(Entry<String, CompetitionSer> e : competitionMap.entrySet()){
-					CompetitionSer competitionSer = e.getValue();
-					List<User> users = competitionSer.getUsers();
-					if (users.size() == Consts.MATECHED_COUNT) {
-						boolean flag = true;
-						for (User user : competitionSer.getUsers()) {
-							if (user.getCompetitionScore() == null) {
-								flag = false;
-								break;
-							}
-						}
-						if (flag) {
-							Map<Integer, Integer> sortedUserMap = sortForCompetition(users);
-							for (Entry<Integer, Integer> e1 : sortedUserMap.entrySet()) {
-								Map<String, Object> map = new HashMap<String, Object>();
-								map.put("userId", e1.getKey());
-								map.put("credit", e1.getValue());
-								userMapper.updateCredit(map);
-							}
-						}
-					}
-				}
-			}
-		}).start();
-	}
 	
 	/**
-	 * 为修改积分排序
+	 * 为积分计算排序
+	 * 
 	 * @param users
 	 * @return
 	 */
-	private Map<Integer, Integer> sortForCompetition(List<User> users){
-		Map<Integer, Integer> result = new HashMap<Integer,Integer>();
-		
-		return result;
+	private void sortForCredit(List<User> users){
+		Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+		List<Integer[]> result = new ArrayList<Integer[]>();
+		Integer[] scores = new Integer[Consts.MATECHED_COUNT];
+		for (int i = 0 ; i < users.size() ; i++) {
+			scores[i] = users.get(i).getCompetitionScore();
+		}
+		Arrays.sort(scores);
+		for (int i = scores.length - 1; i >= 0; i--) {
+			if (i != scores.length - 1) {
+				int rank = result.get(scores.length - i - 2)[1];
+				if (scores[i] == scores[i + 1]) {
+					result.add(new Integer[] { scores[i], rank });
+				} else {
+					result.add(new Integer[] { scores[i], rank + 1 });
+				}
+			} else {
+				result.add(new Integer[] { scores[i], 1 });
+			}
+		}
+		for(Integer[] e : result){
+			map.put(e[0], e[1]);
+		}
+		for (User user : users) {
+			int score = map.get(user.getCompetitionScore());
+			user.setTempCredit(Credit.byRank(score).getCredit());
+			user.setCredit(Credit.byRank(score).getCredit() + user.getCredit());
+		}
 	}
 
 }

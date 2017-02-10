@@ -5,6 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <%@include file="../common/common.jsp"%>
+<script type="text/javascript" src="<%=bp%>/js/lib/jquery-timer.js" ></script>
 <script type="text/javascript" src="<%=bp%>/js/front/competition/competitionexam.js"></script>
 <title>竞技试题</title>
 <style type="text/css">

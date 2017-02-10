@@ -35,6 +35,9 @@ public abstract class BaseController {
 	
 	public static final String PATH_COMPEPITION_EXAM = "/competitionexam";
 	public String competitionExam = PATH_COMPEPITION_EXAM;
+	
+	public static final String PATH_COMPETITION_RECORD = "/competitionrecord";
+	public String competitionRecord = PATH_COMPETITION_RECORD;
 
 	public static final String PATH_EMAIL = "/email";
 	public String email = PATH_EMAIL;

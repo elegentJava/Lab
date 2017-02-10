@@ -43,20 +43,20 @@ public class GlobalContext {
 	private Map<String, Exam> currentExam;
 
 	/**
-	 * 等待队列
+	 * 匹配等待队列
 	 */
 	private LinkedList<String> watchingQueue;
 
 	/**
-	 * 匹配队Map
+	 * 匹配处理Map[competitionId-competition]
 	 */
 	private Map<String, CompetitionSer> competitionMap;
 
 	/**
-	 * 匹配成功后用户检索Map
+	 * 匹配成功后用户检索Map[tokenId-competitionId]
 	 */
 	private Map<String, String> matchingMap;
-
+	
 	public Map<String, User> getUserToken() {
 		return userToken;
 	}

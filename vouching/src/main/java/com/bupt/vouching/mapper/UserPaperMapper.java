@@ -1,6 +1,7 @@
 package com.bupt.vouching.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import com.bupt.vouching.bean.UserPaper;
 
@@ -29,10 +30,18 @@ public interface UserPaperMapper {
 	public Integer saveUserPaper(UserPaper userPaper);
 
 	/**
-	 * 通过用户ID查询试卷
+	 * 查询用户已经参加过的考试信息
 	 * 
-	 * @param userId
+	 * @param map
 	 * @return
 	 */
-	public List<UserPaper> findExamsByUserId(Integer userId);
+	public List<UserPaper> findJoinedExam(Map<String, Object> map);
+
+	/**
+	 * 通过用户ID和试卷处理状态查询试卷信息
+	 * 
+	 * @param map
+	 * @return
+	 */
+	public List<UserPaper> findUserpaperByUserIdAndStatus(Map<String, Object> map);
 }

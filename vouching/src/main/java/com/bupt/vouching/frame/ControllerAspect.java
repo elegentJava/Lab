@@ -66,4 +66,9 @@ public class ControllerAspect {
 		}
 	}
 	
+	@Before("within(com.bupt.vouching.controller..*)")
+	public void joinedExamValidate(JoinPoint jp) throws Exception{
+		
+	}
+	
 }
