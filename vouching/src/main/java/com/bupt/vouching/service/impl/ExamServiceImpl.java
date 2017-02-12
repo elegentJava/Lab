@@ -128,6 +128,7 @@ public class ExamServiceImpl implements ExamService {
 		}
 		activeChapters = chapterMapper.findAllChaptersByActiveStatus(Consts.ACTIVE);
 		PageHelper.startPage(1, PageSize.MANUAL_QUESTION_RESULT);
+		//初始化默认加载第一单元、难度为简单的选择题
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("chapterId", 1);
 		map.put("level", 0);

@@ -1,9 +1,30 @@
 var tree = new dTree("tree");
+
 $(function(){
 	
 	//隐藏分页项
 	$("#pager").hide();
 	
+	//初始化加载数据
+	initLoadData();
+	
+	//题目类型变更
+	typeChange();
+	
+	//难度类型变更
+	
+	//清除所有题目
+	
+	//存卷
+	
+	//预览
+	
+});
+
+/**
+ * 初始化装载数据
+ */
+function initLoadData(){
 	//装载页面
 	var url = "/vouching/exam/loadManual";
 	var data = {
@@ -14,117 +35,126 @@ $(function(){
 		var questionTypes = data.detail.questionTypes;
 		var levels = data.detail.levels;
 		var radios = data.detail.radios;
-		//装载章节树
+		/**
+		 * 装载章节树
+		 */
 		tree.add(0, -1, "章节列表","");
 		for (var i = 0; i < chapters.length; i++) {
 			tree.add(chapters[i].chapterId, 0, chapters[i].name, "1", chapters[i].name, "main");
 		} 
+		document.getElementById("dtree").innerHTML=tree;
+		//为章节树添加点击事件
 		$("a[href='1']").each(function(){
 			$(this).unbind("click");
 			$(this).bind("click",function(){
 				var chapterId = $(this).attr("id").slice($(this).attr("id").length - 1);
-				$("#chapterIdHidden").val(chapterId);
-				queryQuestionsForCommon(chapterId, null, null);
+				
 			});
 		});
-		document.getElementById("dtree").innerHTML=tree;
-		//装载题目类型
+		/**
+		 * 装载题目类型
+		 */
 		for (var i = 0; i < questionTypes.length; i++) {
 			//装载上面的按钮
 			$("#types").append("<td width='60px'>"+questionTypes[i].name+"</td>");
 			$("#types").append("<td source='" +questionTypes[i].id+ "'>0</td>");
+			$("td[source='"+questionTypes[i].id+"']").data("selected","none");
 			$("#types").append("<td><input source='" +questionTypes[i].id+ "' name='clear' type='button' value='清除'/></td>");
 			//装载选择框
 			$("#source").append("<option value='"+questionTypes[i].id+"'>"+questionTypes[i].name+"</option>");
 		}
-		//装载难易程度
+		/**
+		 * 装载难易程度
+		 */
 		for (var i = 0; i < levels.length; i++) {
 			$("#levels").append("<option value='"+levels[i].id+"'>"+levels[i].name+"</option>");
 		}
-		//装载默认的单选试题
+		/**
+		 * 装载默认的单选试题
+		 */
 		$("#questionList").children().remove();
 		if(radios.length > 0){
 			for (var i = 0,j = 1; i < radios.length; i++,j++) {
-				$("#questionList").append("<tr><td align='left' valign='top' width='10%'><input qid='" +radios[i].id+ "' name='addQuestion' type='button' value='添加到试卷' /></td><td align='center' width='10%'>"+ j +"&nbsp;</td><td align='left' width='80%'>" +radios[i].question+ "</td></tr>");
+				$("#questionList").append("<tr><td align='left' valign='top' width='10%'><input qid='" +radios[i].id+ "' name='addQuestion' type='button' value='添加' /></td><td align='center' width='10%'>"+ j +"&nbsp;</td><td align='left' width='80%'>" +radios[i].question+ "</td></tr>");
 				$("#questionList").append("<tr><td colspan='2' style='border: 1px dashed #ccc; border-bottom: none;'></td></tr>");
 			}
 			VCUtils.common.pager.front.loadPage(data);
 			$("#pager").show();
 		} else {
-			//
 			$("#pager").hide();
+			$("#questionList").append("<tr><td colspan='2' style='border: 1px dashed #ccc; border-bottom: none;'>没有相关的题目!</td></tr>");
 		}
-		VCUtils.common.pager.front.registerEvent(queryQuestionsForPage);
-		bindClickForAddQuestion();
+		VCUtils.common.pager.front.registerEvent();
+		//添加题目事件
+		addQuestion();
 	};
 	VCUtils.common.ajax.commonAjax(url, true, data, successCallback, null);
-	
-	//为题目类型绑定事件
-	$("#source").bind("change",function(){
-		var source = $(this).val();
-		queryQuestionsForCommon(null, source, null);
-	});
-	
-	//为难易程度绑定事件
-	$("#levels").bind("change",function(){
-		var level = $(this).val();
-		queryQuestionsForCommon(null, null, level);
-	});
-	
-	//提交试卷
-	
-	
-});
+}
 
 /**
- * 清除题目
+ * 添加题目
+ */
+function addQuestion(){
+	$("input[name='addQuestion']").each(function(){
+		$(this).unbind("change");
+		$(this).bind("change",function(){
+			var a = $("td[source='1']").data("selected");
+			alert(a);
+		});
+	});
+}
+
+/**
+ * 清除所有题目
  */
 function clearQuestion(){
-	$("input[name='clear']").each(function(){
-		$(this).bind("click",function(){
-			var source = $(this).attr("source");
-			//题目数修改
-			var count = $("td[source='" +source+ "']").text();
-			if(count != "0"){
-				var updatedCount = parseInt(count) - 1;
-				$("td[source='" +source+ "']").text(updatedCount);
-			}
-			//数据填充
-		});
+	
+}
+
+/**
+ * 题目类型变更
+ */
+function typeChange(){
+	$("#source").unbind("change");
+	$("#source").bind("change",function(){
+		var source = $(this).val();
+		var radioSelected = $("td[source='" + source + "']").data("selected");
+		alert(source);
 	});
 }
 
 /**
- * 为添加试题绑定事件
+ * 难度变更
  */
-function bindClickForAddQuestion(){
-	$("input[name='addQuestion']").each(function(){
-		$(this).unbind("click");
-		$(this).bind("click",function(){
-			var qid = $(this).attr("qid");
-			var source = $("#sourceHidden").val();
-			//按钮失效
-			$(this).attr("value","该题目已经添加");
-			$(this).css("color","red");
-			$(this).attr("disabled",true);
-			//题目数修改
-			var count = $("td[source='" +source+ "']").text();
-			var updatedCount = parseInt(count) + 1;
-			$("td[source='" +source+ "']").text(updatedCount);
-			//数据填充
-			
-		});
-	});
+function levelChange(){
+	
 }
 
 /**
- * 普通数据装载
- * 
- * @param chapterId
- * @param source
- * @param level
+ * 保存试卷
  */
-function queryQuestionsForCommon(chapterId,source,level){
+function saveExam(){
+	
+}
+
+/**
+ * 预览试卷
+ */
+function previewExam(){
+	
+}
+
+/**
+ * 考试名称校验
+ */
+function nameValidate(){
+	
+}
+
+/**
+ * 装载分页数据
+ */
+function loadPageData(chapterId,source,level,pageNum){
 	if(chapterId == null){
 		chapterId = $("#chapterIdHidden").val();
 	}
@@ -140,7 +170,7 @@ function queryQuestionsForCommon(chapterId,source,level){
 		chapterId : chapterId,
 		source : source,
 		level : level,
-		pageNum : 1
+		pageNum : pageNum
 	};
 	var successCallback = function(data){
 		$("#chapterIdHidden").attr("value",chapterId);
@@ -151,7 +181,7 @@ function queryQuestionsForCommon(chapterId,source,level){
 		$("#questionList").children().remove();
 		if(questions.length > 0){
 			for (var i = 0,j = 1; i < questions.length; i++,j++) {
-				$("#questionList").append("<tr><td align='left' valign='top' width='10%'><input qid='" +questions[i].id+ "' name='addQuestion' type='button' value='添加到试卷' /></td><td align='center' width='10%'>"+ j +"&nbsp;</td><td align='left' width='80%'>" +questions[i].question+ "</td></tr>");
+				$("#questionList").append("<tr><td align='left' valign='top' width='10%'><input qid='" +questions[i].id+ "' name='addQuestion' type='button' value='添加' /></td><td align='center' width='10%'>"+ j +"&nbsp;</td><td align='left' width='80%'>" +questions[i].question+ "</td></tr>");
 				$("#questionList").append("<tr><td colspan='2' style='border: 1px dashed #ccc; border-bottom: none;'></td></tr>");
 			}
 			VCUtils.common.pager.front.loadPage(data);
@@ -161,45 +191,7 @@ function queryQuestionsForCommon(chapterId,source,level){
 			$("#pager").hide();
 		}
 		VCUtils.common.pager.front.registerEvent(queryQuestionsForPage);
-		bindClickForAddQuestion();
+		addQuestion();
 	};
 	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, null);
 }
-
-/**
- * 分页专门装载
- * 
- * @param pageNum
- */
-function queryQuestionsForPage(pageNum){
-	var url = "/vouching/exam/queryQuestions";
-	var data = {
-		token : $("#token").val(),
-		chapterId : $("#chapterIdHidden").val(),
-		source : $("#sourceHidden").val(),
-		level : $("#levelHidden").val(),
-		pageNum : pageNum
-	};
-	var successCallback = function(data){
-		var questions = data.detail.questions;
-		//装载数据
-		$("#questionList").children().remove();
-		if(questions.length > 0){
-			for (var i = 0,j = 1; i < questions.length; i++,j++) {
-				$("#questionList").append("<tr><td align='left' valign='top' width='10%'><input qid='" +questions[i].id+ "' name='addQuestion' type='button' value='添加到试卷' /></td><td align='center' width='10%'>"+ j +"&nbsp;</td><td align='left' width='80%'>" +questions[i].question+ "</td></tr>");
-				$("#questionList").append("<tr><td colspan='2' style='border: 1px dashed #ccc; border-bottom: none;'></td></tr>");
-			}
-			VCUtils.common.pager.front.loadPage(data);
-			$("#pager").show();
-		} else {
-			//
-			$("#pager").hide();
-		}
-		VCUtils.common.pager.front.registerEvent(queryQuestionsForPage);
-		bindClickForAddQuestion();
-	};
-	var faildCallback = function(data){
-		divAlert("题目查询失败!");
-	};
-	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, faildCallback);
-};
