@@ -12,8 +12,10 @@ $(function(){
 	typeChange();
 	
 	//难度类型变更
+	levelChange();
 	
 	//清除所有题目
+	clear();
 	
 	//存卷
 	
@@ -25,6 +27,7 @@ $(function(){
  * 初始化装载数据
  */
 function initLoadData(){
+	var loading = layer.load();
 	//装载页面
 	var url = "/vouching/exam/loadManual";
 	var data = {
@@ -58,7 +61,7 @@ function initLoadData(){
 			//装载上面的按钮
 			$("#types").append("<td width='60px'>"+questionTypes[i].name+"</td>");
 			$("#types").append("<td source='" +questionTypes[i].id+ "'>0</td>");
-			$("td[source='"+questionTypes[i].id+"']").data("selected","none");
+			$("td[source='"+questionTypes[i].id+"']").data("selected",new Array());
 			$("#types").append("<td><input source='" +questionTypes[i].id+ "' name='clear' type='button' value='清除'/></td>");
 			//装载选择框
 			$("#source").append("<option value='"+questionTypes[i].id+"'>"+questionTypes[i].name+"</option>");
@@ -84,11 +87,12 @@ function initLoadData(){
 			$("#pager").hide();
 			$("#questionList").append("<tr><td colspan='2' style='border: 1px dashed #ccc; border-bottom: none;'>没有相关的题目!</td></tr>");
 		}
-		VCUtils.common.pager.front.registerEvent();
+		VCUtils.common.pager.front.registerEvent(loadPageData);
 		//添加题目事件
 		addQuestion();
+		layer.close(loading);
 	};
-	VCUtils.common.ajax.commonAjax(url, true, data, successCallback, null);
+	VCUtils.common.ajax.commonAjax(url, true, data, successCallback, null, loading);
 }
 
 /**
@@ -96,10 +100,85 @@ function initLoadData(){
  */
 function addQuestion(){
 	$("input[name='addQuestion']").each(function(){
-		$(this).unbind("change");
-		$(this).bind("change",function(){
-			var a = $("td[source='1']").data("selected");
-			alert(a);
+		$(this).unbind("click");
+		$(this).bind("click",function(){
+			var name = $(this).attr("name");
+			var source = $("#sourceHidden").attr("value");
+			var qid = $(this).attr("qid");
+			var selected = getSelected(source);
+			var count = $("td[source='" +source+ "']").text();
+			var updatedCount = 0;
+			if (name == "addQuestion") {
+				selected.push(qid);
+				//修改自身
+				$(this).attr("name","clearSingle");
+				$(this).attr("value","删除");
+				$(this).css("color","red");
+				//题目数修改
+				updatedCount = parseInt(count) + 1;
+			} else {
+				//剔除数据
+				for(var i = 0 ; i < selected.length ; i++){
+					if (qid == selected[i]) {
+						var temp = selected[i];
+						selected[i] = selected[selected.length-1];
+						selected[selected.length-1] = temp;
+						break;
+					}
+				}
+				selected.pop();
+				//修改自身
+				$(this).attr("name","addQuestion");
+				$(this).attr("value","添加");
+				$(this).css("color","black");
+				//题目数修改
+				updatedCount = parseInt(count) - 1;
+			}
+			$("td[source='" +source+ "']").text(updatedCount);
+		});
+	});
+}
+
+/**
+ * 清除一个题目
+ */
+function clearSingle(){
+	$("input[name='clearSingle']").each(function(){
+		$(this).unbind("click");
+		$(this).bind("click",function(){
+			var name = $(this).attr("name");
+			var source = $("#sourceHidden").attr("value");
+			var qid = $(this).attr("qid");
+			var selected = getSelected(source);
+			var count = $("td[source='" +source+ "']").text();
+			var updatedCount = 0;
+			if (name == "addQuestion") {
+				selected.push(qid);
+				//修改自身
+				$(this).attr("name","clearSingle");
+				$(this).attr("value","删除");
+				$(this).css("color","red");
+				//题目数修改
+				updatedCount = parseInt(count) + 1;
+			} else {
+				//剔除数据
+				for(var i = 0 ; i < selected.length ; i++){
+					if (qid == selected[i]) {
+						var temp = selected[i];
+						selected[i] = selected[selected.length-1];
+						selected[selected.length-1] = temp;
+						break;
+					}
+				}
+				selected.pop();
+				//修改自身
+				$(this).attr("name","addQuestion");
+				$(this).attr("value","添加");
+				$(this).css("color","black");
+				//题目数修改
+				updatedCount = parseInt(count) - 1;
+			}
+			$("td[source='" +source+ "']").text(updatedCount);
 		});
 	});
 }
@@ -107,8 +186,16 @@ function addQuestion(){
 /**
  * 清除所有题目
  */
-function clearQuestion(){
-	
+function clear(){
+	$("input[name='clear']").each(function(){
+		$(this).unbind("click");
+		$(this).bind("click",function(){
+			var source = $(this).attr("source");
+			resetSelected(source);
+			$("td[source='"+source+"']").text("0");
+			loadPageData(null, null, null, 1);
+		});
+	});
 }
 
 /**
@@ -118,8 +205,7 @@ function typeChange(){
 	$("#source").unbind("change");
 	$("#source").bind("change",function(){
 		var source = $(this).val();
-		var radioSelected = $("td[source='" + source + "']").data("selected");
-		alert(source);
+		loadPageData(null, source, null, null);
 	});
 }
 
@@ -127,7 +213,11 @@ function typeChange(){
  * 难度变更
  */
 function levelChange(){
-	
+	$("#levels").unbind("change");
+	$("#levels").bind("change",function(){
+		var level = $(this).val();
+		loadPageData(null, null, level, null);
+	});
 }
 
 /**
@@ -155,6 +245,7 @@ function nameValidate(){
  * 装载分页数据
  */
 function loadPageData(chapterId,source,level,pageNum){
+	var loading = layer.load();
 	if(chapterId == null){
 		chapterId = $("#chapterIdHidden").val();
 	}
@@ -163,6 +254,9 @@ function loadPageData(chapterId,source,level,pageNum){
 	}
 	if(level == null){
 		level = $("#levelHidden").val();
+	}
+	if(pageNum == null){
+		pageNum = 1;
 	}
 	var url = "/vouching/exam/queryQuestions";
 	var data = {
@@ -181,17 +275,51 @@ function loadPageData(chapterId,source,level,pageNum){
 		$("#questionList").children().remove();
 		if(questions.length > 0){
 			for (var i = 0,j = 1; i < questions.length; i++,j++) {
-				$("#questionList").append("<tr><td align='left' valign='top' width='10%'><input qid='" +questions[i].id+ "' name='addQuestion' type='button' value='添加' /></td><td align='center' width='10%'>"+ j +"&nbsp;</td><td align='left' width='80%'>" +questions[i].question+ "</td></tr>");
+				var selected = getSelected(source);
+				var flag = true;
+				for(var k = 0 ; k < selected.length ; k++){
+					if (selected[k] == questions[i].id) {
+						flag = false;
+						$("#questionList").append("<tr><td align='left' valign='top' width='10%'><input style='color:red' qid='" +questions[i].id+ "' name='clearSingle' type='button' value='删除' /></td><td align='center' width='10%'>"+ j +"&nbsp;</td><td align='left' width='80%'>" +questions[i].question+ "</td></tr>");
+						break;
+					}
+				}
+				if (flag) {
+					$("#questionList").append("<tr><td align='left' valign='top' width='10%'><input qid='" +questions[i].id+ "' name='addQuestion' type='button' value='添加' /></td><td align='center' width='10%'>"+ j +"&nbsp;</td><td align='left' width='80%'>" +questions[i].question+ "</td></tr>");
+				}
 				$("#questionList").append("<tr><td colspan='2' style='border: 1px dashed #ccc; border-bottom: none;'></td></tr>");
 			}
 			VCUtils.common.pager.front.loadPage(data);
 			$("#pager").show();
 		} else {
-			//
+			$("#questionList").append("<tr><td colspan='2' style='border: 1px dashed #ccc; border-bottom: none;'>暂无相关题目!</td></tr>");
 			$("#pager").hide();
 		}
-		VCUtils.common.pager.front.registerEvent(queryQuestionsForPage);
+		VCUtils.common.pager.front.registerEvent(loadPageData);
 		addQuestion();
+		clearSingle();
+		layer.close(loading);
 	};
-	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, null);
+	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, loading);
+}
+
+/**
+ * 获取已经选择的所有ID
+ * 
+ * @param source
+ * @returns
+ */
+function getSelected(source) {
+	return $("td[source='" + source + "']").data("selected");
+}
+
+/**
+ * 重置选择的所有ID
+ * 
+ * @param source
+ * @param data
+ * @returns
+ */
+function resetSelected(source) {
+	return $("td[source='" + source + "']").data("selected",new Array());
 }
