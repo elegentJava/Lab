@@ -33,6 +33,10 @@ public enum UserTemplate implements TemplateType{
 	 * 邮箱
 	 */
 	EMAIL(4,"Email"),
+	/**
+	 * 班级
+	 */
+	CLASS(5,"ClassId"),
 	;
 
 	private int id;

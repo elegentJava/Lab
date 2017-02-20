@@ -65,7 +65,7 @@
 										<c:when test="${user.role == 2}">
 											<a href="/vouching/forward/forwardManual?token=${token}" target="menu">手工组卷</a> | 
 											<a href="/vouching/forward/forwardAuto?token=${token}" target="menu">自动组卷</a> | 
-											<a href="#" target="menu">批改试卷</a> | 
+											<a href="/vouching/forward/forwardMarkPaper?token=${token}" target="menu">批改试卷</a> | 
 											<a href="/vouching/forward/forwardExamSetting?token=${token}" target="menu">考试设置</a> | 
 											<a href="/vouching/forward/forwardChapter?token=${token}" target="menu">章节设置</a> |
 											<a href="#" target="menu">查看成绩</a>

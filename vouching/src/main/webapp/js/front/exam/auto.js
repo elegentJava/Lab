@@ -44,6 +44,8 @@ $(function(){
 			};
 			var successCallback = function(data){
 				layer.msg("试卷生成成功!");
+				var url = "/vouching/forward/forwardPreview?examId=" + data.detail.examId + "&token=" + token;
+				VCUtils.common.util.simpleHref(url);
 			};
 			VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, null);
 		}
@@ -60,7 +62,7 @@ function examNameValidate(){
 	var name = $("#name").val();
 	if (VCUtils.common.util.isNotNullOrBlank(name)) {
 		var flag = true;
-		var url = "/vouching/exam/autoValidateName";
+		var url = "/vouching/exam/validateExamName";
 		var data = {
 			token : $("#token").val(),
 			name : name

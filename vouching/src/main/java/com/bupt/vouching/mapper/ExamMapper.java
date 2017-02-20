@@ -85,4 +85,12 @@ public interface ExamMapper {
 	 */
 	public Exam findExamByName(String name);
 
+	/**
+	 * 通过教师ID查询所有创建的试卷ID
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public List<Integer> findExamIdsByUserId(Integer userId);
+
 }

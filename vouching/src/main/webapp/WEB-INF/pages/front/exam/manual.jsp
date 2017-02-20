@@ -40,9 +40,12 @@
 			<table><tr><td><div id="dtree" class="dtree"></div></td></tr></table>
 			<br /><br />
 			<table>
-				<tr><td>&nbsp;输入考试名称<br /><input name="name" id="name" /></td></tr>
+				<tr>
+					<td>&nbsp;输入考试名称<br /><input name="name" id="name" /></td>
+					<td><span id="errorMsg" style="color: red"></span></td>
+				</tr>
 				<tr><td>&nbsp;输入考试备注<br /><input name="bak" id="bak" /></td></tr>
-				<tr><td><input type="button" id="saveExam" value="存卷" />&nbsp;&nbsp;&nbsp; <input type="button" value="预览" /></td></tr>
+				<tr><td><input type="button" id="saveExam" value="保存试卷并预览" /></td></tr>
 			</table>
 		</div>
 		<div style="width: 80%; height: auto; float: left;">

@@ -23,7 +23,7 @@ public enum PageSize {
 	/**
 	 * 手工组卷题目显示记录数
 	 */
-	MANUAL_QUESTION_RESULT(4),
+	MANUAL_QUESTION_RESULT(10),
 	/**
 	 * 竞技排行榜显示记录数
 	 */
@@ -60,6 +60,10 @@ public enum PageSize {
 	 * 竞技记录数
 	 */
 	COMPETITION_RECORD(5), 
+	/**
+	 * 批改试卷记录数
+	 */
+	USER_PAPER_RECORD(10), 
 	;
 
 	private int pageSize;

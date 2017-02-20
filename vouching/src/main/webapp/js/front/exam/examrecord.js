@@ -14,6 +14,7 @@ $(function(){
  * @param pageNum
  */
 function loadExamRecord(pageNum){
+	var loading = layer.load();
 	var url = "/vouching/exam/loadExamRecord";
 	var data = {
 		token : $("#token").val(),
@@ -21,7 +22,7 @@ function loadExamRecord(pageNum){
 	};
 	var successCallback = function(data){
 		$("#examRecordList").children().remove();
-		datas = data.detail.examRecords;
+		var datas = data.detail.examRecords;
 		if (datas != null && datas.length >= 1) {
 			for (var i = 0; i < datas.length; i++) {
 				$("#examRecordList").append("<tr></tr>");
@@ -37,10 +38,8 @@ function loadExamRecord(pageNum){
 			$("#pager").hide();
 			$("#examRecordList").append("<tr><td colspan='3' class='teatbbai' align='left' style='font-family: 黑体;color:read;'>暂无成绩信息！</td></tr>");
 		}
+		layer.close(loading);
 	};
-	var failedCallback = function(data){
-		divAlert(data.errorCode);
-	};
-	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, failedCallback);
+	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, loading);
 }
 

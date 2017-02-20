@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <meta name="renderer" content="webkit">
 <%@include file="common/common.jsp" %>
-<script type="text/javascript" src="<%=bp%>/js/md5.js" ></script>
+<script type="text/javascript" src="<%=bp%>/js/lib/md5.js" ></script>
 <script type="text/javascript" src="<%=bp%>/js/back/login.js"></script>
 <title>登录</title>
 </head>

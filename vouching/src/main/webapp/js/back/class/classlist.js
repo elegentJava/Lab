@@ -4,15 +4,7 @@ $(function(){
 	$("#pager").hide();
 	
 	//全选事件
-	$("#checkall").click(function() {
-		$("input[name='classId']").each(function() {
-			if (this.checked) {
-				this.checked = false;
-			} else {
-				this.checked = true;
-			}
-		});
-	});
+	VCUtils.common.util.selectBAll("classId");
 	
 	//初始化装载数据
 	initData(1);
@@ -71,7 +63,7 @@ function initData(pageNum){
 		}
 		layer.close(loading);
 	};
-	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null);
+	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null,loading);
 }
 
 /**
@@ -85,22 +77,24 @@ function updateClassStatus(objectName,isActive){
 		$(this).unbind("click");
 		$(this).bind("click",function(){
 			var classId = $(this).attr("classId");
-			var url="/vouching/admin/updateClassStatus";
-			var data = {
-				token : $("#token").val(),
-				isActive : isActive,
-				classId : classId
-			};
-			var successCallback = function(data){
-				layer.msg("修改成功!");
-				var length = $("#classList>tr").length;
-				var pageNum = parseInt($("#pageNum").text());
-				if(length == 1){
-					pageNum = pageNum - 1;
-				}
-				initData(pageNum);
-			};
-			VCUtils.common.ajax.commonAjax(url,false,data,successCallback,null);
+			VCUtils.common.tip.confirm("您确定要修改状态吗？", function(){
+				var url="/vouching/admin/updateClassStatus";
+				var data = {
+					token : $("#token").val(),
+					isActive : isActive,
+					classId : classId
+				};
+				var successCallback = function(data){
+					layer.msg("修改状态成功!");
+					var length = $("#classList>tr").length;
+					var pageNum = parseInt($("#pageNum").text());
+					if(length == 1){
+						pageNum = pageNum - 1;
+					}
+					initData(pageNum);
+				};
+				VCUtils.common.ajax.commonAjax(url,false,data,successCallback);
+			});
 		});
 	});
 }
@@ -113,21 +107,23 @@ function deleteSingle(){
 		$(this).unbind("click");
 		$(this).bind("click",function(){
 			var classId = $(this).attr("classId");
-			var url="/vouching/admin/deleteSingleClass";
-			var data = {
-				token : $("#token").val(),
-				classId : classId
-			};
-			var successCallback = function(data){
-				layer.msg("删除成功!");
-				var length = $("#classList>tr").length;
-				var pageNum = parseInt($("#pageNum").text());
-				if(length == 1){
-					pageNum = pageNum - 1;
-				}
-				initData(pageNum);
-			};
-			VCUtils.common.ajax.commonAjax(url,false,data,successCallback,null);
+			VCUtils.common.tip.confirm("您确定要删除吗？", function(){
+				var url="/vouching/admin/deleteSingleClass";
+				var data = {
+					token : $("#token").val(),
+					classId : classId
+				};
+				var successCallback = function(data){
+					layer.msg("删除成功!");
+					var length = $("#classList>tr").length;
+					var pageNum = parseInt($("#pageNum").text());
+					if(length == 1){
+						pageNum = pageNum - 1;
+					}
+					initData(pageNum);
+				};
+				VCUtils.common.ajax.commonAjax(url,false,data,successCallback);
+			});
 		});
 	});
 }
@@ -150,19 +146,21 @@ function multiDelete() {
 		var classIds = new Array();
 		var checkedObj = $("input[name='classId']:checked");
 		if (checkedObj.length > 0) {
-			for (var i = 0; i < checkedObj.length; i++) {
-				classIds[i] = $(checkedObj[i]).attr("value");
-			}
-			var url="/vouching/admin/batchDeleteClass";
-			var data = {
-				token : $("#token").val(),
-				classIds : classIds
-			};
-			var successCallback = function(data){
-				layer.msg("删除成功!");
-				initData(1);
-			};
-			VCUtils.common.ajax.commonAjax(url,false,data,successCallback,null);
+			VCUtils.common.tip.confirm("您确定要删除吗？", function(){
+				for (var i = 0; i < checkedObj.length; i++) {
+					classIds[i] = $(checkedObj[i]).attr("value");
+				}
+				var url="/vouching/admin/batchDeleteClass";
+				var data = {
+					token : $("#token").val(),
+					classIds : classIds
+				};
+				var successCallback = function(data){
+					layer.msg("删除成功!");
+					initData(1);
+				};
+				VCUtils.common.ajax.commonAjax(url,false,data,successCallback);
+			});
 		} else {
 			layer.alert("请选择一个再删除!", {icon: 5,});
 		}

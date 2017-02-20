@@ -44,4 +44,13 @@ public interface UserPaperMapper {
 	 * @return
 	 */
 	public List<UserPaper> findUserpaperByUserIdAndStatus(Map<String, Object> map);
+
+	/**
+	 * 通过试卷ID和试卷处理状态查询试卷信息
+	 * 
+	 * @param map
+	 * @return
+	 */
+	public List<UserPaper> findUserpaperByExamIdAndStatus(Map<String, Object> map);
+	
 }

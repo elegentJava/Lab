@@ -112,6 +112,13 @@ public abstract class BaseController {
 	
 	public static final String PATH_EXAM_RECORD = "/examrecord";
 	public String examRecord = PATH_EXAM_RECORD;
+	
+	public static final String PATH_MARK_PAPER = "/markpaper";
+	public String markPaper = PATH_MARK_PAPER;
+	
+	public static final String PATH_MARK_DETAIL= "/markdetail";
+	public String markDetail = PATH_MARK_DETAIL;
+	
 	/*
 	 * practice目录下
 	 */
@@ -176,6 +183,9 @@ public abstract class BaseController {
 	
 	public static final String PATH_ADD_CLASS = "/addclass";
 	public String addClass = PATH_ADD_CLASS;
+	
+	public static final String PATH_CLASS_ASSIGN = "/classassign";
+	public String classAssign = PATH_CLASS_ASSIGN;
 	
 	/**
 	 * 组合返回路径字符串

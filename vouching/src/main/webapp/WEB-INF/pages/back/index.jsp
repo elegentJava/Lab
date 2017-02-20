@@ -27,6 +27,9 @@
 		<ul style="display:block">
 			<li><a href="/vouching/forward/forwardStudentList?token=${token}" target="right"><span class="icon-caret-right"></span>学生管理</a></li>
 			<li><a href="/vouching/forward/forwardTeacherList?token=${token}" target="right"><span class="icon-caret-right"></span>教师管理</a></li>
+		</ul>
+		<h2><span class="icon-user"></span>班级管理</h2>
+		<ul style="display:block">
 			<li><a href="/vouching/forward/forwardClassList?token=${token}" target="right"><span class="icon-caret-right"></span>班级管理</a></li>
 		</ul>
 		<h2><span class="icon-user"></span>资源管理</h2>

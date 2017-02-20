@@ -212,6 +212,7 @@ public class ExamServiceImpl implements ExamService {
 	@Override
 	public MJSONObject autoGenerateExam(JSONObject jParams) {
 		MJSONObject result = new MJSONObject();
+		JSONObject detail = new JSONObject();
 		String token = jParams.getString("token");
 		String name = jParams.getString("name");
 		String bak = jParams.getString("bak");
@@ -255,6 +256,8 @@ public class ExamServiceImpl implements ExamService {
 			exam.setPhraseId(phraseIds);
 			exam.setTranslateId(translateIds);
 			if (examMapper.saveExam(exam) == Consts.DATA_SINGLE_SUCCESS) {
+				detail.put("examId", exam.getExamId());
+				result.setDetail(detail);
 				result.setErrorCode(ErrorCode.SUCCESS);
 			} else {
 				result.setErrorCode(ExamError.ADD_EXAM_FAILD);
@@ -336,31 +339,31 @@ public class ExamServiceImpl implements ExamService {
 		Integer examId = jParams.getInteger("examId");
 		if (examId != null) {
 			Exam exam = examMapper.findExamById(examId);
-			if(exam.getRadioIds() != null){
+			if(exam.getRadioIds() != null && exam.getRadioIds().size() > 0){
 				List<Radio> radios = radioMapper.findRadiosByIds(exam.getRadioIds());
 				detail.put("radios", radios);
 			} else {
 				detail.put("radios", null);
 			}
-			if(exam.getPhraseIds() != null){
+			if(exam.getPhraseIds() != null && exam.getPhraseIds().size() > 0){
 				List<Phrase> phrases = phraseMapper.findPhrasesByIds(exam.getPhraseIds());
 				detail.put("phrases", phrases);
 			} else {
 				detail.put("phrases", null);
 			}
-			if(exam.getBlankIds() != null){
+			if(exam.getBlankIds() != null && exam.getBlankIds().size() > 0){
 				List<Blank> blanks = blankMapper.findBlanksByIds(exam.getBlankIds());
 				detail.put("blanks", blanks);
 			} else {
 				detail.put("blanks", null);
 			}
-			if(exam.getTranslateIds() != null){
+			if(exam.getTranslateIds() != null && exam.getTranslateIds().size() > 0){
 				List<Translate> translates = translateMapper.findTranslatesByIds(exam.getTranslateIds());
 				detail.put("translates", translates);
 			} else {
 				detail.put("translates", null);
 			}
-			if(exam.getClozeIds() != null){
+			if(exam.getClozeIds() != null && exam.getClozeIds().size() > 0){
 				List<Cloze> clozes = clozeMapper.findClozesByIds(exam.getClozeIds());
 				detail.put("clozes", clozes);
 			} else {
@@ -582,6 +585,77 @@ public class ExamServiceImpl implements ExamService {
 		return result;
 	}
 	
+	@Override
+	public MJSONObject validateExamName(JSONObject jParams) {
+		MJSONObject result = new MJSONObject();
+		String name = jParams.getString("name");
+		if (!Utils.isNullOrBlank(name)) {
+			if (examMapper.findExamByName(name) == null) {
+				result.setErrorCode(ErrorCode.SUCCESS);
+			} else {
+				result.setErrorCode(ExamError.AUTO_EXAM_NAME_EXISTED);
+			}
+		} else {
+			result.setErrorCode(ExamError.AUTO_EXAM_NAME_IS_NULL);
+		}
+		return result;
+	}
+
+	@Override
+	public MJSONObject manualSaveExam(JSONObject jParams) {
+		MJSONObject result = new MJSONObject();
+		JSONObject detail = new JSONObject();
+		String token = jParams.getString("token");
+		String examName = jParams.getString("examName");
+		String bak = jParams.getString("bak");
+		Integer[] radios = jParams.getObject("radios", Integer[].class);
+		Integer[] blanks = jParams.getObject("blanks", Integer[].class);
+		Integer[] clozes = jParams.getObject("clozes", Integer[].class);
+		Integer[] phrases = jParams.getObject("phrases", Integer[].class);
+		Integer[] translates = jParams.getObject("translates", Integer[].class);
+		Exam exam = new Exam();
+		exam.setBak(bak);
+		exam.setName(examName);
+		exam.setCreateDate(new Date());
+		exam.setTeacherId(globalContext.getUserToken().get(token).getUserId());
+		exam.setClassId(globalContext.getUserToken().get(token).getClassId());
+		exam.setIsActive(Consts.INACTIVE);
+		exam.setRadioId(generateIds(radios));
+		exam.setBlankId(generateIds(blanks));
+		exam.setClozeId(generateIds(clozes));
+		exam.setPhraseId(generateIds(phrases));
+		exam.setTranslateId(generateIds(translates));
+		if (examMapper.saveExam(exam) == Consts.DATA_SINGLE_SUCCESS) {
+			detail.put("examId", exam.getExamId());
+			result.setDetail(detail);
+			result.setErrorCode(ErrorCode.SUCCESS);
+		} else {
+			result.setErrorCode(ExamError.ADD_EXAM_FAILD);
+		}
+		return result;
+	}
+	
+	@Override
+	public MJSONObject loadMarkPaper(JSONObject jParams) {
+		MJSONObject result = new MJSONObject();
+		JSONObject detail = new JSONObject();
+		String token = jParams.getString("token");
+		Integer pageNum = jParams.getInteger("pageNum");
+		User user = globalContext.getUserToken().get(token);
+		List<Integer> examIds = examMapper.findExamIdsByUserId(user.getUserId());
+		PageHelper.startPage(pageNum, PageSize.USER_PAPER_RECORD);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("list", examIds);
+		map.put("status", Consts.USER_PAPER_UNDO);
+		List<UserPaper> userPapers = userPaperMapper.findUserpaperByExamIdAndStatus(map);
+		PageInfo<UserPaper> pageInfo = new PageInfo<UserPaper>(userPapers);
+		detail.put("up", pageInfo.getList());
+		result.setPageInfo(pageInfo);
+		result.setDetail(detail);
+		result.setErrorCode(ErrorCode.SUCCESS);
+		return result;
+	}
+	
 	/**
 	 * 生成更新后的题目id集合字符串
 	 * 
@@ -653,21 +727,26 @@ public class ExamServiceImpl implements ExamService {
 		}
 		return null;
 	}
-
-	@Override
-	public MJSONObject autoValidateName(JSONObject jParams) {
-		MJSONObject result = new MJSONObject();
-		String name = jParams.getString("name");
-		if (!Utils.isNullOrBlank(name)) {
-			if (examMapper.findExamByName(name) == null) {
-				result.setErrorCode(ErrorCode.SUCCESS);
-			} else {
-				result.setErrorCode(ExamError.AUTO_EXAM_NAME_EXISTED);
+	
+	/**
+	 * 形成ID字符串
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	private String generateIds(Integer[] ids) {
+		if (ids != null) {
+			String result = "";
+			for (int i = 0; i < ids.length; i++) {
+				if (i == ids.length - 1) {
+					result += ids[i];
+				} else {
+					result += ids[i] + ";";
+				}
 			}
-		} else {
-			result.setErrorCode(ExamError.AUTO_EXAM_NAME_IS_NULL);
+			return result;
 		}
-		return result;
+		return null;
 	}
 
 }

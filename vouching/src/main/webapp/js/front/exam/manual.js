@@ -14,12 +14,9 @@ $(function(){
 	//难度类型变更
 	levelChange();
 	
-	//清除所有题目
-	clear();
+	//存卷并预览
+	saveExam();
 	
-	//存卷
-	
-	//预览
 	
 });
 
@@ -48,10 +45,11 @@ function initLoadData(){
 		document.getElementById("dtree").innerHTML=tree;
 		//为章节树添加点击事件
 		$("a[href='1']").each(function(){
+			$(this).attr("href","javascript:;");
 			$(this).unbind("click");
 			$(this).bind("click",function(){
 				var chapterId = $(this).attr("id").slice($(this).attr("id").length - 1);
-				
+				loadPageData(null, chapterId, 1, 0);
 			});
 		});
 		/**
@@ -65,6 +63,10 @@ function initLoadData(){
 			$("#types").append("<td><input source='" +questionTypes[i].id+ "' name='clear' type='button' value='清除'/></td>");
 			//装载选择框
 			$("#source").append("<option value='"+questionTypes[i].id+"'>"+questionTypes[i].name+"</option>");
+			/**
+			 * 清除所有题目事件
+			 */
+			clear();
 		}
 		/**
 		 * 装载难易程度
@@ -193,7 +195,7 @@ function clear(){
 			var source = $(this).attr("source");
 			resetSelected(source);
 			$("td[source='"+source+"']").text("0");
-			loadPageData(null, null, null, 1);
+			loadPageData();
 		});
 	});
 }
@@ -205,7 +207,7 @@ function typeChange(){
 	$("#source").unbind("change");
 	$("#source").bind("change",function(){
 		var source = $(this).val();
-		loadPageData(null, source, null, null);
+		loadPageData(null, null, source, null);
 	});
 }
 
@@ -216,7 +218,7 @@ function levelChange(){
 	$("#levels").unbind("change");
 	$("#levels").bind("change",function(){
 		var level = $(this).val();
-		loadPageData(null, null, level, null);
+		loadPageData(null, null, null, level);
 	});
 }
 
@@ -224,27 +226,69 @@ function levelChange(){
  * 保存试卷
  */
 function saveExam(){
-	
-}
-
-/**
- * 预览试卷
- */
-function previewExam(){
-	
+	$("#saveExam").unbind("click");
+	$("#saveExam").bind("click",function(){
+		var examName = $("#name").val();
+		var bak = $("#bak").val();
+		var radios = getSelected(1);
+		var blanks = getSelected(2);
+		var clozes = getSelected(3);
+		var translates = getSelected(4);
+		var phrases = getSelected(5);
+		var token = $("#token").val();
+		if (examNameValidate()) {
+			var url = "/vouching/exam/manualSaveExam";
+			var data = {
+				token : token,
+				examName : examName,
+				bak : bak,
+				radios : radios,
+				blanks : blanks,
+				clozes : clozes,
+				phrases : phrases,
+				translates : translates,
+			};
+			var successCallback = function(data){
+				layer.msg("试卷创建成功!");
+				var url = "/vouching/forward/forwardPreview?examId=" + data.detail.examId + "&token=" + token;
+				VCUtils.common.util.simpleHref(url);
+			};
+			VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, null);
+		}
+	});
 }
 
 /**
  * 考试名称校验
  */
-function nameValidate(){
-	
+function examNameValidate(){
+	var name = $("#name").val();
+	if (VCUtils.common.util.isNotNullOrBlank(name)) {
+		var flag = true;
+		var url = "/vouching/exam/validateExamName";
+		var data = {
+			token : $("#token").val(),
+			name : name
+		};
+		var successCallback = function(data){
+			$("#errorMsg").text("");
+		};
+		var faildCallback = function(data){
+			$("#errorMsg").text(data.errorCode);
+			flag = false;
+		};
+		VCUtils.common.ajax.commonAjax(url, false, data, successCallback, faildCallback, null);
+		return flag;
+	} else {
+		$("#errorMsg").text("请输入考试名称!");
+		return false;
+	}
 }
 
 /**
  * 装载分页数据
  */
-function loadPageData(chapterId,source,level,pageNum){
+function loadPageData(pageNum,chapterId,source,level){
 	var loading = layer.load();
 	if(chapterId == null){
 		chapterId = $("#chapterIdHidden").val();

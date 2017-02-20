@@ -18,6 +18,7 @@
 					<button id="checkall" class="button border-green"><span class="icon-check"></span> 全选</button>
 					<button id="multiDelete" class="button border-red"><span class="icon-trash-o"></span> 批量删除</button>
 					<a class="button border-yellow" href="/vouching/forward/forwardAddClass?token=${token}"><span class="icon-plus-square-o"></span> 添加班级</a>
+					<a class="button border-yellow" href="/vouching/forward/forwardClassAssign?token=${token}"><span class="icon-plus-square-o"></span> 指派</a>
 				</li>
 			</ul>
 		</div>

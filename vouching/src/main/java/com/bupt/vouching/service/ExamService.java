@@ -145,5 +145,21 @@ public interface ExamService {
 	 * @param jParams
 	 * @return
 	 */
-	public MJSONObject autoValidateName(JSONObject jParams);
+	public MJSONObject validateExamName(JSONObject jParams);
+
+	/**
+	 * 手动创建试卷
+	 * 
+	 * @param jParams
+	 * @return
+	 */
+	public MJSONObject manualSaveExam(JSONObject jParams);
+
+	/**
+	 * 装载批改试卷信息
+	 * 
+	 * @param jParams
+	 * @return
+	 */
+	public MJSONObject loadMarkPaper(JSONObject jParams);
 }

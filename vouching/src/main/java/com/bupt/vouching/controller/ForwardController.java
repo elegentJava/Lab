@@ -300,6 +300,30 @@ public class ForwardController extends BaseController {
 	}
 	
 	/**
+	 * 跳转到批改试卷页面
+	 * 
+	 * @param token
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("forwardMarkPaper")
+	public String forwardMarkPaper(String token, HttpServletRequest request){
+		return formFrontResult(token, request, exam, markPaper);
+	}
+	
+	/**
+	 * 跳转到批改试卷详情页面
+	 * 
+	 * @param token
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("forwardMarkDetail")
+	public String forwardMarkDetail(String token, HttpServletRequest request){
+		return formFrontResult(token, request, exam, markDetail);
+	}
+	
+	/**
 	 * 跳转到试卷预览页面
 	 * 
 	 * @param token
@@ -487,6 +511,18 @@ public class ForwardController extends BaseController {
 	@RequestMapping("forwardAddClass")
 	public String forwardAddClass(String token, HttpServletRequest request){
 		return formBackResult(token, request, clas, addClass);
+	}
+	
+	/**
+	 * 跳转到班级指派页面
+	 * 
+	 * @param token
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("forwardClassAssign")
+	public String forwardClassAssign(String token, HttpServletRequest request){
+		return formBackResult(token, request, clas, classAssign);
 	}
 	
 	/**

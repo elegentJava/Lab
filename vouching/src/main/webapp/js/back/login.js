@@ -7,8 +7,9 @@ $(function(){
 		var password = $("#password").val();
 		if(VCUtils.common.util.isNotNullOrBlank(account) && VCUtils.common.util.isNotNullOrBlank(password)){
 			$("#password").text(hex_md5(password));
-			var url = "/vouching/user/adminLogin";
+			var url = "/vouching/user/login";
 			var data = {
+				flag : false,
 				account : account,
 				password : hex_md5(password)
 			};

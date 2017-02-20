@@ -14,6 +14,11 @@ var VCUtils = {
 		tip : {
 			errorAlert : function(info){
 				layer.alert(info, {icon: 5,});
+			},
+			confirm : function(info,confirmFunction){
+				layer.confirm(info, {
+					btn : [ '确定', '取消' ]
+				}, confirmFunction, null);
 			}
 		},
 		
@@ -221,8 +226,22 @@ var VCUtils = {
 						this.checked = flag;
 					});
 				});
-			}
+			},
 			
+			selectBAll  : function(name){
+				//全选事件
+				$("#checkall").click(function() {
+					var flag = true;
+					var allLength = $("input[name='"+name+"']").length;
+					var selectedLength = $("input[name='"+name+"']:checked").length;
+					if (allLength == selectedLength) {
+						flag = false;
+					}
+					$("input[name='"+name+"']").each(function() {
+						this.checked = flag;
+					});
+				});
+			}
 		}
 	},
 	

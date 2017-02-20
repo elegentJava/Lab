@@ -67,6 +67,7 @@ function deleteQuestion(){
  * 初始化装载数据
  */
 function initLoadData(){
+	var loading = layer.load();
 	var url = "/vouching/exam/loadPreview";
 	data = {
 		token : $("#token").val(),
@@ -85,7 +86,7 @@ function initLoadData(){
 		
 		//装载单选题
 		$("#radiosList").children().remove();
-		if (radios != null && radios.length > 1) {
+		if (radios != null && radios.length > 0) {
 			for (var i = 0; i < radios.length; i++) {
 				$("#radiosList").append("<tr></tr>");
 				var tr = $("#radiosList").children().eq(7*i);
@@ -103,7 +104,7 @@ function initLoadData(){
 		
 		//装载名词解释题
 		$("#phrasesList").children().remove();
-		if (phrases != null && phrases.length > 1) {
+		if (phrases != null && phrases.length > 0) {
 			for (var i = 0; i < phrases.length; i++) {
 				$("#phrasesList").append("<tr></tr>");
 				var tr = $("#phrasesList").children().eq(4*i);
@@ -119,7 +120,7 @@ function initLoadData(){
 		
 		//装载填空题
 		$("#blanksList").children().remove();
-		if (blanks != null && blanks.length > 1) {
+		if (blanks != null && blanks.length > 0) {
 			for (var i = 0; i < blanks.length; i++) {
 				$("#blanksList").append("<tr></tr>");
 				var tr = $("#blanksList").children().eq(4*i);
@@ -135,7 +136,7 @@ function initLoadData(){
 		
 		//装载语句翻译题
 		$("#translatesList").children().remove();
-		if (translates != null && translates.length > 1) {
+		if (translates != null && translates.length > 0) {
 			for (var i = 0; i < translates.length; i++) {
 				$("#translatesList").append("<tr></tr>");
 				var tr = $("#translatesList").children().eq(4*i);
@@ -151,7 +152,7 @@ function initLoadData(){
 		
 		//装载完型填空题
 		$("#clozesList").children().remove();
-		if (clozes != null && clozes.length > 1) {
+		if (clozes != null && clozes.length > 0) {
 			for (var i = 0; i < clozes.length; i++) {
 				$("#clozesList").append("<tr></tr>");
 				var tr = $("#clozesList").children().eq(4*i);
@@ -164,10 +165,7 @@ function initLoadData(){
 		} else {
 			$("#clozesList").append("<tr><td colspan='2'>该试卷暂未添加完型填空试题</td></tr>");
 		}
-		
+		layer.close(loading);
 	};
-	var faildCallback = function(data){
-		divAlert(data.errorCode);
-	};
-	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, faildCallback);
+	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, loading);
 }

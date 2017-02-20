@@ -335,19 +335,57 @@ public class ExamController extends BaseController {
 	}
 	
 	/**
-	 * 自动组卷页面校验考试名称
+	 * 校验考试名称
 	 * 
 	 * @param jo
 	 * @return
 	 */
-	@RequestMapping("autoValidateName")
-	public @ResponseBody JSONObject autoValidateName(@RequestBody JSONObject jo) {
+	@RequestMapping("validateExamName")
+	public @ResponseBody JSONObject validateExamName(@RequestBody JSONObject jo) {
 		MJSONObject detail = null;
 		try {
 			RequestTemplate rt = new RequestTemplate(jo);
-			detail = examService.autoValidateName(rt.getJParams());
+			detail = examService.validateExamName(rt.getJParams());
 		} catch (Exception e) {
-			log.error("自动组卷页面校验考试名称失败!",e);
+			log.error("校验考试名称失败!",e);
+			return new ResponseTemplate().getReturn();
+		}
+		return new ResponseTemplate(detail).getReturn();
+	}
+	 
+	/**
+	 * 手动创建试卷
+	 * 
+	 * @param jo
+	 * @return
+	 */
+	@RequestMapping("manualSaveExam")
+	public @ResponseBody JSONObject manualSaveExam(@RequestBody JSONObject jo) {
+		MJSONObject detail = null;
+		try {
+			RequestTemplate rt = new RequestTemplate(jo);
+			detail = examService.manualSaveExam(rt.getJParams());
+		} catch (Exception e) {
+			log.error("手动创建试卷失败!",e);
+			return new ResponseTemplate().getReturn();
+		}
+		return new ResponseTemplate(detail).getReturn();
+	}
+	
+	/**
+	 * 装载批改试卷信息
+	 * 
+	 * @param jo
+	 * @return
+	 */
+	@RequestMapping("loadMarkPaper")
+	public @ResponseBody JSONObject loadMarkPaper(@RequestBody JSONObject jo) {
+		MJSONObject detail = null;
+		try {
+			RequestTemplate rt = new RequestTemplate(jo);
+			detail = examService.loadMarkPaper(rt.getJParams());
+		} catch (Exception e) {
+			log.error("装载批改试卷信息失败!",e);
 			return new ResponseTemplate().getReturn();
 		}
 		return new ResponseTemplate(detail).getReturn();

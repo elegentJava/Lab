@@ -90,7 +90,7 @@ public class Consts {
 	/**
 	 * 答案为空
 	 */
-	public static final String ANSWER_NULL = "??**&|@";
+	public static final String ANSWER_NULL = "?_?";
 	/**
 	 * 角色类型--管理员
 	 */
@@ -139,7 +139,7 @@ public class Consts {
 	/**
 	 * 默认的班级ID(创建用户没有选择班级)
 	 */
-	public static final Integer DEFAULT_CLASS_ID = 3;
+	public static final Integer DEFAULT_CLASS_ID = 1;
 	
 	/**
 	 * 资源还没有处理

@@ -7,7 +7,7 @@
 <meta name="renderer" content="webkit">
 <%@include file="../common/common.jsp" %>
 <script type="text/javascript" src="<%=bp%>/js/back/user/studentlist.js" ></script>
-<script type="text/javascript" src="<%=bp%>/js/ajaxfileupload.js" ></script>
+<script type="text/javascript" src="<%=bp%>/js/lib/ajaxfileupload.js" ></script>
 <title>学生信息列表</title>
 </head>
 <body>

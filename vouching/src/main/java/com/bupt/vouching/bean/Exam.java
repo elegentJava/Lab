@@ -140,7 +140,7 @@ public class Exam {
 	}
 
 	public List<Integer> getRadioIds() {
-		if (this.radioId != null) {
+		if (!Utils.isNullOrBlank(this.radioId)) {
 			radioIds = generateIds(this.radioId);
 		}
 		return radioIds;
@@ -151,7 +151,7 @@ public class Exam {
 	}
 
 	public List<Integer> getBlankIds() {
-		if (this.blankId != null) {
+		if (!Utils.isNullOrBlank(this.blankId)) {
 			blankIds = generateIds(this.blankId);
 		}
 		return blankIds;
@@ -162,7 +162,7 @@ public class Exam {
 	}
 
 	public List<Integer> getPhraseIds() {
-		if (this.phraseId != null) {
+		if (!Utils.isNullOrBlank(this.phraseId)) {
 			phraseIds = generateIds(this.phraseId);
 		}
 		return phraseIds;
@@ -173,7 +173,7 @@ public class Exam {
 	}
 
 	public List<Integer> getTranslateIds() {
-		if (this.translateId != null) {
+		if (!Utils.isNullOrBlank(this.translateId)) {
 			translateIds = generateIds(this.translateId);
 		}
 		return translateIds;
@@ -184,7 +184,7 @@ public class Exam {
 	}
 
 	public List<Integer> getClozeIds() {
-		if (this.clozeId != null) {
+		if (!Utils.isNullOrBlank(this.clozeId)) {
 			clozeIds = generateIds(this.clozeId);
 		}
 		return clozeIds;

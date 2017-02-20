@@ -17,6 +17,9 @@
 	
 	<!-- 保存试卷信息 -->
 	<insert id="saveExam" parameterType="Exam">
+		<selectKey resultType="int" order="AFTER" keyProperty="examId">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
 		insert into
 		exam(name,createdate,bak,teacherid,isactive,classid,
 			 radioid,blankid,phraseid,translateid,clozeid)
@@ -84,6 +87,13 @@
 		examid,name,createdate,bak
 		from exam
 		where name = #{0} 
+	</select>
+	
+	<!-- 通过教师ID查询所有创建的试卷ID -->
+	<select id="findExamIdsByUserId" parameterType="int" resultType="int">
+		select examid
+		from exam
+		where teacherid = #{0}
 	</select>
 	
 </mapper>
