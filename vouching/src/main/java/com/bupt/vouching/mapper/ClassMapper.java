@@ -68,4 +68,12 @@ public interface ClassMapper {
 	 */
 	public Integer addClass(Class clas);
 
+	/**
+	 * 通过用户的角色查询班级信息
+	 * 
+	 * @param roleTeacher
+	 * @return
+	 */
+	public List<Class> findClassByUserRole(Integer roleTeacher);
+
 }

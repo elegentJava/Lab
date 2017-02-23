@@ -4,15 +4,7 @@ $(function(){
 	$("#pager").hide();
 	
 	//全选事件
-	$("#checkall").click(function() {
-		$("input[name='userId']").each(function() {
-			if (this.checked) {
-				this.checked = false;
-			} else {
-				this.checked = true;
-			}
-		});
-	});
+	VCUtils.common.util.selectBAll("userId");
 	
 	//初始化装载数据
 	loadDataForPage(1);
@@ -80,7 +72,6 @@ function loadDataForPage(pageNum){
 				tr.append("<td>"+teachers[i].email+"</td>");
 				tr.append("<td>"+teachers[i].isOnlineName+"</td>");
 				tr.append("<td>"+teachers[i].formatLastLoginDate+"</td>");
-				tr.append("<td>"+teachers[i].className+"</td>");
 				tr.append("<div class='button-group'></div>");
 				var buttons = $(tr).find(">div");
 				buttons.append("<button userId='"+teachers[i].userId+"' class='button border-main' name='resetPassword'><span class='icon-edit'></span>重置密码</button>");
@@ -92,16 +83,16 @@ function loadDataForPage(pageNum){
 			resetPassword();
 			deleteSingle();
 		} else {
-			$("#teacherList").append("<tr><td colspan=‘8’>暂无教师信息!</td></tr>");
+			$("#teacherList").append("<tr><td colspan=‘7’>暂无教师信息!</td></tr>");
 			$("#pager").hide();
 		}
 		layer.close(loading);
 	};
 	var faildCallback = function(data){
 		layer.close(loading);
-		layer.alert("数据加载失败!", {icon: 5,});
+		VCUtils.common.tip.errorAlert("数据加载失败!");
 	};
-	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, faildCallback);
+	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, faildCallback, loading);
 }
 
 /**
@@ -119,7 +110,7 @@ function resetPassword(){
 		var successCallback = function(data){
 			layer.msg("重置成功!");
 		};
-		VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null);
+		VCUtils.common.ajax.commonAjax(url, false, data, successCallback);
 	});
 }
 
@@ -130,21 +121,23 @@ function deleteSingle(){
 	$("button[name='deleteSingle']").unbind("click");
 	$("button[name='deleteSingle']").bind("click",function(){
 		var userId = $(this).attr("userId");
-		var url = "/vouching/admin/deleteSinglerUser";
-		var data = {
-		    token : $("#token").val(),
-		    userId : userId
-		};
-		var successCallback = function(data){
-			layer.msg("删除成功!");
-			var length = $("#teacherList>tr").length;
-			var pageNum = parseInt($("#pageNum").text());
-			if(length == 1){
-				pageNum = pageNum - 1;
-			}
-			loadDataForPage(pageNum);
-		};
-		VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null);
+		VCUtils.common.tip.confirm("确定要删除吗？", function(){
+			var url = "/vouching/admin/deleteSinglerUser";
+			var data = {
+			    token : $("#token").val(),
+			    userId : userId
+			};
+			var successCallback = function(data){
+				layer.msg("删除成功!");
+				var length = $("#studentList>tr").length;
+				var pageNum = parseInt($("#pageNum").text());
+				if(length == 1){
+					pageNum = pageNum - 1;
+				}
+				loadDataForPage(pageNum);
+			};
+			VCUtils.common.ajax.commonAjax(url, false, data, successCallback);
+		});
 	});
 }
 
@@ -154,24 +147,26 @@ function deleteSingle(){
 function multiDelete() {
 	$("#multiDelete").unbind("click");
 	$("#multiDelete").bind("click",function(){
-		var userIds = new Array();
-		var checkedObj = $("input[name='userId']:checked");
-		if (checkedObj.length > 0) {
-			for (var i = 0; i < checkedObj.length; i++) {
-				userIds[i] = $(checkedObj[i]).attr("value");
+		VCUtils.common.tip.confirm("确定要删除吗？", function(){
+			var userIds = new Array();
+			var checkedObj = $("input[name='userId']:checked");
+			if (checkedObj.length > 0) {
+				for (var i = 0; i < checkedObj.length; i++) {
+					userIds[i] = $(checkedObj[i]).attr("value");
+				}
+				var url="/vouching/admin/batchDeleteUsers";
+				var data = {
+					token : $("#token").val(),
+					userIds : userIds
+				};
+				var successCallback = function(data){
+					layer.msg("删除成功!");
+					loadDataForPage(1);	
+				};
+				VCUtils.common.ajax.commonAjax(url,false,data,successCallback);
+			} else {
+				VCUtils.common.tip.errorAlert("请选择一个再删除!");
 			}
-			var url="/vouching/admin/batchDeleteUsers";
-			var data = {
-				token : $("#token").val(),
-				userIds : userIds
-			};
-			var successCallback = function(data){
-				layer.msg("删除成功!");
-				loadDataForPage(1);	
-			};
-			VCUtils.common.ajax.commonAjax(url,false,data,successCallback,null);
-		} else {
-			layer.alert("请选择一个再删除!", {icon: 5,});
-		}
+		});
 	});
 }

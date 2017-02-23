@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -20,7 +22,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.bupt.vouching.frame.Consts;
+import com.bupt.vouching.mapper.ClassMapper;
 import com.bupt.vouching.type.base.TemplateType;
+import com.bupt.vouching.type.excel.UserTemplate;
 
 /**
  * POI工具类
@@ -31,8 +36,11 @@ import com.bupt.vouching.type.base.TemplateType;
 @Scope("singleton")
 public class POIUtils {
 	
+	@Resource
+	private ClassMapper classMapper;
+	
 	private Logger log = Logger.getLogger(getClass());
-
+	
 	private String EXCEL_2007 = ".xlsx";
 	
 	/**
@@ -189,7 +197,18 @@ public class POIUtils {
 				if (types[0].isInstance(new String())) {
 					param = value;
 				} else if (types[0].isInstance(new Integer(0))) {
-					param = (int) Double.parseDouble(value);
+					if (templateType == UserTemplate.SEX) {
+						param = "男".equals(value) ? 1 : 0;
+					} else if (templateType == UserTemplate.CLASS){
+						com.bupt.vouching.bean.Class clasz = classMapper.findCLassByName(value);
+						if(clasz != null){
+							param = clasz.getClassId();
+						} else {
+							param = Consts.DEFAULT_CLASS_ID;
+						}
+					} else {
+						param = (int) Double.parseDouble(value);
+					}
 				}
 				method.invoke(bean, param);
 				break;

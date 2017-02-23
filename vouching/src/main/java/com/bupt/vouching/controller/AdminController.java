@@ -103,6 +103,25 @@ public class AdminController extends BaseController {
 	}
 	
 	/**
+	 * 装载班级指派的教师班级列表
+	 * 
+	 * @param jo
+	 * @return
+	 */
+	@RequestMapping("loadTeacherClasses")
+	public @ResponseBody JSONObject loadTeacherClasses(@RequestBody JSONObject jo) {
+		MJSONObject detail = null;
+		try {
+			RequestTemplate rt = new RequestTemplate(jo);
+			detail = adminService.loadTeacherClasses(rt.getJParams());
+		} catch (Exception e) {
+			log.error("装载班级指派的教师班级列表失败!",e);
+			return new ResponseTemplate().getReturn();
+		}
+		return new ResponseTemplate(detail).getReturn();
+	}
+	
+	/**
 	 * 添加用户
 	 * 
 	 * @param jo

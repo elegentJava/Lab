@@ -149,4 +149,12 @@ public interface UserMapper {
 	 * @param map
 	 */
 	public Integer updateCredit(Map<String, Object> map);
+
+	/**
+	 * 通过帐号族查询用户信息
+	 * 
+	 * @param users
+	 * @return
+	 */
+	public List<User> findUsersByAccounts(List<User> users);
 }

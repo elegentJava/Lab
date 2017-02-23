@@ -38,10 +38,6 @@ public enum AdminError implements ErrorType{
 	 */
 	CLASS_ADD_FAILD(0x006,"添加班级失败！"), 
 	/**
-	 * 批量插入失败
-	 */
-	USER_BATCH_INSERT_FAILD(0x007,"批量插入失败!"), 
-	/**
 	 * 删除用户失败
 	 */
 	USER_DELETE_FAILD(0x008,"删除用户失败!"), 

@@ -146,6 +146,17 @@ public class AdminServiceImpl implements AdminService {
 		result.setErrorCode(ErrorCode.SUCCESS);
 		return result;
 	}
+	
+	@Override
+	public MJSONObject loadTeacherClasses(JSONObject jParams) {
+		MJSONObject result = new MJSONObject();
+		JSONObject detail = new JSONObject();
+		List<Class> classes = classMapper.findClassByUserRole(Consts.ROLE_TEACHER);
+		detail.put("classes", classes);
+		result.setDetail(detail);
+		result.setErrorCode(ErrorCode.SUCCESS);
+		return result;
+	}
 
 	@Override
 	public MJSONObject addUser(JSONObject jParams) {
@@ -214,17 +225,27 @@ public class AdminServiceImpl implements AdminService {
 					MultipartFile file = multiRequest.getFile(ite.next());
 					if (file != null) {
 						try {
+							Map<String, String> accountValidateMap = new HashMap<String,String>();
 							List<User> users = poiUtils.read(file, UserTemplate.DEFAULT, User.class);
 							for (User user : users) {
 								user.setPassword(Consts.DEFAULT_PASSWORD);
 								user.setIsOnline(Consts.USER_NOT_ONLINE);
 								user.setClassId(Consts.DEFAULT_CLASS_ID);
 								user.setRole(role);
+								accountValidateMap.put(user.getAccount(), user.getAccount());
+								if (userMapper.findUserByAccount(user.getAccount()) != null) {
+									result.setErrorCode(UserError.ACCOUNT_EXISTED);
+									return result;
+								} 
 							}
-							if (userMapper.batchInsert(users) == users.size()) {
-								result.setErrorCode(ErrorCode.SUCCESS);
+							if (accountValidateMap.size() == users.size()) {
+								if (userMapper.batchInsert(users) == users.size()) {
+									result.setErrorCode(ErrorCode.SUCCESS);
+								} else {
+									result.setErrorCode(UserError.USER_BATCH_INSERT_FAILD);
+								}
 							} else {
-								result.setErrorCode(AdminError.USER_BATCH_INSERT_FAILD);
+								result.setErrorCode(UserError.ACCOUNT_EXISTED);
 							}
 						} catch (Exception e) {
 							log.error("上传文件失败!", e);

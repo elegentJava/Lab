@@ -128,4 +128,12 @@ public interface AdminService {
 	 */
 	public MJSONObject dealSingleResource(JSONObject jParams);
 
+	/**
+	 * 装载班级指派的教师班级列表
+	 * 
+	 * @param jParams
+	 * @return
+	 */
+	public MJSONObject loadTeacherClasses(JSONObject jParams);
+
 }

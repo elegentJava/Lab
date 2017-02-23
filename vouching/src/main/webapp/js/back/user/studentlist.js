@@ -21,27 +21,30 @@ $(function(){
 	//批量导入
 	$("#batchInsert").unbind("click");
 	$("#batchInsert").bind("click",function(){
-		var token = $("#token").val();
-		$.ajaxFileUpload({
-            url:'/vouching/admin/batchInsertUsers',
-            secureuri:false,                       
-            fileElementId : "userFile",
-            data : {
-            	token : token,
-            	role : 1
-            },
-            dataType:'json',                       
-            success:function(data, status){        
-            	if (data.result == "success") {
-					layer.msg("批量添加成功!");
-				} else {
-					layer.alert(data.errorCode, {icon: 5,});
-				}
-            },
-            error:function(data, status, e){ 
-            	layer.alert(data.errorCode, {icon: 5,});
-            }
-        });
+		var a = $("#userFile").click();
+		if($("#userFile").click()){
+			var token = $("#token").val();
+			$.ajaxFileUpload({
+	            url:'/vouching/admin/batchInsertUsers',
+	            secureuri:false,                       
+	            fileElementId : "userFile",
+	            data : {
+	            	token : token,
+	            	role : 1
+	            },
+	            dataType:'json',                       
+	            success:function(data, status){        
+	            	if (data.result == "success") {
+						layer.msg("批量添加成功!");
+					} else {
+						layer.alert(data.errorCode, {icon: 5,});
+					}
+	            },
+	            error:function(data, status, e){ 
+	            	layer.alert(data.errorCode, {icon: 5,});
+	            }
+	        });
+		}
 	});
 	
 });

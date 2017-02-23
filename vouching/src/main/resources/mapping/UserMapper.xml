@@ -144,4 +144,14 @@
 		where userid = #{userId}
 	</update>
 	
+	<!-- 通过帐号族查询用户信息 -->
+	<select id="findUsersByAccounts" resultType="User">
+		select userid
+		from user
+		where account in 
+		<foreach collection="list" item="item" index="index" separator="," open="(" close=")" > 
+	        #{item.account}
+	    </foreach>
+	</select>
+	
 </mapper>

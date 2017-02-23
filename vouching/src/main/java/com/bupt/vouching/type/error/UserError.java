@@ -84,7 +84,11 @@ public enum UserError implements ErrorType{
 	/**
 	 * 两次输入的密码不一致
 	 */
-	TWICE_PASSWORD_NOT_MATCH(0x018,"两次输入的密码不一致!");
+	TWICE_PASSWORD_NOT_MATCH(0x018,"两次输入的密码不一致!"), 
+	/**
+	 * 批量插入失败
+	 */
+	USER_BATCH_INSERT_FAILD(0x007,"批量插入失败!"), 
 	;
 	
 	private int id;

@@ -19,25 +19,25 @@
 			<div class="form-group">
 				<div class="label"><label>班级：</label></div>
 				<div class="field w50">
-					<select id="clas" class="input"></select>
+					<select id="tclass" class="input"></select>
 					<div class="tips"></div>
 				</div>
 			</div>
 			<div class="form-group">
 				<div class="label"><label>教师：</label></div>
 				<div class="field">
-					<select id="clas" class="input w50"></select>
+					<select id="teacher" class="input w50"></select>
 					<div class="tips"></div>
 				</div>
 			</div>
-			<div id="errorMsg" class="form-group">
+			<div class="form-group">
 				<div class="label"><label></label></div>
-				<div class="input-help"><ul><li style="color: red;"></li></ul></div>
+				<div class="input-help"><ul><li style="color: red;" id="terror"></li></ul></div>
 			</div>
 			<div class="form-group">
 				<div class="label"><label></label></div>
 				<div class="field">
-					<button id="add" class="button bg-main icon-check-square-o">指派</button>
+					<button id="assignTeacher" class="button bg-main icon-check-square-o">指派</button>
 					<div></div>
 				</div>
 			</div>
@@ -50,15 +50,13 @@
 			<div class="form-group">
 				<div class="label"><label>班级：</label></div>
 				<div class="field">
-					<select id="clas" class="input w50"></select>
-					<div class="tips"></div>
+					<select id="sclass" class="input w50"></select>
 				</div>
 			</div>
 			<div class="form-group">
 				<div class="label"><label>学生：</label></div>
 				<div class="field">
 					<select id="clas" class="input w50"></select>
-					<div class="tips"></div>
 				</div>
 			</div>
 			<div id="errorMsg" class="form-group">

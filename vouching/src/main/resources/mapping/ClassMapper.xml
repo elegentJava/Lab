@@ -56,4 +56,15 @@
 		(#{className},#{bak},#{isActive})
 	</insert>
 	
+	<!-- 通过用户的角色查询班级信息 -->
+	<select id="findClassByUserRole" parameterType="int" resultType="Class">
+		select c1.*
+		from class c1
+		where c1.classid not in (
+			select c.classid 
+			from class c, user u
+			where u.role = #{0} and c.classid = u.classid
+		)
+	</select>
+	
 </mapper>

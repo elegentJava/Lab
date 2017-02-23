@@ -19,7 +19,7 @@
 					<button id="checkall" class="button border-green"><span class="icon-check"></span> 全选</button>
 					<button id="multiDelete" class="button border-red"><span class="icon-trash-o"></span> 批量删除</button>
 					<a class="button border-yellow" href="/vouching/forward/forwardAddStudent?token=${token}"><span class="icon-plus-square-o"></span> 添加学生</a>
-					<input id="userFile" name="userFile" type="file" class="button border-green"/>
+					<input id="userFile" name="userFile" type="file" style="display:none"/>
 					<button id="batchInsert" class="button border-green"><span class="icon-plus-square-o"></span> 批量导入</button>
 					<a class="button border-yellow" href="/vouching/template/user_template.xlsx"><span class="icon-download"></span> 下载模板</a>
 				</li>
