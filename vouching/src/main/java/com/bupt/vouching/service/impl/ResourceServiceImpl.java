@@ -43,8 +43,10 @@ import com.bupt.vouching.type.PageSize;
 import com.bupt.vouching.type.LevelType;
 import com.bupt.vouching.type.ResourceType;
 import com.bupt.vouching.type.SentenceTypes;
+import com.bupt.vouching.type.error.AdminError;
 import com.bupt.vouching.type.error.ErrorCode;
 import com.bupt.vouching.type.error.ResourceError;
+import com.bupt.vouching.util.EmailUtils;
 import com.bupt.vouching.util.Utils;
 import com.bupt.vouching.util.page.PageHelper;
 import com.bupt.vouching.util.page.PageInfo;
@@ -77,6 +79,9 @@ public class ResourceServiceImpl implements ResourceService {
 	
 	@Resource
 	private TeachResourceMapper teachResourceMapper;
+	
+	@Resource
+	private EmailUtils emailUtils;
 
 	@Override
 	public MJSONObject loadCategoryTree(JSONObject jParams) {
@@ -280,6 +285,20 @@ public class ResourceServiceImpl implements ResourceService {
 					}
 				}
 			}
+		}
+		return result;
+	}
+
+	@Override
+	public MJSONObject sendHD(JSONObject jParams) {
+		MJSONObject result = new MJSONObject();
+		String receiver = jParams.getString("receiver");
+		String subject = jParams.getString("subject");
+		String content = jParams.getString("content");
+		if (emailUtils.sendHtmlEmail(receiver, subject, content)) {
+			result.setErrorCode(ErrorCode.SUCCESS);
+		} else {
+			result.setErrorCode(AdminError.SEND_HD_FAILD);
 		}
 		return result;
 	}

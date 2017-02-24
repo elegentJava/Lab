@@ -1,5 +1,6 @@
 package com.bupt.vouching.util;
 
+import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -24,18 +25,21 @@ public class EmailUtils {
 	 * @param subject
 	 * @param content
 	 * @return
-	 * @throws Exception
 	 */
-	public boolean sendHtmlEmail(String receiver,String subject,String content) throws Exception {
+	public boolean sendHtmlEmail(String receiver,String subject,String content) {
 		HtmlEmail email = new HtmlEmail();
 		email.setHostName(HOST_NAME);
 		email.setAuthentication(USERNAME, PASSWORD);
-		email.addTo(receiver, "John Doe");
-		email.setFrom(USERNAME, "Me");
-		email.setSubject(subject);
-		email.setHtmlMsg("<html>The apache logo </html>");
-		email.setTextMsg("Your email client does not support HTML messages");
-		email.send();
+		try {
+			email.addTo(receiver, "John Doe");
+			email.setFrom(USERNAME, "Me");
+			email.setSubject(subject);
+			email.setHtmlMsg("<html>The apache logo </html>");
+			email.setTextMsg("Your email client does not support HTML messages");
+			email.send();
+		} catch (EmailException e) {
+			return false;
+		}
 		return true;
 	}
 	

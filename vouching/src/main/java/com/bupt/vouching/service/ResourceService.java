@@ -89,4 +89,12 @@ public interface ResourceService {
 	 */
 	public MJSONObject uploadResource(Map<String, Object> params, HttpServletRequest request);
 
+	/**
+	 * 发送函电
+	 * 
+	 * @param jParams
+	 * @return
+	 */
+	public MJSONObject sendHD(JSONObject jParams);
+
 }

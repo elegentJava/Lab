@@ -190,4 +190,23 @@ public class ResourceController extends BaseController {
 		return new ResponseTemplate(detail).getReturn();
 	}
 	
+	/**
+	 * 发送函电
+	 * 
+	 * @param jo
+	 * @return
+	 */
+	@RequestMapping("sendHD")
+	public @ResponseBody JSONObject sendHD(@RequestBody JSONObject jo) {
+		MJSONObject detail = null;
+		try {
+			RequestTemplate rt = new RequestTemplate(jo);
+			detail = resourceService.sendHD(rt.getJParams());
+		} catch (Exception e) {
+			log.error("发送函电失败!",e);
+			return new ResponseTemplate().getReturn();
+		}
+		return new ResponseTemplate(detail).getReturn();
+	}
+	
 }

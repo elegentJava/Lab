@@ -49,7 +49,10 @@ public enum AdminError implements ErrorType{
 	 * 资源处理失败
 	 */
 	RESOURCE_DEAL_FAILD(0x010,"资源处理失败!"), 
-
+	/**
+	 * 发送函电失败
+	 */
+	SEND_HD_FAILD(0x011,"发送函电失败!"), 
 	;
 	
 	private int id;
