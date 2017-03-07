@@ -18,6 +18,7 @@ public class EmailUtils {
 	private static final String HOST_NAME = "smtp.163.com";
 	private static final String USERNAME="18800162572@163.com";
 	private static final String PASSWORD = "2050233a";
+	private static final String NICK_NAME = "国贸管理系统";
 
 	/**
 	 * 
@@ -31,11 +32,10 @@ public class EmailUtils {
 		email.setHostName(HOST_NAME);
 		email.setAuthentication(USERNAME, PASSWORD);
 		try {
-			email.addTo(receiver, "John Doe");
-			email.setFrom(USERNAME, "Me");
+			email.addTo(receiver);
+			email.setFrom(USERNAME, NICK_NAME);
 			email.setSubject(subject);
-			email.setHtmlMsg("<html>The apache logo </html>");
-			email.setTextMsg("Your email client does not support HTML messages");
+			email.setHtmlMsg("<html>"+content+"</html>");
 			email.send();
 		} catch (EmailException e) {
 			return false;

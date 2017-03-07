@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bupt.vouching.bean.Correspondence;
 import com.bupt.vouching.bean.CorrespondenceCategory;
 import com.bupt.vouching.bean.Glossary;
 import com.bupt.vouching.bean.Sentence;
@@ -29,11 +31,13 @@ import com.bupt.vouching.frame.Consts;
 import com.bupt.vouching.frame.GlobalContext;
 import com.bupt.vouching.frame.MJSONObject;
 import com.bupt.vouching.mapper.CorrespondenceCategoryMapper;
+import com.bupt.vouching.mapper.CorrespondenceMapper;
 import com.bupt.vouching.mapper.GlossaryMapper;
 import com.bupt.vouching.mapper.SentenceCategoryMapper;
 import com.bupt.vouching.mapper.SentenceMapper;
 import com.bupt.vouching.mapper.TeachResourceMapper;
 import com.bupt.vouching.service.ResourceService;
+import com.bupt.vouching.service.bean.CorrespondenceSer;
 import com.bupt.vouching.service.bean.GlossarySource;
 import com.bupt.vouching.service.bean.Resources;
 import com.bupt.vouching.service.bean.SentenceLevel;
@@ -79,6 +83,9 @@ public class ResourceServiceImpl implements ResourceService {
 	
 	@Resource
 	private TeachResourceMapper teachResourceMapper;
+	
+	@Resource
+	private CorrespondenceMapper correspondenceMapper;
 	
 	@Resource
 	private EmailUtils emailUtils;
@@ -295,6 +302,10 @@ public class ResourceServiceImpl implements ResourceService {
 		String receiver = jParams.getString("receiver");
 		String subject = jParams.getString("subject");
 		String content = jParams.getString("content");
+		String token = jParams.getString("token");
+		if ("默认发送给当前用户的邮箱".equals(receiver)) {
+			receiver = globalContext.getUserToken().get(token).getEmail();
+		}
 		if (emailUtils.sendHtmlEmail(receiver, subject, content)) {
 			result.setErrorCode(ErrorCode.SUCCESS);
 		} else {
@@ -303,4 +314,166 @@ public class ResourceServiceImpl implements ResourceService {
 		return result;
 	}
 	
+	@Override
+	public MJSONObject loadHD(JSONObject jParams) {
+		MJSONObject result = new MJSONObject();
+		JSONObject detail = new JSONObject();
+		Integer categoryId = jParams.getInteger("categoryId");
+		String token = jParams.getString("token");
+		Correspondence correspondence = correspondenceMapper.findCorrespondenceByCategoryId(categoryId);
+		globalContext.getCurrentCorrespondence().put(token, correspondence);
+		detail.put("correspondence", generateCorrespondenceStr(correspondence.getEnglish()));
+		detail.put("translate", correspondence.getTranslate());
+		result.setDetail(detail);
+		result.setErrorCode(ErrorCode.SUCCESS);
+		return result;
+	}
+	
+	@Override
+	public MJSONObject replaceChange(JSONObject jParams) {
+		MJSONObject result = new MJSONObject();
+		JSONObject detail = new JSONObject();
+		String token = jParams.getString("token");
+		String key = jParams.getString("key");
+		Integer listNo = Integer.parseInt(key.split("-")[0]);
+		Integer innerNo = Integer.parseInt(key.split("-")[1]);
+		Correspondence correspondence = globalContext.getCurrentCorrespondence().get(token);
+		detail.put("correspondence", generateCorrespondenceStr(correspondence.getEnglish(),listNo,innerNo));
+		result.setDetail(detail);
+		result.setErrorCode(ErrorCode.SUCCESS);
+		return result;
+	}
+	
+	/**
+	 * 组成前台函电字符串
+	 * 
+	 * @param correspondenceEnglish
+	 * @return
+	 */
+	private CorrespondenceSer generateCorrespondenceStr(String correspondenceEnglish){
+		CorrespondenceSer correspondenceSer = new CorrespondenceSer();
+		Stack<String> stack = new Stack<>();
+		String[] item = correspondenceEnglish.split("");
+		for (int i = item.length - 1; i > 0; i--) {
+			stack.push(item[i]);
+		}
+		while (!stack.isEmpty()) {
+			String outLayer = stack.pop();
+			switch (outLayer) {
+			// 需要提示的信息
+			case "{":
+				String content = "";
+				String tipContent = "";
+				while (!stack.isEmpty() && !"}".equals(stack.peek())) {
+					String inLayer = stack.pop();
+					if (!"<".equals(inLayer)) {
+						content += inLayer;
+					} else if ("<".equals(inLayer)) {
+						while (!stack.isEmpty() && !stack.peek().equals(">")) {
+							tipContent += stack.pop();
+						}
+						stack.pop();
+					}
+				}
+				if (!stack.isEmpty()) {
+					stack.pop();
+					String combination = "<a style='color:blue' title='" + tipContent + "'>" + content + "</a>";
+					correspondenceSer.setEnglish(correspondenceSer.getEnglish()+combination);
+				}
+				break;
+			case "[":
+				String content1 = "";
+				while (!stack.isEmpty() && !"]".equals(stack.peek())) {
+					content1 += stack.pop();
+				}
+				stack.pop();
+				String[] temp = content1.split("\\|");
+				List<String> list = new ArrayList<String>();
+				for (int i = 0; i < temp.length; i++) {
+					list.add(temp[i]);
+				}
+				correspondenceSer.setEnglish(correspondenceSer.getEnglish()+"<span style='color:#996699'>"+temp[0]+"</span>");
+				correspondenceSer.getList().add(list);
+				break;
+			default:
+				String content2 = outLayer;
+				while (!stack.isEmpty() && !"{".equals(stack.peek()) && !"[".equals(stack.peek())) {
+					content2 += stack.pop();
+				}
+				correspondenceSer.setEnglish(correspondenceSer.getEnglish()+content2);
+				break;
+			}
+		}
+		return correspondenceSer;
+	}
+	
+	/**
+	 * 替换后组合函电电文
+	 * 
+	 * @param correspondenceEnglish
+	 * @param listNo
+	 * @param innerNo
+	 * @return
+	 */
+	private CorrespondenceSer generateCorrespondenceStr(String correspondenceEnglish,Integer listNo,Integer innerNo){
+		CorrespondenceSer correspondenceSer = new CorrespondenceSer();
+		Stack<String> stack = new Stack<>();
+		String[] item = correspondenceEnglish.split("");
+		for (int i = item.length - 1; i > 0; i--) {
+			stack.push(item[i]);
+		}
+		while (!stack.isEmpty()) {
+			String outLayer = stack.pop();
+			switch (outLayer) {
+			// 需要提示的信息
+			case "{":
+				String content = "";
+				String tipContent = "";
+				while (!stack.isEmpty() && !"}".equals(stack.peek())) {
+					String inLayer = stack.pop();
+					if (!"<".equals(inLayer)) {
+						content += inLayer;
+					} else if ("<".equals(inLayer)) {
+						while (!stack.isEmpty() && !stack.peek().equals(">")) {
+							tipContent += stack.pop();
+						}
+						stack.pop();
+					}
+				}
+				if (!stack.isEmpty()) {
+					stack.pop();
+					String combination = "<a style='color:blue' title='" + tipContent + "'>" + content + "</a>";
+					correspondenceSer.setEnglish(correspondenceSer.getEnglish()+combination);
+				}
+				break;
+			case "[":
+				String content1 = "";
+				while (!stack.isEmpty() && !"]".equals(stack.peek())) {
+					content1 += stack.pop();
+				}
+				stack.pop();
+				String[] temp = content1.split("\\|");
+				List<String> list = new ArrayList<String>();
+				for (int i = 0; i < temp.length; i++) {
+					list.add(temp[i]);
+				}
+				correspondenceSer.getList().add(list);
+				if (correspondenceSer.getList().size() != listNo + 1) {
+					correspondenceSer.setEnglish(correspondenceSer.getEnglish() + "<span style='color:#996699'>"+temp[0]+"</span>");
+				} else {
+					correspondenceSer.setEnglish(correspondenceSer.getEnglish() + "<span style='color:#996699'>"+correspondenceSer.getList().get(listNo).get(innerNo)+"</span>");
+				}
+				break;
+			default:
+				String content2 = outLayer;
+				while (!stack.isEmpty() && !"{".equals(stack.peek()) && !"[".equals(stack.peek())) {
+					content2 += stack.pop();
+				}
+				correspondenceSer.setEnglish(correspondenceSer.getEnglish()+content2);
+				break;
+			}
+		}
+		return correspondenceSer;
+	}
+
 }

@@ -33,16 +33,24 @@
 								<td width="84%"></td>
 							</tr>
 							<tr>
-								<td></td>
-								<td align="left" style="word-wrap:break-word;">zasdasas</td>
+								<td>正文:</td>
+								<td align="left" style="word-wrap:break-word;" id="english"></td>
 							</tr>
 							<tr>
 								<td></td>
 								<td><hr /> <br /></td>
 							</tr>
 							<tr>
+								<td>可替换语句:</td>
+								<td id="replace"></td>
+							</tr>
+							<tr>
 								<td></td>
-								<td align="left">asdasasdasas<br /></td>
+								<td><hr /> <br /></td>
+							</tr>
+							<tr>
+								<td>翻译:</td>
+								<td align="left" id="translate"></td>
 							</tr>
 							<tr>
 								<td></td>
@@ -57,5 +65,6 @@
 		</div>
 	</div>
 	<input type="hidden" id="token" value="${token}" />
+	<input type="hidden" id="categoryId" value="26" />
 </body>
 </html>

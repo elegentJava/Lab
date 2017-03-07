@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import com.bupt.vouching.bean.Correspondence;
 import com.bupt.vouching.bean.Exam;
 import com.bupt.vouching.bean.Question;
 import com.bupt.vouching.bean.User;
@@ -43,6 +44,7 @@ public class InitServlet extends HttpServlet {
 		globalContext.setWatchingQueue(new LinkedList<String>());
 		globalContext.setCompetitionMap(new ConcurrentHashMap<String,CompetitionSer>());
 		globalContext.setMatchingMap(new ConcurrentHashMap<String,String>());
+		globalContext.setCurrentCorrespondence(new HashMap<String, Correspondence>());
 		
 		//启动检测竞技队列
 		app.getBean(TimeService.class).competitionQueueListener();

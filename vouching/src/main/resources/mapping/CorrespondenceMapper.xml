@@ -2,4 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.bupt.vouching.mapper.CorrespondenceMapper" >
 
+	<!-- 通过种类ID查询函电 -->
+	<select id="findCorrespondenceByCategoryId" parameterType="int" resultType="Correspondence">
+		select
+		correspondenceid,categroyid,english,translate
+		from correspondence
+		where categroyid = #{0}
+	</select>
+
 </mapper>

@@ -209,4 +209,42 @@ public class ResourceController extends BaseController {
 		return new ResponseTemplate(detail).getReturn();
 	}
 	
+	/**
+	 * 装载函电
+	 * 
+	 * @param jo
+	 * @return
+	 */
+	@RequestMapping("loadHD")
+	public @ResponseBody JSONObject loadHD(@RequestBody JSONObject jo) {
+		MJSONObject detail = null;
+		try {
+			RequestTemplate rt = new RequestTemplate(jo);
+			detail = resourceService.loadHD(rt.getJParams());
+		} catch (Exception e) {
+			log.error("装载函电失败!",e);
+			return new ResponseTemplate().getReturn();
+		}
+		return new ResponseTemplate(detail).getReturn();
+	}
+	
+	/**
+	 * 替换语句
+	 * 
+	 * @param jo
+	 * @return
+	 */
+	@RequestMapping("replaceChange")
+	public @ResponseBody JSONObject replaceChange(@RequestBody JSONObject jo) {
+		MJSONObject detail = null;
+		try {
+			RequestTemplate rt = new RequestTemplate(jo);
+			detail = resourceService.replaceChange(rt.getJParams());
+		} catch (Exception e) {
+			log.error("替换语句失败!",e);
+			return new ResponseTemplate().getReturn();
+		}
+		return new ResponseTemplate(detail).getReturn();
+	}
+	
 }

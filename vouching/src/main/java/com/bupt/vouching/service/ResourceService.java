@@ -46,7 +46,7 @@ public interface ResourceService {
 	 * @return
 	 */
 	public MJSONObject loadSentenceTree(JSONObject jParams);
-	
+
 	/**
 	 * 查询语句
 	 * 
@@ -62,7 +62,8 @@ public interface ResourceService {
 	 * @param request
 	 * @return
 	 */
-	public HttpServletRequest loadSentence(Map<String, Object> params, HttpServletRequest request);
+	public HttpServletRequest loadSentence(Map<String, Object> params,
+			HttpServletRequest request);
 
 	/**
 	 * 装载语句的类型和等级
@@ -87,7 +88,8 @@ public interface ResourceService {
 	 * @param request
 	 * @return
 	 */
-	public MJSONObject uploadResource(Map<String, Object> params, HttpServletRequest request);
+	public MJSONObject uploadResource(Map<String, Object> params,
+			HttpServletRequest request);
 
 	/**
 	 * 发送函电
@@ -96,5 +98,21 @@ public interface ResourceService {
 	 * @return
 	 */
 	public MJSONObject sendHD(JSONObject jParams);
+
+	/**
+	 * 装载函电
+	 * 
+	 * @param jParams
+	 * @return
+	 */
+	public MJSONObject loadHD(JSONObject jParams);
+
+	/**
+	 * replaceChange
+	 * 
+	 * @param jParams
+	 * @return
+	 */
+	public MJSONObject replaceChange(JSONObject jParams);
 
 }

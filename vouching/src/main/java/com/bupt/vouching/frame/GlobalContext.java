@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.bupt.vouching.bean.Correspondence;
 import com.bupt.vouching.bean.Exam;
 import com.bupt.vouching.bean.Question;
 import com.bupt.vouching.bean.User;
@@ -56,7 +57,12 @@ public class GlobalContext {
 	 * 匹配成功后用户检索Map[tokenId-competitionId]
 	 */
 	private Map<String, String> matchingMap;
-	
+
+	/**
+	 * 用户当前正在访问的函电
+	 */
+	private Map<String, Correspondence> currentCorrespondence;
+
 	public Map<String, User> getUserToken() {
 		return userToken;
 	}
@@ -111,6 +117,14 @@ public class GlobalContext {
 
 	public void setMatchingMap(Map<String, String> matchingMap) {
 		this.matchingMap = matchingMap;
+	}
+
+	public Map<String, Correspondence> getCurrentCorrespondence() {
+		return currentCorrespondence;
+	}
+
+	public void setCurrentCorrespondence(Map<String, Correspondence> currentCorrespondence) {
+		this.currentCorrespondence = currentCorrespondence;
 	}
 
 }
