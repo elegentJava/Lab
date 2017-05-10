@@ -141,13 +141,13 @@ public class PracticeServiceImpl implements PracticeService {
 		String token = jParams.getString("token");
 		Map<String, List<? extends Question>> currentPractice = globalContext.getCurrentPractice();
 		List<? extends Question> questions = currentPractice.get(token);
-		if (questions != null) {
+		if (questions != null && questions.size() > 0) {
 			detail.put("questions", questions);
 			detail.put("chapterId", questions.get(0).getChapterId());
 			result.setDetail(detail);
 			result.setErrorCode(ErrorCode.SUCCESS);
 		} else {
-			result.setErrorCode(PracticeError.LOAD_START_FAILD);
+			result.setErrorCode(PracticeError.NO_MATCH_QUESTION);
 		}
 		return result;
 	}

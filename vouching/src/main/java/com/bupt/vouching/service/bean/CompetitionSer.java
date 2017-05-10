@@ -1,6 +1,7 @@
 package com.bupt.vouching.service.bean;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.bupt.vouching.bean.Question;
@@ -20,6 +21,7 @@ public class CompetitionSer {
 	private List<? extends Question> questions;
 	private Boolean scoreHandle;
 	private String answers;
+	private Date matchTime;
 
 	public CompetitionSer() {
 		setId(Utils.UUID());
@@ -73,6 +75,14 @@ public class CompetitionSer {
 
 	public void setAnswers(String answers) {
 		this.answers = answers;
+	}
+
+	public Date getMatchTime() {
+		return matchTime;
+	}
+
+	public void setMatchTime(Date matchTime) {
+		this.matchTime = matchTime;
 	}
 
 }

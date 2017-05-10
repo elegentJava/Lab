@@ -154,6 +154,7 @@ function submitExam() {
 		};
 		var successCallback = function(data){
 			layer.msg("试卷保存成功!");
+			VCUtils.common.util.simpleHref("/vouching//forward/forwardJoinExam?token=" + $("#token").val());
 		};
 		VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null ,null);
 	});

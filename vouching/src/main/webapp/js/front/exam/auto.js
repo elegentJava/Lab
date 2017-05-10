@@ -10,7 +10,8 @@ $(function(){
 		var levels = data.detail.levels;
 		//装载题型
 		for (var i = 0; i < questionTypes.length; i++) {
-			$("#questionList").append("<tr><td width='120' align='left'>"+questionTypes[i].name+"</td><td align='left'><select id='"+questionTypes[i].tag+"'><option value='5'>5</option><option value='10'>10</option><option value='15'>15</option></select></td></tr>");
+			var scoreId = questionTypes[i].tag + "Score";
+			$("#questionList").append("<tr><td width='120' align='left'>"+questionTypes[i].name+"</td><td align='left'><select id='"+questionTypes[i].tag+"'><option value='5'>5</option><option value='10'>10</option><option value='15'>15</option></select></td><td width='120'>总分数:</td><td><input id='"+scoreId+"'/></td></tr>");
 		}
 		//装载难度
 		for (var i = 0; i < levels.length; i++) {
@@ -40,6 +41,11 @@ $(function(){
 				clozeCount : $("#cloze").val(),
 				phraseCount : $("#phrase").val(),
 				translateCount : $("#translate").val(),
+				radioScore : $("#radioScore").val(),
+				blankScore : $("#blankScore").val(),
+				clozeScore : $("#clozeScore").val(),
+				phraseScore : $("#phraseScore").val(),
+				translateScore : $("#translateScore").val(),
 				level : $("#levels").val()
 			};
 			var successCallback = function(data){

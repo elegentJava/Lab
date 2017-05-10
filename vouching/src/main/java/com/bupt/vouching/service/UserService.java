@@ -35,4 +35,12 @@ public interface UserService {
 	 */
 	public MJSONObject loginValidate(JSONObject jParams);
 
+	/**
+	 * 装载导航栏信息
+	 * 
+	 * @param jParams
+	 * @return
+	 */
+	public MJSONObject loadNavigate(JSONObject jParams);
+
 }

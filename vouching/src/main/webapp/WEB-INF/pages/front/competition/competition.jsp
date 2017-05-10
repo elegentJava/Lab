@@ -37,7 +37,16 @@
 					<tr><td colspan="2" class="weizhi">&nbsp;<strong>首页 ->互动平台 ->知识点竞技</strong></td></tr>
 					<tr><td colspan="2">&nbsp;</td></tr>
 				</table>
-				<table width="100%" border="0" cellspacing="1" cellpadding="0">
+				<table width="80%" border="0" cellspacing="1" cellpadding="0">
+					<tr>
+						<td height="120" align="center" valign="middle">
+							<h3>匹配规则：</h3>
+							<h4>1.五人一组进行匹配</h4>
+							<h4>2.匹配过程中只能通过注销帐号与点击匹配页面的关闭按钮取消匹配</h4>
+							<h4>3.匹配成功后，由系统随机生成15道题目进行答题</h4>
+							<h4>4.答题过程中如果退出，积分为0</h4>
+						</td>
+					</tr>
 					<tr>
 						<td height="120" align="center" valign="middle">
 							<button id="match">开始匹配</button>

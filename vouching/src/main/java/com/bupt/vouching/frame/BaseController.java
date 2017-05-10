@@ -77,6 +77,9 @@ public abstract class BaseController {
 	public static final String PATH_STATION = "/station";
 	public String station = PATH_STATION;
 	
+	public static final String PATH_FLASH = "/flash";
+	public String flash = PATH_FLASH;
+	
 	public static final String PATH_RECEIVE_BOX= "/receivebox";
 	public String receiveBox = PATH_RECEIVE_BOX;
 	
@@ -118,6 +121,9 @@ public abstract class BaseController {
 	
 	public static final String PATH_MARK_DETAIL= "/markdetail";
 	public String markDetail = PATH_MARK_DETAIL;
+	
+	public static final String PATH_EXAM_GRADE = "/examgrade";
+	public String examGrade = PATH_EXAM_GRADE;
 	
 	/*
 	 * practice目录下

@@ -391,4 +391,80 @@ public class ExamController extends BaseController {
 		return new ResponseTemplate(detail).getReturn();
 	}
 	
+	/**
+	 * 装载批阅试卷详情信息
+	 * 
+	 * @param jo
+	 * @return
+	 */
+	@RequestMapping("loadMarkDetail")
+	public @ResponseBody JSONObject loadMarkDetail(@RequestBody JSONObject jo) {
+		MJSONObject detail = null;
+		try {
+			RequestTemplate rt = new RequestTemplate(jo);
+			detail = examService.loadMarkDetail(rt.getJParams());
+		} catch (Exception e) {
+			log.error("装载批阅试卷详情信息失败!",e);
+			return new ResponseTemplate().getReturn();
+		}
+		return new ResponseTemplate(detail).getReturn();
+	}
+	
+	/**
+	 * 批阅试卷
+	 * 
+	 * @param jo
+	 * @return
+	 */
+	@RequestMapping("markPaper")
+	public @ResponseBody JSONObject markPaper(@RequestBody JSONObject jo) {
+		MJSONObject detail = null;
+		try {
+			RequestTemplate rt = new RequestTemplate(jo);
+			detail = examService.markPaper(rt.getJParams());
+		} catch (Exception e) {
+			log.error("批阅试卷失败!",e);
+			return new ResponseTemplate().getReturn();
+		}
+		return new ResponseTemplate(detail).getReturn();
+	}
+	
+	/**
+	 * 装载考试信息
+	 * 
+	 * @param jo
+	 * @return
+	 */
+	@RequestMapping("loadGradeExam")
+	public @ResponseBody JSONObject loadGradeExam(@RequestBody JSONObject jo) {
+		MJSONObject detail = null;
+		try {
+			RequestTemplate rt = new RequestTemplate(jo);
+			detail = examService.loadGradeExam(rt.getJParams());
+		} catch (Exception e) {
+			log.error("装载考试信息失败!",e);
+			return new ResponseTemplate().getReturn();
+		}
+		return new ResponseTemplate(detail).getReturn();
+	}
+	
+	/**
+	 * 装载成绩信息
+	 * 
+	 * @param jo
+	 * @return
+	 */
+	@RequestMapping("loadExamGrade")
+	public @ResponseBody JSONObject loadExamGrade(@RequestBody JSONObject jo) {
+		MJSONObject detail = null;
+		try {
+			RequestTemplate rt = new RequestTemplate(jo);
+			detail = examService.loadExamGrade(rt.getJParams());
+		} catch (Exception e) {
+			log.error("装载成绩信息失败!",e);
+			return new ResponseTemplate().getReturn();
+		}
+		return new ResponseTemplate(detail).getReturn();
+	}
+	
 }

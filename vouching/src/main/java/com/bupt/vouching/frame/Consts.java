@@ -90,7 +90,7 @@ public class Consts {
 	/**
 	 * 答案为空
 	 */
-	public static final String ANSWER_NULL = "?_?";
+	public static final String ANSWER_NULL = "  ";
 	/**
 	 * 角色类型--管理员
 	 */

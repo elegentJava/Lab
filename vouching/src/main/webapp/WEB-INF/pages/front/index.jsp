@@ -22,11 +22,11 @@
 			<tr>
 				<td height="29" align="right" class="bai12">${user.name}，你好！&nbsp;角色：${user.roleName}&nbsp;&nbsp;
 					<a id="logout" href="javascript:;" target="_parent">注销</a>&nbsp;| 
-					<a href="/vouching/forward/forwardModifyPW?token=${requestScope.token}" target="menu">个人密码修改</a>&nbsp;
+					<a href="/vouching/forward/forwardModifyPW?token=${requestScope.token}" target="menu">个人密码修改</a>&nbsp;|
+					<a href="javascript:;">未读站内信：<span id="unreadCount"></span></a>
 					<c:if test="${user.role == 1}">
 						|
-						<a href="javascript:;">互动平台积分：0</a> 
-						<a href="javascript:;">未读站内信：0</a>
+						<a href="javascript:;">互动平台积分：<span id="credit"></span></a> 
 					</c:if>
 				</td>
 			</tr>
@@ -58,7 +58,7 @@
 									<a href="/vouching/forward/forwardDownload?token=${token}" target="menu">下载资源</a>
 								</li>
 								<li style="padding-left: 95px;" name="alpt" class='s_li'>
-									<a href="/vouching/flash/all.swf" target="blank">Flash平台</a>
+									<a href="/vouching/forward/forwardFlash?token=${token}" target="menu">Flash平台</a>
 								</li>
 								<li style="padding-left: 30px;" name="kspt" class='s_li'>
 									<c:choose>
@@ -68,7 +68,7 @@
 											<a href="/vouching/forward/forwardMarkPaper?token=${token}" target="menu">批改试卷</a> | 
 											<a href="/vouching/forward/forwardExamSetting?token=${token}" target="menu">考试设置</a> | 
 											<a href="/vouching/forward/forwardChapter?token=${token}" target="menu">章节设置</a> |
-											<a href="#" target="menu">查看成绩</a>
+											<a href="/vouching/forward/forwardExamGrade?token=${token}" target="menu">查看成绩</a>
 										</c:when>
 										<c:otherwise>
 											<a href="/vouching/forward/forwardJoinExam?token=${token}" target="menu">查看考试信息</a> | 
@@ -86,9 +86,18 @@
 									<a href="/vouching/forward/forwardCompetition?token=${token}" target="menu">知识点竞技</a> | 
 									<a href="/vouching/forward/forwardCompetitionRecord?token=${token}" target="menu">查看成绩</a>
 								</li>
-								<li style="padding-left: 420px;" name="znx" class='s_li'>
-									<a href="/vouching/forward/forwardEmailStation?token=${token}" target="menu">站内信</a>
-								</li>
+								<c:choose>
+									<c:when test="${user.role == 1}">
+										<li style="padding-left: 420px;" name="znx" class='s_li'>
+											<a href="/vouching/forward/forwardEmailStation?token=${token}" target="menu">站内信</a>
+										</li>
+									</c:when>
+									<c:otherwise>
+										<li style="padding-left: 260px;" name="znx" class='s_li'>
+											<a href="/vouching/forward/forwardEmailStation?token=${token}" target="menu">站内信</a>
+										</li>
+									</c:otherwise>
+								</c:choose>
 							</ul>
 						</div>
 					</td>

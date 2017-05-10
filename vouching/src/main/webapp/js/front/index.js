@@ -33,5 +33,16 @@ $(function(){
 		VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, null);
 	});
 	
+	//装载导航栏信息
+	var url = "/vouching/user/loadNavigate";
+	var data = {
+		token : $("#token").val()
+	};
+	var successCallback = function(data){
+		$("#credit").text(data.detail.credit);
+		$("#unreadCount").text(data.detail.unreadCount);
+	};
+	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, null);
+	
 });
 

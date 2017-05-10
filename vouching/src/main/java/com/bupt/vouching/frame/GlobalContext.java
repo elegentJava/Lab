@@ -11,6 +11,7 @@ import com.bupt.vouching.bean.Correspondence;
 import com.bupt.vouching.bean.Exam;
 import com.bupt.vouching.bean.Question;
 import com.bupt.vouching.bean.User;
+import com.bupt.vouching.bean.UserPaper;
 import com.bupt.vouching.service.bean.CompetitionSer;
 
 /**
@@ -42,6 +43,11 @@ public class GlobalContext {
 	 * 用户正在参加的考试
 	 */
 	private Map<String, Exam> currentExam;
+	
+	/**
+	 * 老师正在批阅的试卷
+	 */
+	private Map<String,List<UserPaper>> markPapers;
 
 	/**
 	 * 匹配等待队列
@@ -127,4 +133,12 @@ public class GlobalContext {
 		this.currentCorrespondence = currentCorrespondence;
 	}
 
+	public Map<String, List<UserPaper>> getMarkPapers() {
+		return markPapers;
+	}
+
+	public void setMarkPapers(Map<String, List<UserPaper>> markPapers) {
+		this.markPapers = markPapers;
+	}
+	
 }

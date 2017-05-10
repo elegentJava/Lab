@@ -27,9 +27,9 @@
 						</table>
 						<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin: 10px auto;table-layout: fixed;">
 							<tr height="30">
-								<td align="left" valign="top" class="t2" width="15%"><strong>
-										<a href="javascript:;" id="sendHD">发送函电</a>
-								</strong></td>
+								<td align="left" valign="top" class="t2" width="15%">
+									<button id="sendHD"><strong>发送函电</strong></button>
+								</td>
 								<td width="84%"></td>
 							</tr>
 							<tr>

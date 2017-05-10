@@ -76,22 +76,29 @@ function loadHD(){
 	};
 	var successCallback = function(data){
 		var correspondence = data.detail.correspondence;
-		var translate = data.detail.translate;
-		var list = correspondence.list;
-		$("#english").html(correspondence.english);
-		$("#translate").html(translate);
-		$("#replace").children().remove();
-		$("#replace").text("");
-		for(var i = 0; i<list.length; i++){
-			var innerList = list[i];
-			$("#replace").append("替换语句"+(i+1)+":       <select style='width:40%'></select><br/>");
-			var obj = $("#replace>select").eq(i);
-			for(var j=0;j<innerList.length;j++){
-				$(obj).append("<option value='"+i+"-"+j+"'>"+innerList[j]+"</option>");
+		if (correspondence != null) {
+			var translate = data.detail.translate;
+			var list = correspondence.list;
+			$("#english").html(correspondence.english);
+			$("#translate").html(translate);
+			$("#replace").children().remove();
+			$("#replace").text("");
+			for(var i = 0; i<list.length; i++){
+				var innerList = list[i];
+				$("#replace").append("替换语句"+(i+1)+":       <select style='width:40%'></select><br/>");
+				var obj = $("#replace>select").eq(i);
+				for(var j=0;j<innerList.length;j++){
+					$(obj).append("<option value='"+i+"-"+j+"'>"+innerList[j]+"</option>");
+				}
 			}
+			replaceChange();
+			layer.close(loading);
+		} else {
+			$("#english").html("<p style='color:red'>暂无相关函电!</p>");
+			$("#translate").html("");
+			$("#replace").remove();
+			layer.close(loading);
 		}
-		replaceChange();
-		layer.close(loading);
 	};
 	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, loading);
 }
@@ -108,18 +115,18 @@ function sendHD(){
 		var content = $("#english").html();
 		layer.open({
 			  type: 1 ,
-			  area: ['430px', '250px'] ,
+			  area: ['300px', '200px'] ,
 			  shade: 0.6 ,
 			  anim: 3 ,
 			  closeBtn: 1,
-			  title : '发送函电' ,
-			  content: '<div style="padding:10px;"><div style="padding:10px;"><table><tbody><tr><td>收件人：</td><td><input id="receiver" value="默认发送给当前用户的邮箱"/></td></tr><tr><td>主题：</td><td><input id="subject" value="'+subject+'"/></td></tr><tr><td>内容：</td><td><textarea id="content" rows="3" cols="30" value="'+content+'"></textarea></td></tr><tr><td> </td><td><button id="send">发送</button></td></tr></tbody></table></div></div>' ,
+			  title : '发送函电(修改邮箱或者主题)' ,
+			  content: '<div style="padding:10px;"><div style="padding:10px;"><table><tbody><tr><td>收件人：</td><td><input id="receiver" value="默认发送给当前用户的邮箱"/></td></tr><tr><td>主题：</td><td><input id="subject" value="'+subject+'"/></td></tr><tr><td> </td><td><button id="send">发送</button></td></tr></tbody></table></div></div>' ,
 			  success : function(){
 				  $("#send").unbind("click");
 				  $("#send").bind("click",function(){
+					  var loading = layer.load();
 					  var receiver = $("#receiver").val();
 					  var subject = $("#subject").val();
-					  var content = $("#content").val();
 					  var url = "/vouching/resource/sendHD";
 					  var token = $("#token").val();
 					  var data = {
@@ -130,9 +137,10 @@ function sendHD(){
 					  };
 					  var successCallback = function(data){
 						  	layer.closeAll("page");
+						  	layer.close(loading);
 							layer.msg("发送成功!");
 				     };
-					 VCUtils.common.ajax.commonAjax(url, false, data, successCallback);
+					 VCUtils.common.ajax.commonAjax(url, false, data, successCallback,null,loading);
 			    });
 			  }
 		});

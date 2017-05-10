@@ -9,28 +9,36 @@ $(function(){
 		var questions = data.detail.questions;
 		var chapterId = data.detail.chapterId;
 		$("#chapterIdHidden").attr("value",chapterId);
-		$("#title").text(questions[0].tagName);
-		if(questions[0].tag == "radio"){
-			for (var i = 0; i < questions.length; i++) {
-				$("#questionList").append("<tr></tr>");
-				var tr = $("#questionList").children().eq(6*i);
-				tr.append("<td colspan='2' align='left'><font style='color: red'>第&nbsp;" + (i+1) + "&nbsp;题</font>：" + questions[i].question + "</td>");
-				for (var j = 0; j < questions[i].options.length; j++) {
-					$("#questionList").append("<tr><td align='center' valign='top' width='100'></td><td align='left'><input name='answer"+i+"' value='"+(j+1)+"' type='radio'/>&nbsp;&nbsp;"+ questions[i].options[j] +"</td></tr>");
+		if(questions != null){
+			$("#title").text(questions[0].tagName);
+			if(questions[0].tag == "radio"){
+				for (var i = 0; i < questions.length; i++) {
+					$("#questionList").append("<tr></tr>");
+					var tr = $("#questionList").children().eq(6*i);
+					tr.append("<td colspan='2' align='left'><font style='color: red'>第&nbsp;" + (i+1) + "&nbsp;题</font>：" + questions[i].question + "</td>");
+					for (var j = 0; j < questions[i].options.length; j++) {
+						$("#questionList").append("<tr><td align='center' valign='top' width='100'></td><td align='left'><input name='answer"+i+"' value='"+(j+1)+"' type='radio'/>&nbsp;&nbsp;"+ questions[i].options[j] +"</td></tr>");
+					}
+					$("#questionList").append("<tr><td colspan='2' style='border: 1px dashed #ccc;border-bottom: none;'></td></tr>");
 				}
-				$("#questionList").append("<tr><td colspan='2' style='border: 1px dashed #ccc;border-bottom: none;'></td></tr>");
+			} else {
+				for (var i = 0; i < questions.length; i++) {
+					$("#questionList").append("<tr></tr>");
+					var tr = $("#questionList").children().eq(3*i);
+					tr.append("<td colspan='2' align='left'><font style='color: red'>第&nbsp;" + (i+1) + "&nbsp;题</font>：" + questions[i].question + "</td>");
+					$("#questionList").append("<tr><td colspan='2' align='center'><input name='answer' size='200px'/></td></tr>");
+					$("#questionList").append("<tr><td colspan='2' style='border: 1px dashed #ccc;border-bottom: none;'></td></tr>");
+				}
 			}
 		} else {
-			for (var i = 0; i < questions.length; i++) {
-				$("#questionList").append("<tr></tr>");
-				var tr = $("#questionList").children().eq(3*i);
-				tr.append("<td colspan='2' align='left'><font style='color: red'>第&nbsp;" + (i+1) + "&nbsp;题</font>：" + questions[i].question + "</td>");
-				$("#questionList").append("<tr><td colspan='2' align='center'><input name='answer' size='200px'/></td></tr>");
-				$("#questionList").append("<tr><td colspan='2' style='border: 1px dashed #ccc;border-bottom: none;'></td></tr>");
-			}
+			$("#questionList").append("<tr><td colspan='2' style='border: 1px dashed #ccc;border-bottom: none;'></td></tr>");
 		}
 	};
-	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, null, null);
+	var faildCallback = function(data){
+		$("#questionList").append("<tr><td colspan='2' style='border: 1px dashed #ccc;border-bottom: none;color:red'><h2>"+data.errorCode+"</h2></td></tr>");
+		$("#showAnswer").hide();
+	}
+	VCUtils.common.ajax.commonAjax(url, false, data, successCallback, faildCallback, null);
 	
 	//查看答案并计分
 	$("#showAnswer").bind("click",function(){

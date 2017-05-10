@@ -22,9 +22,11 @@
 		</selectKey>
 		insert into
 		exam(name,createdate,bak,teacherid,isactive,classid,
-			 radioid,blankid,phraseid,translateid,clozeid)
+			 radioid,blankid,phraseid,translateid,clozeid,
+			 radioscore,blankscore,phrasescore,translatescore,clozescore)
 		values(#{name},#{createDate},#{bak},#{teacherId},#{isActive},#{classId},
-			 #{radioId},#{blankId},#{phraseId},#{translateId},#{clozeId})
+			 #{radioId},#{blankId},#{phraseId},#{translateId},#{clozeId},
+			 #{radioScore},#{blankScore},#{phraseScore},#{translateScore},#{clozeScore})
 	</insert>
 	
 	<!-- 根据激活状态查询试卷详情信息 -->

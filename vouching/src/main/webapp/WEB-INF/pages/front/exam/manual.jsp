@@ -66,7 +66,10 @@
 							<tr><td colspan="2">&nbsp;</td></tr>
 						</table>
 						<br />
-						<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr id="types"></tr></table>
+						<table width="100%" border="0" cellspacing="0" cellpadding="0">
+							<tr id="types"></tr>
+							<tr id="scores"></tr>
+						</table>
 						<br />
 						<table cellpadding="0" cellspacing="0" class="juhuang12">
 							<tr>

@@ -102,6 +102,18 @@ public class ForwardController extends BaseController {
 	}
 	
 	/**
+	 * 跳转到Flash页面
+	 * 
+	 * @param token
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("forwardFlash")
+	public String forwardFlash(String token, HttpServletRequest request){
+		return formFrontResult(token, request, flash, flash);
+	}
+	
+	/**
 	 * 跳转到发送站内信页面
 	 * 
 	 * @param token
@@ -138,7 +150,20 @@ public class ForwardController extends BaseController {
 	}
 	
 	/**
+	 * 跳转到学生成绩页面
+	 * 
+	 * @param token
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("forwardExamGrade")
+	public String forwardExamGrade(String token, HttpServletRequest request){
+		return formFrontResult(token, request, exam, examGrade);
+	}
+	
+	/**
 	 * 跳转到详情页面
+	 * 
 	 * @param token
 	 * @param type
 	 * @param emailId
@@ -319,7 +344,8 @@ public class ForwardController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("forwardMarkDetail")
-	public String forwardMarkDetail(String token, HttpServletRequest request){
+	public String forwardMarkDetail(String token,String userPaperId, HttpServletRequest request){
+		request.setAttribute("userPaperId", userPaperId);
 		return formFrontResult(token, request, exam, markDetail);
 	}
 	

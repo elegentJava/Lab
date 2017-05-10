@@ -91,9 +91,10 @@ function loadJoinedForPage(pageNum){
 			for (var i = 0; i < datas.length; i++) {
 				$("#joinedList").append("<tr id='" + datas[i].examId + "'></tr>");
 				var tr = $("#joinedList").children().eq(i);
-				tr.append("<td class='teatbbai' align='center'>" + datas[i].name + "</td>");
-				tr.append("<td class='teatbbai' align='center'>" + datas[i].bak + "</td>");
-				tr.append("<td class='teatbbai' align='center'>" + datas[i].formatCreateDate + "</td>");
+				tr.append("<td class='teatbbai' align='center'>" + datas[i].exam.name + "</td>");
+				tr.append("<td class='teatbbai' align='center'>" + datas[i].exam.bak + "</td>");
+				tr.append("<td class='teatbbai' align='center'>" + datas[i].statusName + "</td>");
+				tr.append("<td class='teatbbai' align='center'>" + datas[i].exam.formatCreateDate + "</td>");
 			}
 			VCUtils.common.pager.front.loadPage(data);
 			$("#joinedPager").show();

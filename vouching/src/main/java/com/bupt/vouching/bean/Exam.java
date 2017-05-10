@@ -29,16 +29,20 @@ public class Exam {
 	private Integer teacherId;
 	private Integer classId;
 	private Integer isActive;
+	private Integer radioScore;
+	private Integer blankScore;
+	private Integer phraseScore;
+	private Integer translateScore;
+	private Integer clozeScore;
 
 	private List<Integer> radioIds;
 	private List<Integer> blankIds;
 	private List<Integer> phraseIds;
 	private List<Integer> translateIds;
 	private List<Integer> clozeIds;
-	
+
 	private Class clas;
 	private String formatCreateDate;
-
 
 	public Integer getExamId() {
 		return examId;
@@ -65,7 +69,7 @@ public class Exam {
 	}
 
 	public String getBak() {
-		if(Utils.isNullOrBlank(this.bak)){
+		if (Utils.isNullOrBlank(this.bak)) {
 			this.bak = "无备注信息";
 		}
 		return bak;
@@ -139,6 +143,46 @@ public class Exam {
 		this.isActive = isActive;
 	}
 
+	public Integer getRadioScore() {
+		return radioScore;
+	}
+
+	public void setRadioScore(Integer radioScore) {
+		this.radioScore = radioScore;
+	}
+
+	public Integer getBlankScore() {
+		return blankScore;
+	}
+
+	public void setBlankScore(Integer blankScore) {
+		this.blankScore = blankScore;
+	}
+
+	public Integer getPhraseScore() {
+		return phraseScore;
+	}
+
+	public void setPhraseScore(Integer phraseScore) {
+		this.phraseScore = phraseScore;
+	}
+
+	public Integer getTranslateScore() {
+		return translateScore;
+	}
+
+	public void setTranslateScore(Integer translateScore) {
+		this.translateScore = translateScore;
+	}
+
+	public Integer getClozeScore() {
+		return clozeScore;
+	}
+
+	public void setClozeScore(Integer clozeScore) {
+		this.clozeScore = clozeScore;
+	}
+
 	public List<Integer> getRadioIds() {
 		if (!Utils.isNullOrBlank(this.radioId)) {
 			radioIds = generateIds(this.radioId);
@@ -203,7 +247,7 @@ public class Exam {
 	}
 
 	public String getFormatCreateDate() {
-		if(this.createDate != null){
+		if (this.createDate != null) {
 			formatCreateDate = DateFormatUtils.format(this.createDate, Consts.DATE_SIMPLE_PATTERN);
 		}
 		return formatCreateDate;
@@ -212,7 +256,7 @@ public class Exam {
 	public void setFormatCreateDate(String formatCreateDate) {
 		this.formatCreateDate = formatCreateDate;
 	}
-	
+
 	/**
 	 * 形成id串
 	 * 

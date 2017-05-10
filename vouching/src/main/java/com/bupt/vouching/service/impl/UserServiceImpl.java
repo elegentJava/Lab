@@ -13,6 +13,7 @@ import com.bupt.vouching.bean.User;
 import com.bupt.vouching.frame.Consts;
 import com.bupt.vouching.frame.GlobalContext;
 import com.bupt.vouching.frame.MJSONObject;
+import com.bupt.vouching.mapper.EmailMapper;
 import com.bupt.vouching.mapper.UserMapper;
 import com.bupt.vouching.service.UserService;
 import com.bupt.vouching.service.bean.CompetitionSer;
@@ -31,6 +32,9 @@ public class UserServiceImpl implements UserService {
 
 	@Resource
 	private UserMapper userMapper;
+	
+	@Resource
+	private EmailMapper emailMapper;
 
 	@Resource
 	private GlobalContext globalContext;
@@ -83,7 +87,7 @@ public class UserServiceImpl implements UserService {
 		User user = globalContext.getUserToken().get(token);
 		user.setIsOnline(Consts.USER_NOT_ONLINE);
 		user.setLastLoginDate(user.getLoginDate());
-		removeCompetitionMap(token);
+		removeCompetitionMap(user,token);
 		globalContext.getUserToken().remove(token);
 		if (userMapper.updateUserStatusAndLastLoginDate(user) == Consts.DATA_SINGLE_SUCCESS) {
 			result.setErrorCode(ErrorCode.SUCCESS);
@@ -127,17 +131,36 @@ public class UserServiceImpl implements UserService {
 	/**
 	 * 用户注销后，从匹配队列中删除
 	 * 
+	 * @param user
 	 * @param token
 	 */
-	private void removeCompetitionMap(String token) {
+	private void removeCompetitionMap(User user,String token) {
 		String competitionId = globalContext.getMatchingMap().get(token);
 		globalContext.getMatchingMap().remove(token);
 		if (competitionId != null) {
 			CompetitionSer competitionSer = globalContext.getCompetitionMap().get(competitionId);
 			if (competitionSer != null) {
-				competitionSer.getUsers().remove(token);
+				competitionSer.getUsers().remove(user);
 			}
 		}
+	}
+
+	@Override
+	public MJSONObject loadNavigate(JSONObject jParams) {
+		MJSONObject result = new MJSONObject();
+		JSONObject detail = new JSONObject();
+		String token = jParams.getString("token");
+		User user = globalContext.getUserToken().get(token);
+		int unreadCount = emailMapper.findReceiveUnreadEmails(user.getUserId()).size();
+		detail.put("unreadCount", unreadCount);
+		if (Consts.ROLE_STUDENT == user.getRole()) {
+			detail.put("credit", user.getCredit());
+		} else {
+			detail.put("credit", null);
+		}
+		result.setDetail(detail);
+		result.setErrorCode(ErrorCode.SUCCESS);
+		return result;
 	}
 
 }

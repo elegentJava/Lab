@@ -17,7 +17,7 @@
 			</h1>
 		</div>
 		<div class="head-l">
-			<a class="button button-little bg-green" href="/vouching/forward/login" target="_blank"><span class="icon-home"></span>前台首页</a> &nbsp;&nbsp;
+			<a class="button button-little bg-green" href="/vouching/forward/forwardFrontLogin" target="_blank"><span class="icon-home"></span>前台首页</a> &nbsp;&nbsp;
 			<a id="logout" class="button button-little bg-red" href="javascript:;"><span class="icon-power-off"></span> 退出登录</a>
 		</div>
 	</div>

@@ -191,20 +191,16 @@ public class ResourceServiceImpl implements ResourceService {
 		Integer pageNum = Integer.parseInt((String) params.get("pageNum"));
 		Integer categoryId = Integer.parseInt((String) params.get("categoryId"));
 		String token = (String) params.get("token");
-		if (categoryId != null) {
-			PageHelper.startPage(pageNum, PageSize.SENTENCE_RESULT);
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("categoryId", categoryId);
-			map.put("level", 0);
-			map.put("type", 0);
-			List<Sentence> sentences = sentenceMapper.findSentencesByCTL(map);
-			PageInfo<Sentence> pageInfo = new PageInfo<Sentence>(sentences);
-			request.setAttribute(Consts.LABEL_DETAIL, pageInfo);
-			request.setAttribute(Consts.LABEL_TOKEN, token);
-			request.setAttribute(Consts.LABEL_ERROR_CODE, ErrorCode.SUCCESS);
-		} else {
-			request.setAttribute(Consts.LABEL_ERROR_CODE, ErrorCode.PARAM_ABNORMAL);
-		}
+		PageHelper.startPage(pageNum, PageSize.SENTENCE_RESULT);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("categoryId", categoryId);
+		map.put("level", 0);
+		map.put("type", 0);
+		List<Sentence> sentences = sentenceMapper.findSentencesByCTL(map);
+		PageInfo<Sentence> pageInfo = new PageInfo<Sentence>(sentences);
+		request.setAttribute(Consts.LABEL_DETAIL, pageInfo);
+		request.setAttribute(Consts.LABEL_TOKEN, token);
+		request.setAttribute(Consts.LABEL_ERROR_CODE, ErrorCode.SUCCESS);
 		return request;
 	}
 	
@@ -321,9 +317,13 @@ public class ResourceServiceImpl implements ResourceService {
 		Integer categoryId = jParams.getInteger("categoryId");
 		String token = jParams.getString("token");
 		Correspondence correspondence = correspondenceMapper.findCorrespondenceByCategoryId(categoryId);
-		globalContext.getCurrentCorrespondence().put(token, correspondence);
-		detail.put("correspondence", generateCorrespondenceStr(correspondence.getEnglish()));
-		detail.put("translate", correspondence.getTranslate());
+		if (correspondence != null) {
+			globalContext.getCurrentCorrespondence().put(token, correspondence);
+			detail.put("correspondence", generateCorrespondenceStr(correspondence.getEnglish()));
+			detail.put("translate", correspondence.getTranslate());
+		} else {
+			detail.put("correspondence", null);
+		}
 		result.setDetail(detail);
 		result.setErrorCode(ErrorCode.SUCCESS);
 		return result;
@@ -354,7 +354,7 @@ public class ResourceServiceImpl implements ResourceService {
 		CorrespondenceSer correspondenceSer = new CorrespondenceSer();
 		Stack<String> stack = new Stack<>();
 		String[] item = correspondenceEnglish.split("");
-		for (int i = item.length - 1; i > 0; i--) {
+		for (int i = item.length - 1; i >= 0; i--) {
 			stack.push(item[i]);
 		}
 		while (!stack.isEmpty()) {
@@ -390,6 +390,13 @@ public class ResourceServiceImpl implements ResourceService {
 				String[] temp = content1.split("\\|");
 				List<String> list = new ArrayList<String>();
 				for (int i = 0; i < temp.length; i++) {
+					if(temp[i].contains("{")){
+						String front = temp[i].substring(0, temp[i].indexOf("{"));
+						String middle = temp[i].substring(temp[i].indexOf("{")+1, temp[i].indexOf("<"));
+						String tip = temp[i].substring(temp[i].indexOf("<")+1, temp[i].indexOf(">"));
+						String back = temp[i].substring(temp[i].indexOf("}")+1, temp[i].length());
+						temp[i]=front+"<a style='color:blue' title='" + tip + "'>" + middle + "</a>"+back;
+					}
 					list.add(temp[i]);
 				}
 				correspondenceSer.setEnglish(correspondenceSer.getEnglish()+"<span style='color:#996699'>"+temp[0]+"</span>");
@@ -419,7 +426,7 @@ public class ResourceServiceImpl implements ResourceService {
 		CorrespondenceSer correspondenceSer = new CorrespondenceSer();
 		Stack<String> stack = new Stack<>();
 		String[] item = correspondenceEnglish.split("");
-		for (int i = item.length - 1; i > 0; i--) {
+		for (int i = item.length - 1; i >= 0; i--) {
 			stack.push(item[i]);
 		}
 		while (!stack.isEmpty()) {
@@ -455,6 +462,13 @@ public class ResourceServiceImpl implements ResourceService {
 				String[] temp = content1.split("\\|");
 				List<String> list = new ArrayList<String>();
 				for (int i = 0; i < temp.length; i++) {
+					if(temp[i].contains("{")){
+						String front = temp[i].substring(0, temp[i].indexOf("{"));
+						String middle = temp[i].substring(temp[i].indexOf("{")+1, temp[i].indexOf("<"));
+						String tip = temp[i].substring(temp[i].indexOf("<")+1, temp[i].indexOf(">"));
+						String back = temp[i].substring(temp[i].indexOf("}")+1, temp[i].length());
+						temp[i]=front+"<a style='color:blue' title='" + tip + "'>" + middle + "</a>"+back;
+					}
 					list.add(temp[i]);
 				}
 				correspondenceSer.getList().add(list);

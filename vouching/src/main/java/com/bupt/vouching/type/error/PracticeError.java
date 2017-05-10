@@ -20,7 +20,11 @@ public enum PracticeError implements ErrorType{
 	/**
 	 * 显示答案失败
 	 */
-	SHOW_ANSWER_FAILD(0x002,"显示答案失败!"),
+	SHOW_ANSWER_FAILD(0x002,"显示答案失败!"), 
+	/**
+	 * 暂无相关试题
+	 */
+	NO_MATCH_QUESTION(0x003,"暂无相关试题!"),
 
 	;
 	

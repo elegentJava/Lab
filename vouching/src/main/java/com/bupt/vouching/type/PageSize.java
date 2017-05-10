@@ -64,6 +64,10 @@ public enum PageSize {
 	 * 批改试卷记录数
 	 */
 	USER_PAPER_RECORD(10), 
+	/**
+	 * 成绩显示记录数
+	 */
+	EXAM_GRADE_RECORD(2),
 	;
 
 	private int pageSize;

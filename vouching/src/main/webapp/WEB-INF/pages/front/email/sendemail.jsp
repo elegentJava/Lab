@@ -23,37 +23,32 @@
 				<td width="100%" valign="top">
 					<table cellpadding="0" style="border-collapse:collapse;border:1px solid #004A6E" cellspacing="0" width="100%" border="0">
 						<tr>
-							<td width="10%" align="right">
+							<td width="20%" align="center">
 								<p style="margin-right: 5">
 									<span style="font-size: 9pt">站内短信标题</span>
 								</p>
 							</td>
-							<td width="80%"><input type="text" id="subject" name="subject" value="" size="80" /></td>
+							<td width="60%"><input type="text" id="subject" name="subject" value="" size="40" /></td>
+							<td></td>
 						</tr>
 						<tr>
-							<td width="10%" align="right"><span style="font-size: 9pt">短信收件人</span></td>
-							<td width="80%">
-								<input type="text" id="receivers" value="" size="80" /> 
-								<select id="classList" style="width: 120px"></select>
-							</td>
+							<td width="20%" align="center"><span style="font-size: 9pt">短信收件人</span></td>
+							<td width="60%"><input type="text" id="receivers" value="" size="60" /></td>
+							<td><select id="classList" style="width: 120px"></select></td>
 						</tr>
 						<tr>
-							<td width="10%" align="right"><span style="font-size: 9pt">站内短信内容</span></td>
-							<td width="80%" valign="top">
+							<td width="20%" align="center"><span style="font-size: 9pt">站内短信内容</span></td>
+							<td width="60%" valign="top">
 								<div id="globalDiv" style="background: red;">
 									<div id="areadate" style="float: left;">
-										<textarea rows="13" name="content" id="content" cols="82" style="width: 540; font-family: 宋体; font-size: 9pt; height: 220; border: 1px solid #CCCCCC;resize:none;"></textarea>
-									</div>
-									<div id="stuDiv" style="float: left;margin-left: 5px;height: 220px">
-										<select id="mutiClass" size="12" multiple="multiple" style="WIDTH: 120px;margin-top: 2px;height: 185px" >
-
-										</select>
+										<textarea rows="10" name="content" id="content" cols="60" style="width: 540; font-family: 宋体; font-size: 9pt; height: 220; border: 1px solid #CCCCCC;resize:none;"></textarea>
 									</div>
 								</div>
 							</td>
+							<td width="60%"><select id="mutiClass" size="12" multiple="multiple" style="WIDTH: 120px;margin-top: 2px;height: 185px" ></select></td>
 						</tr>
 						<tr>
-							<td colspan="2" align="center">
+							<td colspan="3" align="center">
 								<input type="button" value="发  送" id="send" style="font-size: 9pt; border: 1px solid #CCCCCC; background-color: #FFFFFF" />
 							</td>
 						</tr>

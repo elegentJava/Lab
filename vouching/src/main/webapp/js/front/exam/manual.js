@@ -60,13 +60,13 @@ function initLoadData(){
 			$("#types").append("<td width='60px'>"+questionTypes[i].name+"</td>");
 			$("#types").append("<td source='" +questionTypes[i].id+ "'>0</td>");
 			$("td[source='"+questionTypes[i].id+"']").data("selected",new Array());
-			$("#types").append("<td><input source='" +questionTypes[i].id+ "' name='clear' type='button' value='清除'/></td>");
+			$("#types").append("<td><input style='width:40px;' source='" +questionTypes[i].id+ "' name='clear' type='button' value='清除'/></td>");
 			//装载选择框
 			$("#source").append("<option value='"+questionTypes[i].id+"'>"+questionTypes[i].name+"</option>");
-			/**
-			 * 清除所有题目事件
-			 */
+			//清除所有题目事件
 			clear();
+			var scoreId = questionTypes[i].tag + "Score";
+			$("#scores").append("<td width='60px'>总分:</td><td></td><td><input style='width:40px;' id='"+scoreId+"'/></td>")
 		}
 		/**
 		 * 装载难易程度
@@ -247,6 +247,11 @@ function saveExam(){
 				clozes : clozes,
 				phrases : phrases,
 				translates : translates,
+				radioScore : $("#radioScore").val(),
+				blankScore : $("#blankScore").val(),
+				clozeScore : $("#clozeScore").val(),
+				phraseScore : $("#phraseScore").val(),
+				translateScore : $("#translateScore").val(),
 			};
 			var successCallback = function(data){
 				layer.msg("试卷创建成功!");

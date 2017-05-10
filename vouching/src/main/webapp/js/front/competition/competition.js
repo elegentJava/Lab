@@ -13,9 +13,9 @@ $(function() {
 				  area: ['430px', '250px'] ,
 				  shade: 0.6 ,
 				  anim: 3 ,
-				  closeBtn: 0,
+				  closeBtn: 1,
 				  title : '匹配中,请等待...' ,
-				  content: '<div style="padding:10px;"><div style="padding:10px;"><table><tbody><tr id="competitionQueue"></tr></tbody></table></div><div style="text-align: center;"><h5>匹配中....</h5></div></div>',
+				  content: '<div style="padding:10px;"><div style="padding:10px;"><table><tbody><tr id="competitionQueue"></tr></tbody></table></div><div style="text-align: center;"><h5 id="info">匹配中....</h5></div></div>',
 				  success : function(){
 					  $(this).everyTime('1s','validateMatchQuery',function(){
 						  var url = "/vouching/competition/matching";
@@ -33,7 +33,8 @@ $(function() {
 							  }
 							  if (users.length == 5) {
 								  $(this).stopTime("validateMatchQuery");
-								  $(this).oneTime('1s',function(){//匹配成功后，1s后跳转
+								  $("#info").text("匹配成功!");
+								  $(this).oneTime('2s',function(){//匹配成功后，1s后跳转
 									  window.parent.menu.location.href = "/vouching/forward/forwardCompetitionExam?token="+$("#token").val();
 									});
 								  }

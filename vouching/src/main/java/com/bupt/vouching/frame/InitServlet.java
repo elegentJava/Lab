@@ -16,6 +16,7 @@ import com.bupt.vouching.bean.Correspondence;
 import com.bupt.vouching.bean.Exam;
 import com.bupt.vouching.bean.Question;
 import com.bupt.vouching.bean.User;
+import com.bupt.vouching.bean.UserPaper;
 import com.bupt.vouching.service.TimeService;
 import com.bupt.vouching.service.bean.CompetitionSer;
 
@@ -45,6 +46,7 @@ public class InitServlet extends HttpServlet {
 		globalContext.setCompetitionMap(new ConcurrentHashMap<String,CompetitionSer>());
 		globalContext.setMatchingMap(new ConcurrentHashMap<String,String>());
 		globalContext.setCurrentCorrespondence(new HashMap<String, Correspondence>());
+		globalContext.setMarkPapers(new HashMap<String,List<UserPaper>>());
 		
 		//启动检测竞技队列
 		app.getBean(TimeService.class).competitionQueueListener();

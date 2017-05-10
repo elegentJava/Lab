@@ -87,4 +87,23 @@ public class UserController extends BaseController{
 		return new ResponseTemplate(detail).getReturn();
 	}
 	
+	/**
+	 * 装载导航栏信息
+	 * 
+	 * @param jo
+	 * @return
+	 */
+	@RequestMapping("loadNavigate")
+	public @ResponseBody JSONObject loadNavigate(@RequestBody JSONObject jo) {
+		MJSONObject detail = null;
+		try {
+			RequestTemplate rt = new RequestTemplate(jo);
+			detail = userService.loadNavigate(rt.getJParams());
+		} catch (Exception e) {
+			log.error("装载导航栏信息失败!",e);
+			return new ResponseTemplate().getReturn();
+		}
+		return new ResponseTemplate(detail).getReturn();
+	}
+	
 }

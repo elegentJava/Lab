@@ -8,6 +8,12 @@ $(function(){
 	
 });
 
+/**
+ * 装在分页数据
+ * 
+ * @param pageNum
+ * @returns
+ */
 function loadPageData(pageNum){
 	var loading = layer.load();
 	var url = "/vouching/exam/loadMarkPaper";
@@ -18,9 +24,10 @@ function loadPageData(pageNum){
 	};
 	var successCallback = function(data){
 		var datas = data.detail.up;
+		$("#markPaperList").children().remove();
 		if (datas != null && datas.length >= 1) {
 			for (var i = 0; i < datas.length; i++) {
-				var url = "/vouching/forward/forwardMarkDetail?token="+token+"&userpaperid="+datas[i].userPaperId;
+				var url = "/vouching/forward/forwardMarkDetail?token="+token+"&userPaperId="+datas[i].userPaperId;
 				$("#markPaperList").append("<tr></tr>");
 				var tr = $("#markPaperList").children().eq(i);
 				tr.append("<td class='teatbbai' align='center'>" + datas[i].exam.name + "</td>");
@@ -34,7 +41,7 @@ function loadPageData(pageNum){
 			VCUtils.common.pager.front.registerEvent(loadPageData);
 		} else {
 			$("#pager").hide();
-			$("#examRecordList").append("<tr><td colspan='5' class='teatbbai' align='left' style='font-family: 黑体;color:read;'>暂无成绩信息！</td></tr>");
+			$("#markPaperList").append("<tr><td colspan='5' class='teatbbai' align='left' style='font-family: 黑体;color:read;'>暂无可批改试卷信息！</td></tr>");
 		}
 		layer.close(loading);
 	};

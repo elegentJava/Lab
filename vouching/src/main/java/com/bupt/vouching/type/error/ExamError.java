@@ -52,7 +52,27 @@ public enum ExamError implements ErrorType{
 	/**
 	 * 试卷已经提交过了
 	 */
-	ALREADY_SUBMIT_EXAM(0x010,"试卷已经提交过了!"),
+	ALREADY_SUBMIT_EXAM(0x010,"试卷已经提交过了!"), 
+	/**
+	 * 分数必须是整数
+	 */
+	SCORE_IS_NOT_INTEGER(0x011,"分数必须是整数!"), 
+	/**
+	 * 分数之和必须是一百分
+	 */
+	SUM_SCORE_IS_NOT_HUNDRED(0x012,"分数之和必须是一百分!"), 
+	/**
+	 * 分数不能为空
+	 */
+	SCORE_IS_NULL(0x013,"分数不能为空!"), 
+	/**
+	 * 批改试卷失败
+	 */
+	MARK_FAILD(0x014,"批改试卷失败!"), 
+	/**
+	 * 分数超出了题目分数限制
+	 */
+	EXTEND_SCORE(0x015,"分数超出了题目分数限制!"),
 	;
 	
 	private int id;

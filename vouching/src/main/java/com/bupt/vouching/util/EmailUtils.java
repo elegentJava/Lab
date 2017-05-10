@@ -2,6 +2,7 @@ package com.bupt.vouching.util;
 
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
+import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Component;
 @Component("emailUtils")
 @Scope("singleton")
 public class EmailUtils {
+	
+	private Logger log = Logger.getLogger(getClass());
 	
 	private static final String HOST_NAME = "smtp.163.com";
 	private static final String USERNAME="18800162572@163.com";
@@ -38,6 +41,7 @@ public class EmailUtils {
 			email.setHtmlMsg("<html>"+content+"</html>");
 			email.send();
 		} catch (EmailException e) {
+			log.error("邮件发送失败!",e);
 			return false;
 		}
 		return true;

@@ -1,8 +1,6 @@
 package com.bupt.vouching.bean;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 
@@ -13,6 +11,10 @@ import com.bupt.vouching.frame.Consts;
  * 
  * @author Hogan
  * 
+ */
+/**
+ * @author Hogan
+ *
  */
 public class UserPaper {
 
@@ -28,11 +30,11 @@ public class UserPaper {
 	private Integer userId;
 	private Integer status;
 
-	private List<Integer> radioIds;
-	private List<Integer> blankIds;
-	private List<Integer> phraseIds;
-	private List<Integer> translateIds;
-	private List<Integer> clozeIds;
+	private Integer[] radioAnswers;
+	private String[] blankAnswers;
+	private String[] phraseAnswers;
+	private String[] translateAnswers;
+	private String[] clozeAnswers;
 	private Exam exam;
 	private User user;
 
@@ -119,61 +121,6 @@ public class UserPaper {
 		this.userId = userId;
 	}
 
-	public List<Integer> getRadioIds() {
-		if (this.radios != null) {
-			radioIds = generateIds(this.radios);
-		}
-		return radioIds;
-	}
-
-	public void setRadioIds(List<Integer> radioIds) {
-		this.radioIds = radioIds;
-	}
-
-	public List<Integer> getBlankIds() {
-		if (this.blanks != null) {
-			blankIds = generateIds(this.blanks);
-		}
-		return blankIds;
-	}
-
-	public void setBlankIds(List<Integer> blankIds) {
-		this.blankIds = blankIds;
-	}
-
-	public List<Integer> getPhraseIds() {
-		if (this.phrases != null) {
-			phraseIds = generateIds(this.phrases);
-		}
-		return phraseIds;
-	}
-
-	public void setPhraseIds(List<Integer> phraseIds) {
-		this.phraseIds = phraseIds;
-	}
-
-	public List<Integer> getTranslateIds() {
-		if (this.translates != null) {
-			translateIds = generateIds(this.translates);
-		}
-		return translateIds;
-	}
-
-	public void setTranslateIds(List<Integer> translateIds) {
-		this.translateIds = translateIds;
-	}
-
-	public List<Integer> getClozeIds() {
-		if (this.clozes != null) {
-			clozeIds = generateIds(this.clozes);
-		}
-		return clozeIds;
-	}
-
-	public void setClozeIds(List<Integer> clozeIds) {
-		this.clozeIds = clozeIds;
-	}
-
 	public Exam getExam() {
 		return exam;
 	}
@@ -210,8 +157,8 @@ public class UserPaper {
 	}
 
 	public String getStatusName() {
-		if(this.status != null){
-			statusName = this.status == 0 ? "还未批阅":"已经批阅";
+		if (this.status != null) {
+			statusName = this.status == 0 ? "还未批阅" : "已经批阅";
 		}
 		return statusName;
 	}
@@ -220,12 +167,64 @@ public class UserPaper {
 		this.statusName = statusName;
 	}
 
-	private List<Integer> generateIds(String id) {
-		List<Integer> result = new ArrayList<Integer>();
-		String[] ids = id.split(Consts.COMMON_SEPARATOR);
-		for (int i = 0; i < ids.length; i++) {
-			result.add(Integer.parseInt(ids[i]));
+	public Integer[] getRadioAnswers() {
+		if(this.radios != null){
+			String[] temp = radios.split(Consts.COMMON_SEPARATOR);
+			Integer[] result = new Integer[temp.length];
+			for (int i = 0; i < result.length; i++) {
+				result[i] = Integer.parseInt(temp[i]);
+			}
+			radioAnswers = result;
 		}
-		return result;
+		return radioAnswers;
 	}
+
+	public void setRadioAnswers(Integer[] radioAnswers) {
+		this.radioAnswers = radioAnswers;
+	}
+
+	public String[] getBlankAnswers() {
+		if(this.blanks != null){
+			blankAnswers = blanks.split(Consts.COMMON_SEPARATOR);
+		}
+		return blankAnswers;
+	}
+
+	public void setBlankAnswers(String[] blankAnswers) {
+		this.blankAnswers = blankAnswers;
+	}
+
+	public String[] getPhraseAnswers() {
+		if(this.phrases != null){
+			phraseAnswers = phrases.split(Consts.COMMON_SEPARATOR);
+		}
+		return phraseAnswers;
+	}
+
+	public void setPhraseAnswers(String[] phraseAnswers) {
+		this.phraseAnswers = phraseAnswers;
+	}
+
+	public String[] getTranslateAnswers() {
+		if(this.translates != null){
+			translateAnswers = translates.split(Consts.COMMON_SEPARATOR);
+		}
+		return translateAnswers;
+	}
+
+	public void setTranslateAnswers(String[] translateAnswers) {
+		this.translateAnswers = translateAnswers;
+	}
+
+	public String[] getClozeAnswers() {
+		if(this.clozes != null){
+			clozeAnswers = clozes.split(Consts.COMMON_SEPARATOR);
+		}
+		return clozeAnswers;
+	}
+
+	public void setClozeAnswers(String[] clozeAnswers) {
+		this.clozeAnswers = clozeAnswers;
+	}
+
 }

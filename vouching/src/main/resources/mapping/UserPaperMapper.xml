@@ -6,6 +6,7 @@
 	<resultMap type="UserPaper" id="findUserpaperByExamIdAndStatus">
 		<id column="userpaperid" property="userPaperId"/>
 		<result column="answerdate" property="answerDate"/>
+		<result column="score" property="score"/>
 		<association property="exam" column="examid" javaType="Exam">
 			<id column="examid" property="examId"/>
 			<result column="name" property="name"/>
@@ -41,6 +42,39 @@
 			<result column="createdate" property="createDate"/>
 		</association>
 	</resultMap>
+	
+	<!-- 查询用户已经参加过的考试信息 -->
+	<resultMap type="UserPaper" id="findUserpaperByUserPaperId">
+		<id column="userpaperid" property="userPaperId"/>
+		<result column="answerdate" property="answerDate"/>
+		<result column="radios" property="radios"/>
+		<result column="blanks" property="blanks"/>
+		<result column="phrases" property="phrases"/>
+		<result column="translates" property="translates"/>
+		<result column="clozes" property="clozes"/>
+		<association property="exam" column="examid" javaType="Exam">
+			<id column="examid" property="examId"/>
+			<result column="name" property="name"/>
+			<result column="radioid" property="radioId"/>
+			<result column="blankid" property="blankId"/>
+			<result column="phraseid" property="phraseId"/>
+			<result column="translateid" property="translateId"/>
+			<result column="clozeid" property="clozeId"/>
+			<result column="radioscore" property="radioScore"/>
+			<result column="blankscore" property="blankScore"/>
+			<result column="phrasescore" property="phraseScore"/>
+			<result column="translatescore" property="translateScore"/>
+			<result column="clozescore" property="clozeScore"/>
+		</association>
+		<association property="user" column="userid" javaType="User">
+			<id column="userid" property="userId"/>
+			<result column="username" property="name"/>
+			<association property="clas" column="classid" javaType="Class">
+				<id column="classid" property="classId"/>
+				<result column="classname" property="className"/>
+			</association>
+		</association>
+	</resultMap>
 		
 	<!-- 通过用户ID查询试卷ID -->
 	<select id="findExamIdByUserId" parameterType="int" resultType="int">
@@ -60,7 +94,7 @@
 	<!-- 通过用户ID查询试卷 -->
 	<select id="findUserpaperByUserIdAndStatus" parameterType="java.util.Map" resultMap="findUserpaperByUserIdAndStatus">
 		select
-		p.examid,p.answerdate,p.score,e.name
+		p.userpaperid,p.examid,p.answerdate,p.score,e.name
 		from userpaper p,exam e
 		where p.userid = #{userId} and status = #{status} and p.examid = e.examid
 	</select>
@@ -68,13 +102,13 @@
 	<!-- 查询用户已经参加过的考试信息 -->
 	<select id="findJoinedExam" parameterType="java.util.Map" resultMap="ExamAndPaper">
 		select
-		e.examid,e.name,e.createdate,e.bak,u.status
+		u.userpaperid,e.examid,e.name,e.createdate,e.bak,u.status
 		from exam e, userpaper u
 		where u.userid = #{userId} and e.examid = u.examid and e.classid = #{classId} and e.isactive = 1 
 	</select>
 	
-	<!-- 通过试卷ID和试卷处理状态查询试卷信息 -->
-	<select id="findUserpaperByExamIdAndStatus" parameterType="java.util.Map" resultMap="findUserpaperByExamIdAndStatus">
+	<!-- 通过试卷IDs和试卷处理状态查询试卷信息 -->
+	<select id="findUserpaperByExamIdsAndStatus" parameterType="java.util.Map" resultMap="findUserpaperByExamIdAndStatus">
 		select
 		p.userpaperid,p.answerdate,e.name,u.name username,c.classname
 		from userpaper p,exam e,user u,class c
@@ -87,5 +121,38 @@
 			#{item}
 		</foreach>
 	</select>
+	
+	<!-- 通过试卷ID和试卷处理状态查询试卷信息 -->
+	<select id="findUserpaperByExamIdAndStatus" parameterType="java.util.Map" resultMap="findUserpaperByExamIdAndStatus">
+		select
+		p.userpaperid,p.answerdate,e.name,u.name username,c.classname,p.score
+		from userpaper p,exam e,user u,class c
+		where status = #{status} and 
+			  p.examid = #{examId} and 
+			  p.examid = e.examid and 
+			  p.userid = u.userid and
+			  u.classid = c.classid
+	</select>
+	
+	<!-- 通过试卷ID查询试卷信息 -->
+	<select id="findUserpaperByUserPaperId" parameterType="java.util.Map" resultMap="findUserpaperByUserPaperId">
+		select
+			p.userpaperid,p.answerdate,p.radios,p.blanks,p.translates,p.clozes,p.phrases,
+			e.name,e.radioid,e.blankid,e.phraseid,e.clozeid,e.translateid,
+			e.radioscore,e.blankscore,e.phrasescore,e.translatescore,e.clozescore,
+			u.name username,c.classname
+		from userpaper p,exam e,user u,class c
+		where p.userpaperid = #{userPaperId} and
+			  p.examid = e.examid and 
+			  p.userid = u.userid and
+			  u.classid = c.classid
+	</select>
+	
+	<!-- 修改学生答卷的状态和分数 -->
+	<update id="updateStatusAndScore" parameterType="java.util.Map">
+		update userpaper
+		set status = #{status} , score = #{score}
+		where userpaperid = #{userPaperId}
+	</update>
 	
 </mapper>

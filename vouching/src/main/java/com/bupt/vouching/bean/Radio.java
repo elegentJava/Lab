@@ -9,7 +9,7 @@ import com.bupt.vouching.type.QuestionCategory;
  * @author Hogan
  * 
  */
-public class Radio implements Question{
+public class Radio implements Question {
 
 	private Integer radioId;
 	private String question;

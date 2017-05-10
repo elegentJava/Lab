@@ -8,7 +8,9 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bupt.vouching.bean.Blank;
@@ -35,6 +37,7 @@ import com.bupt.vouching.service.ExamService;
 import com.bupt.vouching.service.bean.QuestionLevel;
 import com.bupt.vouching.service.bean.QuestionType;
 import com.bupt.vouching.type.LevelType;
+import com.bupt.vouching.type.OptionType;
 import com.bupt.vouching.type.PageSize;
 import com.bupt.vouching.type.QuestionCategory;
 import com.bupt.vouching.type.error.ErrorCode;
@@ -51,6 +54,8 @@ import com.bupt.vouching.util.page.PageInfo;
  */
 @Service("examService")
 public class ExamServiceImpl implements ExamService {
+	
+	private Logger log = Logger.getLogger(getClass());
 
 	@Resource
 	private GlobalContext globalContext;
@@ -209,6 +214,7 @@ public class ExamServiceImpl implements ExamService {
 		return result;
 	}
 	
+	@Transactional
 	@Override
 	public MJSONObject autoGenerateExam(JSONObject jParams) {
 		MJSONObject result = new MJSONObject();
@@ -222,48 +228,78 @@ public class ExamServiceImpl implements ExamService {
 		Integer phraseCount = jParams.getInteger("phraseCount");
 		Integer translateCount = jParams.getInteger("translateCount");
 		Integer level = jParams.getInteger("level");
-		if (!Utils.isNullOrBlank(name) && radioCount != null
-				&& blankCount != null && clozeCount != null
-				&& phraseCount != null && translateCount != null
-				&& level != null) {
-			Map<String, Integer> map = new HashMap<String, Integer>();
-			map.put("level", level);
-			map.put("random", radioCount);
-			List<Integer> radioId = radioMapper.findRadioIdByRandom(map);
-			String radioIds = generateIds(radioId);
-			map.put("random", blankCount);
-			List<Integer> blankId = blankMapper.findBlankIdByRandom(map);
-			String blankIds = generateIds(blankId);
-			map.put("random", clozeCount);
-			List<Integer> clozeId = clozeMapper.findClozeIdByRandom(map);
-			String clozeIds = generateIds(clozeId);
-			map.put("random", phraseCount);
-			List<Integer> phraseId = phraseMapper.findPhraseIdByRandom(map);
-			String phraseIds = generateIds(phraseId);
-			map.put("random", translateCount);
-			List<Integer> translateId = translateMapper.findTranslateIdByRandom(map);
-			String translateIds = generateIds(translateId);
-			Exam exam = new Exam();
-			exam.setBak(bak);
-			exam.setName(name);
-			exam.setCreateDate(new Date());
-			exam.setTeacherId(globalContext.getUserToken().get(token).getUserId());
-			exam.setClassId(globalContext.getUserToken().get(token).getClassId());
-			exam.setIsActive(Consts.INACTIVE);
-			exam.setRadioId(radioIds);
-			exam.setBlankId(blankIds);
-			exam.setClozeId(clozeIds);
-			exam.setPhraseId(phraseIds);
-			exam.setTranslateId(translateIds);
-			if (examMapper.saveExam(exam) == Consts.DATA_SINGLE_SUCCESS) {
-				detail.put("examId", exam.getExamId());
-				result.setDetail(detail);
-				result.setErrorCode(ErrorCode.SUCCESS);
+		Integer radioScore = null;
+		Integer blankScore = null;
+		Integer clozeScore = null;
+		Integer phraseScore = null;
+		Integer translateScore = null;
+		try {
+			radioScore = jParams.getInteger("radioScore");
+			blankScore = jParams.getInteger("blankScore");
+			clozeScore = jParams.getInteger("clozeScore");
+			phraseScore = jParams.getInteger("phraseScore");
+			translateScore = jParams.getInteger("translateScore");
+		} catch (Exception e) {
+			log.error("分数转化失败！", e);
+			result.setErrorCode(ExamError.SCORE_IS_NOT_INTEGER);
+			return result;
+		}
+		if (radioScore != null && blankScore != null && clozeScore != null && phraseScore != null
+				&& translateScore != null) {
+			if (radioScore + blankScore + clozeScore + phraseScore + translateScore == 100) {
+				if (!Utils.isNullOrBlank(name) && radioCount != null
+						&& blankCount != null && clozeCount != null
+						&& phraseCount != null && translateCount != null
+						&& level != null) {
+					Map<String, Integer> map = new HashMap<String, Integer>();
+					map.put("level", level);
+					map.put("random", radioCount);
+					List<Integer> radioId = radioMapper.findRadioIdByRandom(map);
+					String radioIds = generateIds(radioId);
+					map.put("random", blankCount);
+					List<Integer> blankId = blankMapper.findBlankIdByRandom(map);
+					String blankIds = generateIds(blankId);
+					map.put("random", clozeCount);
+					List<Integer> clozeId = clozeMapper.findClozeIdByRandom(map);
+					String clozeIds = generateIds(clozeId);
+					map.put("random", phraseCount);
+					List<Integer> phraseId = phraseMapper.findPhraseIdByRandom(map);
+					String phraseIds = generateIds(phraseId);
+					map.put("random", translateCount);
+					List<Integer> translateId = translateMapper.findTranslateIdByRandom(map);
+					String translateIds = generateIds(translateId);
+					Exam exam = new Exam();
+					exam.setBak(bak);
+					exam.setName(name);
+					exam.setCreateDate(new Date());
+					exam.setTeacherId(globalContext.getUserToken().get(token).getUserId());
+					exam.setClassId(globalContext.getUserToken().get(token).getClassId());
+					exam.setIsActive(Consts.INACTIVE);
+					exam.setRadioId(radioIds);
+					exam.setBlankId(blankIds);
+					exam.setClozeId(clozeIds);
+					exam.setPhraseId(phraseIds);
+					exam.setTranslateId(translateIds);
+					exam.setRadioScore(radioScore);
+					exam.setBlankScore(blankScore);
+					exam.setClozeScore(clozeScore);
+					exam.setPhraseScore(phraseScore);
+					exam.setTranslateScore(translateScore);
+					if (examMapper.saveExam(exam) == Consts.DATA_SINGLE_SUCCESS) {
+						detail.put("examId", exam.getExamId());
+						result.setDetail(detail);
+						result.setErrorCode(ErrorCode.SUCCESS);
+					} else {
+						result.setErrorCode(ExamError.ADD_EXAM_FAILD);
+					}
+				} else {
+					result.setErrorCode(ErrorCode.PARAM_ABNORMAL);
+				}
 			} else {
-				result.setErrorCode(ExamError.ADD_EXAM_FAILD);
+				result.setErrorCode(ExamError.SUM_SCORE_IS_NOT_HUNDRED);
 			}
 		} else {
-			result.setErrorCode(ErrorCode.PARAM_ABNORMAL);
+			result.setErrorCode(ExamError.SCORE_IS_NULL);
 		}
 		return result;
 	}
@@ -613,24 +649,54 @@ public class ExamServiceImpl implements ExamService {
 		Integer[] clozes = jParams.getObject("clozes", Integer[].class);
 		Integer[] phrases = jParams.getObject("phrases", Integer[].class);
 		Integer[] translates = jParams.getObject("translates", Integer[].class);
-		Exam exam = new Exam();
-		exam.setBak(bak);
-		exam.setName(examName);
-		exam.setCreateDate(new Date());
-		exam.setTeacherId(globalContext.getUserToken().get(token).getUserId());
-		exam.setClassId(globalContext.getUserToken().get(token).getClassId());
-		exam.setIsActive(Consts.INACTIVE);
-		exam.setRadioId(generateIds(radios));
-		exam.setBlankId(generateIds(blanks));
-		exam.setClozeId(generateIds(clozes));
-		exam.setPhraseId(generateIds(phrases));
-		exam.setTranslateId(generateIds(translates));
-		if (examMapper.saveExam(exam) == Consts.DATA_SINGLE_SUCCESS) {
-			detail.put("examId", exam.getExamId());
-			result.setDetail(detail);
-			result.setErrorCode(ErrorCode.SUCCESS);
+		Integer radioScore = null;
+		Integer blankScore = null;
+		Integer clozeScore = null;
+		Integer phraseScore = null;
+		Integer translateScore = null;
+		try {
+			radioScore = jParams.getInteger("radioScore");
+			blankScore = jParams.getInteger("blankScore");
+			clozeScore = jParams.getInteger("clozeScore");
+			phraseScore = jParams.getInteger("phraseScore");
+			translateScore = jParams.getInteger("translateScore");
+		} catch (Exception e) {
+			log.error("分数转化失败！", e);
+			result.setErrorCode(ExamError.SCORE_IS_NOT_INTEGER);
+			return result;
+		}
+		if (radioScore != null && blankScore != null && clozeScore != null && phraseScore != null
+				&& translateScore != null) {
+			if (radioScore + blankScore + clozeScore + phraseScore + translateScore == 100) {
+				if (!Utils.isNullOrBlank(examName) && radios != null && blanks != null && clozes != null
+						&& phrases != null && translates != null) {
+					Exam exam = new Exam();
+					exam.setBak(bak);
+					exam.setName(examName);
+					exam.setCreateDate(new Date());
+					exam.setTeacherId(globalContext.getUserToken().get(token).getUserId());
+					exam.setClassId(globalContext.getUserToken().get(token).getClassId());
+					exam.setIsActive(Consts.INACTIVE);
+					exam.setRadioId(generateIds(radios));
+					exam.setBlankId(generateIds(blanks));
+					exam.setClozeId(generateIds(clozes));
+					exam.setPhraseId(generateIds(phrases));
+					exam.setTranslateId(generateIds(translates));
+					if (examMapper.saveExam(exam) == Consts.DATA_SINGLE_SUCCESS) {
+						detail.put("examId", exam.getExamId());
+						result.setDetail(detail);
+						result.setErrorCode(ErrorCode.SUCCESS);
+					} else {
+						result.setErrorCode(ExamError.ADD_EXAM_FAILD);
+					}
+				} else {
+					result.setErrorCode(ErrorCode.PARAM_ABNORMAL);
+				}
+			} else {
+				result.setErrorCode(ExamError.SUM_SCORE_IS_NOT_HUNDRED);
+			}
 		} else {
-			result.setErrorCode(ExamError.ADD_EXAM_FAILD);
+			result.setErrorCode(ExamError.SCORE_IS_NULL);
 		}
 		return result;
 	}
@@ -643,16 +709,184 @@ public class ExamServiceImpl implements ExamService {
 		Integer pageNum = jParams.getInteger("pageNum");
 		User user = globalContext.getUserToken().get(token);
 		List<Integer> examIds = examMapper.findExamIdsByUserId(user.getUserId());
-		PageHelper.startPage(pageNum, PageSize.USER_PAPER_RECORD);
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("list", examIds);
-		map.put("status", Consts.USER_PAPER_UNDO);
-		List<UserPaper> userPapers = userPaperMapper.findUserpaperByExamIdAndStatus(map);
-		PageInfo<UserPaper> pageInfo = new PageInfo<UserPaper>(userPapers);
-		detail.put("up", pageInfo.getList());
-		result.setPageInfo(pageInfo);
+		if (examIds != null && examIds.size() > 0) {
+			PageHelper.startPage(pageNum, PageSize.USER_PAPER_RECORD);
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("list", examIds);
+			map.put("status", Consts.USER_PAPER_UNDO);
+			List<UserPaper> userPapers = userPaperMapper.findUserpaperByExamIdsAndStatus(map);
+			PageInfo<UserPaper> pageInfo = new PageInfo<UserPaper>(userPapers);
+			detail.put("up", pageInfo.getList());
+			result.setPageInfo(pageInfo);
+		} else {
+			detail.put("up", null);
+		}
 		result.setDetail(detail);
 		result.setErrorCode(ErrorCode.SUCCESS);
+		return result;
+	}
+	
+	@Override
+	public MJSONObject loadMarkDetail(JSONObject jParams) {
+		MJSONObject result = new MJSONObject();
+		JSONObject detail = new JSONObject();
+		Integer userPaperId = jParams.getInteger("userPaperId");
+		UserPaper paper = userPaperMapper.findUserpaperByUserPaperId(userPaperId);
+		if (paper.getExam().getRadioIds().size() > 0) {
+			detail.put("radios", radioMapper.findRadiosByIds(paper.getExam().getRadioIds()));
+			detail.put("radioAnswers", paper.getRadioAnswers());
+		} else {
+			detail.put("radios", null);
+		}
+		if (paper.getExam().getBlankIds().size() > 0) {
+			detail.put("blanks", blankMapper.findBlanksByIds(paper.getExam().getBlankIds()));
+			detail.put("blankAnswers", paper.getBlankAnswers());
+		} else {
+			detail.put("blanks", null);
+		}
+		if (paper.getExam().getPhraseIds().size() > 0) {
+			detail.put("phrases", phraseMapper.findPhrasesByIds(paper.getExam().getPhraseIds()));
+			detail.put("phraseAnswers", paper.getPhraseAnswers());
+		} else {
+			detail.put("phrases", null);
+		}
+		if (paper.getExam().getClozeIds().size() > 0) {
+			detail.put("clozes", clozeMapper.findClozesByIds(paper.getExam().getClozeIds()));
+			detail.put("clozeAnswers", paper.getClozeAnswers());
+		} else {
+			detail.put("clozes", null);
+		}
+		if (paper.getExam().getTranslateIds().size() > 0) {
+			detail.put("translates", translateMapper.findTranslatesByIds(paper.getExam().getTranslateIds()));
+			detail.put("translateAnswers", paper.getTranslateAnswers());
+		} else {
+			detail.put("translates", null);
+		}
+		detail.put("examName", paper.getExam().getName());
+		detail.put("username", paper.getUser().getName());
+		detail.put("className", paper.getUser().getClas().getClassName());
+		detail.put("radioScore", paper.getExam().getRadioScore());
+		detail.put("blankScore", paper.getExam().getBlankScore());
+		detail.put("phraseScore", paper.getExam().getPhraseScore());
+		detail.put("translateScore", paper.getExam().getTranslateScore());
+		detail.put("clozeScore", paper.getExam().getClozeScore());
+		result.setDetail(detail);
+		result.setErrorCode(ErrorCode.SUCCESS);
+		return result;
+	}
+	
+	@Override
+	public MJSONObject markPaper(JSONObject jParams) {
+		MJSONObject result = new MJSONObject();
+		Integer userPaperId = jParams.getInteger("userPaperId");
+		try {
+			Integer[] blankScores = jParams.getObject("blankScores", Integer[].class);
+			Integer[] phraseScores = jParams.getObject("phraseScores", Integer[].class);
+			Integer[] translateScores = jParams.getObject("translateScores", Integer[].class);
+			Integer[] clozeScors = jParams.getObject("clozeScores", Integer[].class);
+			UserPaper paper = userPaperMapper.findUserpaperByUserPaperId(userPaperId);
+			Integer bScore = 0;
+			Integer pScore = 0;
+			Integer tScore = 0;
+			Integer cScore = 0;
+			Integer rScore = 0;
+			for (int i = 0; i < blankScores.length; i++) {
+				bScore += blankScores[i];
+			}
+			if (bScore <= paper.getExam().getBlankScore()) {
+				for (int i = 0; i < phraseScores.length; i++) {
+					pScore += phraseScores[i];
+				}
+				if (pScore <= paper.getExam().getPhraseScore()) {
+					for (int i = 0; i < translateScores.length; i++) {
+						tScore += translateScores[i];
+					}
+					if (tScore <= paper.getExam().getTranslateScore()) {
+						for (int i = 0; i < clozeScors.length; i++) {
+							cScore += clozeScors[i];
+						}
+						if (cScore <= paper.getExam().getClozeScore()) {
+							List<Radio> radios = radioMapper.findRadiosByIds(paper.getExam().getRadioIds());
+							Integer[] radioAnswers = paper.getRadioAnswers();
+							int count = 0;
+							for (int i = 0; i < radios.size(); i++) {
+								if (OptionType.byId(radioAnswers[i]).getDescription().equals(radios.get(i).getAnswer())) {
+									count++;
+								}
+							}
+							rScore = count*paper.getExam().getRadioScore()/radios.size();
+							if (rScore < paper.getExam().getRadioScore()) {
+								int sum = rScore + pScore + cScore + bScore + tScore;
+								Map<String, Object> map = new HashMap<String, Object>();
+								map.put("userPaperId", userPaperId);
+								map.put("score", sum);
+								map.put("status", Consts.USER_PAPER_DONE);
+								if (userPaperMapper.updateStatusAndScore(map) == Consts.DATA_SINGLE_SUCCESS) {
+									result.setErrorCode(ErrorCode.SUCCESS);
+								} else {
+									result.setErrorCode(ExamError.MARK_FAILD);
+								}
+							} else {
+								result.setErrorCode(ExamError.EXTEND_SCORE);
+							}
+						} else {
+							result.setErrorCode(ExamError.EXTEND_SCORE);
+						}
+					} else {
+						result.setErrorCode(ExamError.EXTEND_SCORE);
+					}
+				} else {
+					result.setErrorCode(ExamError.EXTEND_SCORE);
+				}
+			} else {
+				result.setErrorCode(ExamError.EXTEND_SCORE);
+			}
+		} catch (NumberFormatException e) {
+			log.error("分数不是整数!");
+			result.setErrorCode(ExamError.SCORE_IS_NOT_INTEGER);
+		} catch (Exception e){
+			log.error("分数不能为空!");
+			result.setErrorCode(ExamError.SCORE_IS_NULL);
+		}
+		return result;
+	}
+	
+	@Override
+	public MJSONObject loadGradeExam(JSONObject jParams) {
+		MJSONObject result = new MJSONObject();
+		JSONObject detail = new JSONObject();
+		String token = jParams.getString("token");
+		User teacher = globalContext.getUserToken().get(token);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("teacherId", teacher.getUserId());
+		map.put("isActive", Consts.ACTIVE);
+		List<Exam> exams = examMapper.findExamDetailByStatusAndTeacher(map);
+		detail.put("exams", exams);
+		result.setDetail(detail);
+		result.setErrorCode(ErrorCode.SUCCESS);
+		return result;
+	}
+	
+	@Override
+	public MJSONObject loadExamGrade(JSONObject jParams) {
+		MJSONObject result = new MJSONObject();
+		JSONObject detail = new JSONObject();
+		Integer pageNum = jParams.getInteger("pageNum");
+		Integer examId = jParams.getInteger("examId");
+		if (pageNum != null && examId != null) {
+			PageHelper.startPage(pageNum, PageSize.EXAM_GRADE_RECORD);
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("examId", examId);
+			map.put("status", Consts.USER_PAPER_DONE);
+			List<UserPaper> userPapers = userPaperMapper.findUserpaperByExamIdAndStatus(map);
+			PageInfo<UserPaper> pageInfo = new PageInfo<UserPaper>(userPapers);
+			detail.put("grades", pageInfo.getList());
+			result.setDetail(detail);
+			result.setPageInfo(pageInfo);
+			result.setErrorCode(ErrorCode.SUCCESS);
+		} else {
+			result.setErrorCode(ErrorCode.PARAM_ABNORMAL);
+		}
 		return result;
 	}
 	

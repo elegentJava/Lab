@@ -162,4 +162,36 @@ public interface ExamService {
 	 * @return
 	 */
 	public MJSONObject loadMarkPaper(JSONObject jParams);
+
+	/**
+	 * 装载批阅试卷详情信息
+	 * 
+	 * @param jParams
+	 * @return
+	 */
+	public MJSONObject loadMarkDetail(JSONObject jParams);
+
+	/**
+	 * 批阅试卷
+	 * 
+	 * @param jParams
+	 * @return
+	 */
+	public MJSONObject markPaper(JSONObject jParams);
+
+	/**
+	 * 装载考试信息
+	 * 
+	 * @param jParams
+	 * @return
+	 */
+	public MJSONObject loadGradeExam(JSONObject jParams);
+
+	/**
+	 * 装载成绩信息
+	 * 
+	 * @param jParams
+	 * @return
+	 */
+	public MJSONObject loadExamGrade(JSONObject jParams);
 }
